@@ -3,28 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/styles.css">
     <title>Children's Game</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 <div class="container">
-    <div class="score">
-        <h3>{{game.score}}</h3>
-    </div>
-    <div class="question">
-        <h1>Hlusta</h1> <!-- This could be dynamically set if different questions exist -->
-    </div>
-    <form action="/check" method="post">
-        <div class="options">
-            <button type="submit" name="answer" value="A">A</button>
-            <button type="submit" name="answer" value="B">B</button>
-            <button type="submit" name="answer" value="C">C</button>
-        </div>
+    <h1>Hlusta</h1>
+    <button id="listenButton">HLUSTA</button>
+    <form id="gameForm" action="/check" method="post">
+        <button type="submit" name="answer" value="A">{{game.options[0]}}</button>
+        <button type="submit" name="answer" value="B">{{game.options[1]}}</button>
+        <button type="submit" name="answer" value="C">{{game.options[2]}}</button>
     </form>
-    <div class="feedback">
-        <!-- Feedback on whether the previous answer was correct -->
-        <p>{{isCorrect ? 'Correct!' : 'Try Again!'}}</p>
+    <div id="feedback" style="display: none;">
+        <p>That's correct!</p>
+        <button id="newGameButton">Start New Game</button>
     </div>
+    <p>Your current score is: <span>{{game.score}}</span></p>
 </div>
 <script src="/js/script.js"></script>
 </body>
