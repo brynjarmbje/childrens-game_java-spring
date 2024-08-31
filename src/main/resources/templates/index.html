@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,16 +11,17 @@
     <h1>Hlusta</h1>
     <button id="listenButton">HLUSTA</button>
     <form id="gameForm" action="/check" method="post">
-        <button type="submit" name="answer" value="A">{{game.options[0]}}</button>
-        <button type="submit" name="answer" value="B">{{game.options[1]}}</button>
-        <button type="submit" name="answer" value="C">{{game.options[2]}}</button>
+        <button type="submit" name="answer" value="A" th:text="${game.options[0]}">${game.options[0]}</button>
+        <button type="submit" name="answer" value="B" th:text="${game.options[1]}">${game.options[1]}</button>
+        <button type="submit" name="answer" value="C" th:text="${game.options[2]}">${game.options[2]}</button>
     </form>
     <div id="feedback" style="display: none;">
         <p>That's correct!</p>
         <button id="newGameButton">Start New Game</button>
     </div>
-    <p>Your current score is: <span>{{game.score}}</span></p>
+    <p>Your current score is: <span th:text="${game.score}">${game.score}</span></p>
 </div>
-<script src="/js/script.js"></script>
+<!-- Use th:src to let Thymeleaf resolve the path -->
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

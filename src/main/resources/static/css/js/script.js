@@ -7,12 +7,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to generate and play the speech
     listenButton.addEventListener('click', function () {
+        // Get the letters from the form buttons
         const options = Array.from(gameForm.elements)
             .filter(el => el.name === 'answer')
-            .map(el => el.value);
+            .map(el => el.textContent);
 
+        // Randomly select one letter to be the currentLetter
         currentLetter = options[Math.floor(Math.random() * options.length)];
 
+        // Create a SpeechSynthesisUtterance to speak the current letter
         const msg = new SpeechSynthesisUtterance(currentLetter);
         window.speechSynthesis.speak(msg);
     });
@@ -21,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     gameForm.addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent the default form submission
 
-        const selectedLetter = event.submitter.value;
+        const selectedLetter = event.submitter.textContent;
 
         if (selectedLetter === currentLetter) {
             feedbackDiv.style.display = 'block';
