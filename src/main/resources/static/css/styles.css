@@ -1,22 +1,256 @@
+/* General Reset and Font Settings */
+body, h1, p, button {
+    margin: 0;
+    padding: 0;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+}
+
+body {
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
 .container {
     text-align: center;
-    padding: 20px;
-    border-radius:
+    background: rgba(255, 255, 255, 0.9);
+    margin-top: 50px;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
 }
 
-.question {
+h1 {
+    font-size: 3em;
+    color: #ff6f61;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+p {
+    font-size: 1.2em;
+    color: #333;
+    margin-top: 20px;
+}
+
+button {
+    background: linear-gradient(to right, #ff6f61, #ff9a9e);
+    border: none;
+    border-radius: 50px;
+    padding: 15px 30px;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin: 10px;
+}
+
+button:focus {
+    outline: none;
+}
+
+button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 7px 15px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+    transform: scale(0.9);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+#listenButton {
+    background: linear-gradient(to right, #ff6f61, #ff9a9e);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px;
     font-size: 2em;
     margin-bottom: 20px;
-}
-
-.options button {
-    font-size: 1.5em;
-    margin: 10px;
-    padding: 10px 20px;
     cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.feedback {
-    font-size: 1.5em;
+#listenButton:hover {
+    transform: scale(1.2);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+#feedback {
+    background: linear-gradient(to right, #8fd3f4, #84fab0);
+    color: white;
+    padding: 20px;
+    border-radius: 20px;
     margin-top: 20px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, opacity 0.2s;
+    transform: scale(0);
+    opacity: 0;
+}
+
+#feedback.show {
+    transform: scale(1);
+    opacity: 1;
+}
+
+#newGameButton {
+    background: linear-gradient(to right, #84fab0, #8fd3f4);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: transform 0.2s;
+    margin-top: 20px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+#newGameButton:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Navbar Container */
+.navbar {
+    background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fad0c4, #ff9a9e);
+    padding: 20px 0;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    animation: gradient-animation 5s ease infinite; /* Add an animated background */
+}
+
+/* Animated Background */
+@keyframes gradient-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.navbar li {
+    margin: 0;
+    position: relative;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.5em;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+    padding: 10px 20px;
+    border-radius: 50px;
+    background-color: #ff6f61;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    width: 200px;
+    overflow: hidden;
+}
+
+/* Hover Effect with Bouncing */
+.navbar a:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+    background-color: #ffde59;
+    color: #333;
+}
+
+/* Fun and Playful Hover Effect - Confetti */
+.navbar a:hover::before,
+.navbar a:hover::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    background-image: url('https://media.giphy.com/media/3o85xpxu6EJLw8z5fG/giphy.gif');
+    background-size: cover;
+    opacity: 0.3;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.navbar a::before {
+    content: "🌟";
+    font-size: 1.2em;
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: sparkle 1s infinite;
+}
+
+.navbar a::after {
+    content: "🎉";
+    font-size: 1.2em;
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: sparkle 1s infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% {
+        transform: translateY(-50%) scale(1);
+    }
+    50% {
+        transform: translateY(-50%) scale(1.2);
+    }
+}
+
+/* Text Shadow for Fun */
+.navbar a {
+    text-shadow: 2px 2px #ff9a9e;
+}
+
+/* Styling for the Username */
+.username {
+    color: white;
+    font-size: 1.5em;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+    padding: 10px 20px;
+    border-radius: 50px;
+    background-color: #ff6f61;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    width: 200px;
+    overflow: hidden;
+        text-shadow: 2px 2px #ff9a9e;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2em;
+    }
+
+    button {
+        font-size: 1.2em;
+        padding: 10px 20px;
+    }
+
+    #listenButton {
+        font-size: 1.5em;
+    }
 }

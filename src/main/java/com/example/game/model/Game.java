@@ -5,8 +5,9 @@ public class Game {
     private String[] options;
     private String correctAnswer;
 
-    // Constructor
-    public Game() {}
+    public Game() {
+        this.score = 0;
+    }
 
     // Getters and Setters
     public int getScore() {

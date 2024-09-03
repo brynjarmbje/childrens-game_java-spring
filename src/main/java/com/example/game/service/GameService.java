@@ -26,5 +26,15 @@ public class GameService {
         }
         return options;
     }
+
+    public String[] generateRandomNumbers() {
+        String[] options = new String[3];
+        for (int i = 0; i < 3; i++) {
+            options[i] = String.valueOf(random.nextInt(100)); // Generate random numbers between 0-99
+        }
+        return options;
+    }
 }
+
+
 

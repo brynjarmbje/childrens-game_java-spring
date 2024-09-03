@@ -7,20 +7,27 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
+<!-- Navigation Menu -->
+<nav class="navbar">
+    <ul>
+        <li><a href="/" th:href="@{/letters}">🎨 Letters Game</a></li>
+        <li><a href="/" th:href="@{/numbers}">🔢 Numbers Game</a></li>
+        <li><span class="username" th:text="${username}"></span></li>
+    </ul>
+</nav>
 <div class="container">
-    <h1>Hlusta</h1>
     <button id="listenButton">HLUSTA</button>
     <form id="gameForm" action="/check" method="post">
         <button type="submit" name="answer" value="A" th:text="${game.options[0]}">${game.options[0]}</button>
         <button type="submit" name="answer" value="B" th:text="${game.options[1]}">${game.options[1]}</button>
         <button type="submit" name="answer" value="C" th:text="${game.options[2]}">${game.options[2]}</button>
     </form>
-    <div id="feedback" style="display: none;">
-        <p>That's correct!</p>
-        <button id="newGameButton">Start New Game</button>
-    </div>
-    <p>Your current score is: <span th:text="${game.score}">0</span></p>
+    <div id="feedback" class="feedback"></div>
+    <button id="newGameButton" style="display:none;">Start New Game</button>
+    <p id="scoreDisplay">Score: 0</p>
 </div>
 <script th:src="@{/js/script.js}"></script>
 </body>
 </html>
+
+
