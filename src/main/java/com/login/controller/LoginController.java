@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.login.service.LoginService;
+import com.login.entity.LoginRequests;
 
 @RestController
 @RequestMapping("/auth")
