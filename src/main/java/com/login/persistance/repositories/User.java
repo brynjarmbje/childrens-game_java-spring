@@ -1,6 +1,6 @@
-package com.login.repo;
+package com.login.persistance.repositories;
 
-//TODO: import jakarta.persistance for sql database ease
+//import jakarta.persistance for sql database ease
 //import jakarta.persistence.Entity;
 //import jakarta.persistence.GeneratedValue;
 //import jakarta.persistence.GenerationType;

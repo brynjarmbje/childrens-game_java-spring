@@ -9,22 +9,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.login.service.LoginService;
-import com.login.entity.LoginRequests;
+import com.login.persistance.entities.LoginRequests;
 
 @RestController
 @RequestMapping("/auth")
 public class LoginController {
-    @Autowired
-    private LoginService loginService;
+	@Autowired
+	private LoginService loginService;
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequests loginRequests) {
-        boolean isAuthenticated = loginService.authenticate(loginRequests.getUsername(),loginRequests.getpassword());//TODO:Nota authenticate frá service
-
-        if (isAuthenticated) {
-            return ResponseEntity.ok("Login successfull");
-        } else { 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials"); }
-    }
+	@PostMapping("/login")
+	public ResponseEntity<String> login(@RequestBody LoginRequests loginRequests) {
+		boolean isAuthenticated = loginService.authenticate(loginRequests.getUsername(), loginRequests.getpassword());
+		if (isAuthenticated) {
+			return ResponseEntity.ok("Login successfull");
+		} else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+		}
+	}
 
 }

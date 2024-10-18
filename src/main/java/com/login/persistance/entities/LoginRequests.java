@@ -1,4 +1,4 @@
-package com.login.controller;
+package com.login.persistance.entities;
 
 // object for data transfers for login request 
 public class LoginRequests {
