@@ -1,10 +1,10 @@
 package com.example.game.repository;
 
-import com.example.game.entity.Admin;
+import com.example.game.entity.Child;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AdminRepository extends JpaRepository<Admin, Long> {
+public interface ChildRepository extends JpaRepository<Child, Long> {
     // You can add custom query methods here if needed
 }
