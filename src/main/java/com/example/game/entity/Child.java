@@ -13,6 +13,10 @@ public class Child {
 	@Column()
     private String name;
 
+	@ManyToOne
+	@JoinColumn(name = "school")
+	private School school;
+
     @ElementCollection
     private List<Integer> level;
 

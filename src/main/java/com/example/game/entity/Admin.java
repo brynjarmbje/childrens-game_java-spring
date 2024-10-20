@@ -26,14 +26,19 @@ public class Admin {
 	@Column()
     private boolean isSupervisor;
 
-    // Default constructor
+	@ManyToOne
+	@JoinColumn(name = "school")
+	private School school;
+
+	// Default constructor
     public Admin() {}
 
     // Parameterized constructor
-    public Admin(String name, String password, boolean isSupervisor) {
-        this.name = name;
+    public Admin(String username, String password, boolean isSupervisor, School school) {
+        this.username = username;
         this.password = password;
         this.isSupervisor = isSupervisor;
+		this.school = school;
     }
 
     // Getters and setters
@@ -61,8 +66,20 @@ public class Admin {
         return isSupervisor;
     }
 
-    public void setSupervisor(boolean supervisor) {
-        isSupervisor = supervisor;
+    public void setAsSupervisor() {
+        this.isSupervisor = true;
     }
+
+    public void removeAsSupervisor() {
+        this.isSupervisor = false;
+    }
+
+    public School getSchool() {
+		return school;
+	}
+
+	public void setSchool(School school) {
+		this.school = school;
+	}
 }
 
