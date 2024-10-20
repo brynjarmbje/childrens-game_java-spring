@@ -18,6 +18,7 @@ public class Game {
     private int level;  // Game level
 
 
+
     // Constructor with parameters
     public Game(String id, int type, int level) {
         this.id = id;
