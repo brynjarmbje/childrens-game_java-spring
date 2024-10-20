@@ -1,7 +1,7 @@
-package com.example.game.controller;
+package com.game.controller;
 
-import com.example.game.model.Game;
-import com.example.game.service.GameService;
+import com.game.model.Game;
+import com.game.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

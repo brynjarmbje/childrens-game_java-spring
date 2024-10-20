@@ -1,12 +1,11 @@
-package com.example.game.service;
+package com.game.service;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.game.entity.Admin;
-import com.example.game.repository.AdminRepository;
+import com.game.entity.Admin;
+import com.game.repository.AdminRepository;
 
 @Service
 public class LoginService {

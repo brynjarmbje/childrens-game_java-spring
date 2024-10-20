@@ -1,6 +1,6 @@
-package com.example.game.repository;
+package com.game.repository;
 
-import com.example.game.entity.Child;
+import com.game.entity.Child;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;

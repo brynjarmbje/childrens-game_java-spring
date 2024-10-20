@@ -1,6 +1,6 @@
-package com.example.game.service;
+package com.game.service;
 
-import com.example.game.model.Game;
+import com.game.model.Game;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;

@@ -1,9 +1,9 @@
-package com.example.game.service;
+package com.game.service;
 
-import com.example.game.entity.Child;
-import com.example.game.entity.Admin;
-import com.example.game.repository.ChildRepository;
-import com.example.game.repository.AdminRepository;
+import com.game.entity.Child;
+import com.game.entity.Admin;
+import com.game.repository.ChildRepository;
+import com.game.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

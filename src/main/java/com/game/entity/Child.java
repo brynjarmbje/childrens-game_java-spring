@@ -1,4 +1,4 @@
-package com.example.game.entity;
+package com.game.entity;
 
 import jakarta.persistence.*;
 import java.util.List;

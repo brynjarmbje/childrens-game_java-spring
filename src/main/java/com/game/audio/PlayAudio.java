@@ -1,4 +1,4 @@
-package com.login.audio;
+package com.game.audio;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

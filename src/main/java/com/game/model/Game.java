@@ -1,4 +1,4 @@
-package com.example.game.model;
+package com.game.model;
 
 public class Game {
     private int score;

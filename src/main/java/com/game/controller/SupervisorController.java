@@ -1,8 +1,8 @@
-package com.example.game.controller;
+package com.game.controller;
 
-import com.example.game.entity.Child;
-import com.example.game.entity.Admin;
-import com.example.game.service.SupervisorService;
+import com.game.entity.Child;
+import com.game.entity.Admin;
+import com.game.service.SupervisorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

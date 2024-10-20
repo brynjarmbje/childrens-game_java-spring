@@ -1,4 +1,4 @@
-package com.example.game.controller;
+package com.game.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.game.service.LoginService;
-import com.example.game.entity.LoginRequest;
+import com.game.service.LoginService;
+import com.game.entity.LoginRequest;
 
 
 @RestController
