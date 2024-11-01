@@ -79,6 +79,16 @@ public class GameController {
         model.addAttribute("username", username);
         return "redirect:/letters";
     }
+
+    @GetMapping("/memory-game")
+    public String memoryGame() {
+        return "memory-game";
+    }
+
+    @GetMapping("/matching-game")
+    public String matchingGame() {
+        return "matching-game";
+    }
 }
 
 

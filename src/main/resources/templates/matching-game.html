@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Matching Game</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body onload="initializeMatchGame()">
+<h1>Matching Game</h1>
+<div class="match-game-section">
+  <h2>Match Icons with Starting Letters</h2>
+    <div class="match-game-container">
+      <div id="icon-column" class="column"></div>
+      <div id="letter-column" class="column"></div>
+    </div>
+</div>
+
+<!-- go back -->
+<a href="/letters" class="back-button">Go Back</a>
+
+<!-- Celebration Modal -->
+<div id="celebration-modal" class="modal">
+  <div class="modal-content">
+    <h2>Congratulations!</h2>
+    <p>You’ve matched all the icons correctly!</p>
+    <button onclick="startNewGame()">New Game</button>
+  </div>
+</div>
+
+
+<script th:src="@{/js/matching-game.js}"></script>
+</body>
+</html>
