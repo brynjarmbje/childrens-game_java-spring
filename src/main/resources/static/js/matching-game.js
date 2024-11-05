@@ -1,123 +1,83 @@
-const iconMapping = {
-    'apple.png': 'fa-apple',
-    'ant.png': 'fa-bug',
-    'banana.png': 'fa-lemon', // Substitute close icons for unavailable ones
-    'bird.png': 'fa-dove',
-    'cat.png': 'fa-cat',
-    'car.png': 'fa-car'
-};
+document.addEventListener("DOMContentLoaded", function () {
+    const icons = document.querySelectorAll(".match-icon");
+    const letters = document.querySelectorAll(".match-letter");
+    let selectedIcon = null;
+    let selectedLetter = null;
 
-const iconData = [
-    { id: 1, imageUrl: 'apple.png', letter: 'A' },
-    { id: 2, imageUrl: 'ant.png', letter: 'A' },
-    { id: 3, imageUrl: 'banana.png', letter: 'B' },
-    { id: 4, imageUrl: 'bird.png', letter: 'B' },
-    { id: 5, imageUrl: 'cat.png', letter: 'C' },
-    { id: 6, imageUrl: 'car.png', letter: 'C' }
-];
+    icons.forEach(icon => {
+        icon.addEventListener("click", () => {
+            if (selectedIcon) selectedIcon.classList.remove("selected");
+            selectedIcon = icon;
+            icon.classList.add("selected");
 
-let selectedIcon = null;
-let matchedCount = 0;
+            // If a letter is already selected, check for a match
+            if (selectedLetter) {
+                checkMatch(selectedIcon, selectedLetter);
+            }
+        });
+    });
 
-// Shuffle array function
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+    letters.forEach(letter => {
+        letter.addEventListener("click", () => {
+            if (selectedLetter) selectedLetter.classList.remove("selected");
+            selectedLetter = letter;
+            letter.classList.add("selected");
+
+            // If an icon is already selected, check for a match
+            if (selectedIcon) {
+                checkMatch(selectedIcon, selectedLetter);
+            }
+        });
+    });
+
+    function checkMatch(icon, letter) {
+        const iconId = icon.getAttribute("data-id");
+        const iconLetter = icon.getAttribute("data-letter");
+        const letterValue = letter.getAttribute("data-letter");
+
+        if (iconLetter === letterValue) {
+            // Correct match: add celebratory effect
+            icon.classList.add("correct-match");
+            letter.classList.add("correct-match");
+            icon.classList.remove("selected");
+            letter.classList.remove("selected");
+
+            // Reset selections for next attempt
+            selectedIcon = null;
+            selectedLetter = null;
+
+            // Check if the game is complete
+            checkGameCompletion();
+        } else {
+            // Incorrect match: add shake effect
+            icon.classList.add("wrong-match");
+            letter.classList.add("wrong-match");
+
+            setTimeout(() => {
+                icon.classList.remove("wrong-match", "selected");
+                letter.classList.remove("wrong-match", "selected");
+                selectedIcon = null;
+                selectedLetter = null;
+            }, 500);
+        }
     }
-}
 
-function initializeMatchGame() {
-    const iconColumn = document.getElementById('icon-column');
-    const letterColumn = document.getElementById('letter-column');
-
-    matchedCount = 0; // Reset matched count
-    selectedIcon = null; // Reset selected icon
-
-    // Clear columns before rendering
-    iconColumn.innerHTML = '';
-    letterColumn.innerHTML = '';
-
-    // Shuffle iconData for random order in both columns
-    const shuffledIcons = [...iconData];
-    const shuffledLetters = [...iconData];
-    shuffleArray(shuffledIcons);
-    shuffleArray(shuffledLetters);
-
-    // Render shuffled icons on the left column
-    shuffledIcons.forEach(icon => {
-        const iconElement = document.createElement('div');
-        iconElement.className = 'match-icon';
-        iconElement.dataset.id = icon.id; // Set unique ID
-        iconElement.innerHTML = `<i class="fas ${iconMapping[icon.imageUrl]}"></i>`;
-        iconElement.onclick = () => selectIcon(icon, iconElement);
-        iconColumn.appendChild(iconElement);
-    });
-
-    // Render shuffled letters on the right column
-    shuffledLetters.forEach(icon => {
-        const letterElement = document.createElement('div');
-        letterElement.className = 'match-letter';
-        letterElement.dataset.id = icon.id; // Set unique ID
-        letterElement.textContent = icon.letter;
-        letterElement.onclick = () => selectLetter(icon.letter, letterElement);
-        letterColumn.appendChild(letterElement);
-    });
-}
-
-// Select an icon for matching
-function selectIcon(icon, iconElement) {
-    selectedIcon = { icon, iconElement };
-    clearSelections();
-    highlightSelection(iconElement);
-}
-
-// Select a letter and check for match
-function selectLetter(letter, letterElement) {
-    if (!selectedIcon) return;
-
-    // Check for match by comparing the IDs of the selected icon and letter
-    if (selectedIcon.icon.letter === letter && selectedIcon.icon.id === parseInt(letterElement.dataset.id)) {
-        // Match found - mark as matched
-        markAsMatched(selectedIcon.iconElement, letterElement);
-        matchedCount++; // Increment matched count
-
-        // Check if all matches are found
-        if (matchedCount === iconData.length) showCelebratoryModal();
-        selectedIcon = null;
-    } else {
-        // No match - reset selection
-        selectedIcon = null;
-        clearSelections();
+    function checkGameCompletion() {
+        const allMatched = document.querySelectorAll(".correct-match").length === icons.length + letters.length;
+        if (allMatched) {
+            showCongratulationsModal();
+        }
     }
-}
 
-// Highlight the selected element
-function highlightSelection(element) {
-    element.style.backgroundColor = '#e0e0e0';
-}
+    function showCongratulationsModal() {
+        document.getElementById("congratulationsModal").style.display = "flex";
+    }
 
-// Clear any temporary highlights
-function clearSelections() {
-    document.querySelectorAll('.match-icon, .match-letter').forEach(el => {
-        el.style.backgroundColor = '';
-    });
-}
+    window.restartGame = function () {
+        fetch("/matching-game/reset", { method: 'POST' })
+            .then(() => location.reload());
+    };
+});
 
-// Mark both icon and letter as matched
-function markAsMatched(iconElement, letterElement) {
-    iconElement.classList.add('matched');
-    letterElement.classList.add('matched');
-}
 
-// Show celebration modal when game is complete
-function showCelebratoryModal() {
-    const modal = document.getElementById('celebration-modal');
-    modal.style.display = 'block';
-}
 
-// Reset the game
-function startNewGame() {
-    document.getElementById('celebration-modal').style.display = 'none';
-    initializeMatchGame();
-}

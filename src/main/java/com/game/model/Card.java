@@ -1,21 +1,20 @@
-package com.game.entity;
+package com.game.model;
 
 public class Card {
     private int id;
     private String imageUrl;
     private char letter;
     private boolean flipped;
-    private boolean locked;
+    private boolean matched;
 
     public Card(int id, String imageUrl, char letter) {
         this.id = id;
         this.imageUrl = imageUrl;
         this.letter = letter;
         this.flipped = false;
-        this.locked = false;
+        this.matched = false;
     }
 
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -24,20 +23,12 @@ public class Card {
         this.id = id;
     }
 
-    public boolean isLocked() {
-        return locked; // Add return statement here
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setLocked(boolean locked) {
-        this.locked = locked;
-    }
-
-    public boolean isFlipped() {
-        return flipped;
-    }
-
-    public void setFlipped(boolean flipped) {
-        this.flipped = flipped;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public char getLetter() {
@@ -48,12 +39,21 @@ public class Card {
         this.letter = letter;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public boolean isFlipped() {
+        return flipped;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setFlipped(boolean flipped) {
+        this.flipped = flipped;
+    }
+
+    public boolean isMatched() {
+        return matched;
+    }
+
+    public void setMatched(boolean matched) {
+        this.matched = matched;
     }
 }
+
 

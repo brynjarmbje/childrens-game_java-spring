@@ -1,55 +1,37 @@
-// Toggle display for the memory game section
-function toggleMemoryGame() {
-    const memoryGameContainer = document.getElementById('memoryGameContainer');
-    memoryGameContainer.style.display = memoryGameContainer.style.display === 'none' ? 'block' : 'none';
-}
+document.addEventListener("DOMContentLoaded", function () {
+    const board = document.getElementById("memoryGameBoard");
 
-// Initialize and render the memory game
-async function initializeMemoryGame() {
-    const response = await fetch('/game/initialize');
-    const cards = await response.json();
-    renderMemoryBoard(cards);
-}
+    // Flip card on click
+    board.addEventListener("click", function (event) {
+        const button = event.target.closest("button");
+        if (!button || button.classList.contains("matched")) return;
 
-async function flipMemoryCard(id) {
-    const response = await fetch(`/game/flip/${id}`, { method: 'POST' });
-    const message = await response.text();
-    alert(message);
-    loadMemoryCards();
-}
-
-async function loadMemoryCards() {
-    const response = await fetch('/game/cards');
-    const cards = await response.json();
-    renderMemoryBoard(cards);
-}
-
-const iconMapping = {
-    'apple.png': 'fa-apple',
-    'ant.png': 'fa-bug',
-    'banana.png': 'fa-lemon', // Substitute close icons for unavailable ones
-    'bird.png': 'fa-dove',
-    'cat.png': 'fa-cat',
-    'car.png': 'fa-car'
-};
-
-function renderMemoryBoard(cards) {
-    const board = document.getElementById('memory-game-board');
-    board.innerHTML = '';  // Clear the board before rendering
-
-    cards.forEach(card => {
-        const cardElement = document.createElement('div');
-        cardElement.className = 'memory-card';
-
-        // Show the icon if the card is not flipped; otherwise, show the letter
-        if (!card.flipped) {
-            cardElement.innerHTML = `<i class="fas ${iconMapping[card.imageUrl]}"></i>`;
-        } else {
-            cardElement.textContent = card.letter;
-        }
-
-        // Add flip functionality
-        cardElement.onclick = () => flipMemoryCard(card.id);
-        board.appendChild(cardElement);
+        const cardId = button.getAttribute("data-id");
+        fetch(`/memory-game/flip?id=${cardId}`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => updateBoard(data.cards));
     });
-}
+
+    function updateBoard(cards) {
+        board.innerHTML = ""; // Clear board
+        cards.forEach(card => {
+            const cardEl = document.createElement("button");
+            cardEl.setAttribute("data-id", card.id);
+            cardEl.className = card.matched ? "matched" : card.flipped ? "flip" : "";
+            cardEl.innerHTML = card.flipped ? card.letter : `<i class="fas ${card.imageUrl}"></i>`;
+            board.appendChild(cardEl);
+        });
+
+        if (cards.every(card => card.matched)) showCongratulationsModal();
+    }
+
+    function showCongratulationsModal() {
+        document.getElementById("congratulationsModal").style.display = "flex";
+    }
+
+    window.restartGame = function () {
+        fetch("/memory-game/reset", { method: 'POST' })
+            .then(() => location.reload());
+    };
+});
+

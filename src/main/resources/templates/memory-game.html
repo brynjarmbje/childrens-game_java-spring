@@ -1,25 +1,47 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Memory Game</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+
+<button class="back-button" onclick="location.href='/'">⬅️ Back</button>
 <h1>Memory Game</h1>
-<div class="memory-game-section">
-    <button id="startMemoryGameButton" onclick="toggleMemoryGame()">Start Memory Game</button>
-    <div id="memoryGameContainer" style="display:none;">
-        <h2>Memory Game</h2>
-        <button onclick="initializeMemoryGame()">Start New Memory Game</button>
-        <div id="memory-game-board" class="memory-game-board"></div>
+
+<div class="memory-game" id="memoryGameBoard">
+    <div th:each="card : ${cards}">
+        <form action="/memory-game/flip" method="post">
+            <input type="hidden" name="id" th:value="${card.id}" />
+            <button type="submit"
+                    th:classappend="${card.matched ? 'matched' : (card.flipped ? 'flip' : '')}">
+                <span class="card-content">
+                    <span th:if="${card.flipped}" th:text="${card.letter}"></span>
+                    <i th:unless="${card.flipped}" th:class="'fas ' + ${card.imageUrl}"></i>
+                </span>
+            </button>
+
+        </form>
     </div>
 </div>
 
-<!-- go back -->
-<a href="/letters" class="back-button">Go Back</a>
+<!-- Modal for game completion -->
+<div th:if="${gameComplete}" id="congratulationsModal" class="modal" style="display: flex;">
+    <div class="modal-content">
+        <h2>Congratulations!</h2>
+        <p>You found all pairs!</p>
+        <form action="/memory-game/reset" method="post">
+            <button type="submit">Play Again</button>
+        </form>
+    </div>
+</div>
 
 <script th:src="@{/js/memory-game.js}"></script>
 </body>
 </html>
+
+
+
+
+
