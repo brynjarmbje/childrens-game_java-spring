@@ -6,3 +6,12 @@
 - [ ] Ákveða sérhæft markmið
 - gefa vísbendingu ef of oft vitlaust
 
+# Pælingar/spurningar til strákana
+- þurfum við id á game?
+
+# TODO:
+- [ ] ákveða hvernig eigi að geyma questions
+- [ ] laga loginService eftir breytingu á authenticate
+- [ ] ákveða restController, örugglega login og finna almennilega útúr því
+- [ ] 
+
