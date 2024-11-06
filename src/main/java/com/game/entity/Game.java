@@ -8,8 +8,6 @@ import jakarta.persistence.*;
 public class Game {
 
 
-    @Id
-    private String id;  // Game ID
 
 
     private int type;   // Game type
@@ -20,8 +18,7 @@ public class Game {
 
 
     // Constructor with parameters
-    public Game(String id, int type, int level) {
-        this.id = id;
+    public Game(int type, int level) {
         this.type = type;
         this.level = level;
     }
@@ -32,16 +29,6 @@ public class Game {
 
 
     // Getters and Setters
-
-
-    public String getId() {
-        return id;
-    }
-
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
 
     public int getType() {

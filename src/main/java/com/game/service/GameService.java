@@ -1,13 +1,22 @@
 package com.game.service;
 
-import com.game.model.Game;
 import org.springframework.stereotype.Service;
+import com.game.entity.Game;
 
 import java.util.Random;
 
 @Service
 public class GameService {
+    private Game game;
 
+    public void startGame(int type, int level){
+        game.setLevel(level);
+        game.setType(type);
+    }
+
+
+
+//------------------
     private final Random random = new Random();
 
     public boolean checkAnswer(String answer, Game game) {
