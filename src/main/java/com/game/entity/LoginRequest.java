@@ -5,11 +5,11 @@ public class LoginRequest {
     private String username;
     private String password;
 
-	public String getUsername() {
+    public String getUsername() {
         return username;
-	}
-	public String getpassword() {
-		// TODO: 
-		throw new UnsupportedOperationException("Unimplemented method 'getpassword'");
-	}
+    }
+
+    public String getpassword() {
+        return password;
+    }
 }
