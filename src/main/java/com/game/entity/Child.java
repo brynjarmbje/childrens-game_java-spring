@@ -14,7 +14,7 @@ public class Child {
     private String name;
 
 	@ManyToOne
-	@JoinColumn(name = "school")
+	@JoinColumn(name = "school") // NOTE: veit ekki alveg afh ég gerði þetta svona, mögulegabreyta
 	private School school;
 
     @ElementCollection
