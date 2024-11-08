@@ -30,8 +30,9 @@ public class GameController {
         if (username == null || username.isEmpty()) {
             return "redirect:/login";
         }
-        return "redirect:/letters";
+        return "index"; // No "redirect:/index", instead render "index" view
     }
+
 
     @PostMapping("/check")
     public String checkAnswer(@RequestParam("answer") String answer, @ModelAttribute("game") Game game, Model model) {
@@ -55,7 +56,7 @@ public class GameController {
         game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
         model.addAttribute("game", game);
         model.addAttribute("username", username);
-        return "index";
+        return "letters";
     }
 
     @GetMapping("/numbers")
@@ -65,7 +66,7 @@ public class GameController {
         game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
         model.addAttribute("game", game);
         model.addAttribute("username", username);
-        return "index";
+        return "numbers";
     }
 
     @GetMapping("/login")
@@ -81,8 +82,9 @@ public class GameController {
             return "login";
         }
         model.addAttribute("username", username);
-        return "redirect:/letters";
+        return "redirect:/"; // Redirects to the root URL, which triggers index() method
     }
+
 
     @Autowired
     private MatchingGameService matchingGameService;
