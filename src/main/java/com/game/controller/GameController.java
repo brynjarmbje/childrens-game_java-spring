@@ -133,7 +133,11 @@ public class GameController {
         return response;
     }
 
-
+    @PostMapping("/matching-game/reset")
+    public String resetMatchingGame() {
+        matchingGameService.initializeGame();
+        return "redirect:/matching-game";
+    }
 }
 
 

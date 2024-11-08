@@ -13,6 +13,10 @@ body {
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"><text y="20" font-size="20">⭐</text></svg>') 15 15, auto;
 }
 
+body, h1, p, button {
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+}
+
 @keyframes gradientBG {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -25,7 +29,7 @@ body {
     height: 10px;
     background-color: #ffde59;
     border-radius: 50%;
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 rgba(255, 255, 255, 0.8);
     pointer-events: none; /* Sparkles won’t interfere with clicks */
     animation: sparkleMove 1s ease-out forwards;
 }

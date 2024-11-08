@@ -244,7 +244,6 @@ button:active {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 columns of equal width */
     gap: 10px; /* Space between the cards */
-    width: 100%;
     max-width: 600px; /* Optional: Set a maximum width for the grid */
     margin: 20px auto; /* Centers the grid horizontally */
     padding: 20px;
@@ -252,7 +251,7 @@ button:active {
 
 /* Card Style */
 .memory-game button {
-    width: 100%; /* Button fills its grid cell */
+    width: 100%; /* Full width for each card */
     padding-top: 100%; /* Keeps the card square */
     position: relative; /* Allows content to be centered */
     font-size: 24px;

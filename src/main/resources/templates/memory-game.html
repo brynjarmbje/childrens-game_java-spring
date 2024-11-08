@@ -7,8 +7,14 @@
 </head>
 <body>
 
-<button class="back-button" onclick="location.href='/'">⬅️ Back</button>
-<h1>Memory Game</h1>
+<button class="back-button" onclick="location.href='/'">⬅️ Til baka</button>
+<h1>Samstæðuspil!</h1>
+
+<div>
+    <p>Finnum samstæður! Ýttu á spil til að heyra nafn þess og sjá upphafsstaf.</p>
+    <p>Ýttu síðan á aðra mynd af hlut sem byrjar á sama upphafsstaf til að finna par!</p>
+    <p>Finndu öll pörin til að vinna!</p>
+</div>
 
 <div class="memory-game" id="memoryGameBoard">
     <div th:each="card : ${cards}">
