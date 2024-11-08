@@ -17,6 +17,17 @@ body, h1, p, button {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
+.match-icon img, .match-letter img {
+    width: 100%;
+    height: auto;
+    max-width: 150px; /* or another maximum size you prefer */
+    max-height: 150px; /* maintain within grid size */
+    object-fit: cover; /* Ensure the images fit within their container */
+    display: block;
+    margin: auto; /* Center the images within their container */
+}
+
+
 @keyframes gradientBG {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }

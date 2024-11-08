@@ -13,7 +13,7 @@
 <div>
   <p>Finnum pörin!</p>
   <p>Ýttu á hlut til að heyra nafnið á honum!</p>
-    Leitum svo af upphafsstaf hlutarins!</p>
+  <p>Leitum svo af upphafsstaf hlutarins!</p>
   <p>Finnum öll pörin til að vinna!</p>
 </div>
 
@@ -21,10 +21,8 @@
   <!-- Icons Grid -->
   <div class="matching-grid">
     <div th:each="icon : ${icons}">
-      <button class="match-icon"
-              th:data-id="${icon.id}"
-              th:data-letter="${icon.letter}">
-        <i th:class="'fas ' + ${icon.imageUrl}"></i>
+      <button class="match-icon" th:data-id="${icon.id}" th:data-letter="${icon.letter}">
+        <img th:src="@{'/imagefiles/' + ${icon.imageUrl}}" alt="icon">
       </button>
     </div>
   </div>
@@ -52,6 +50,7 @@
 <script th:src="@{/js/matching-game.js}"></script>
 </body>
 </html>
+
 
 
 

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 public class MatchingGameService {
@@ -17,24 +16,24 @@ public class MatchingGameService {
     private final List<Icon> fullIconSet; // Store all 16 icons
 
     public MatchingGameService() {
-        // Initialize the full set of 16 icons
+        // Initialize the full set of 16 icons with image paths
         fullIconSet = List.of(
-                new Icon(1, "fa-apple", 'A'),
-                new Icon(2, "fa-ambulance", 'A'),
-                new Icon(3, "fa-bug", 'B'),
-                new Icon(4, "fa-bus", 'B'),
-                new Icon(5, "fa-cat", 'C'),
-                new Icon(6, "fa-carrot", 'C'),
-                new Icon(7, "fa-dog", 'D'),
-                new Icon(8, "fa-dove", 'D'),
-                new Icon(9, "fa-elephant", 'E'),
-                new Icon(10, "fa-envelope", 'E'),
-                new Icon(11, "fa-fish", 'F'),
-                new Icon(12, "fa-frog", 'F'),
-                new Icon(13, "fa-ghost", 'G'),
-                new Icon(14, "fa-guitar", 'G'),
-                new Icon(15, "fa-horse", 'H'),
-                new Icon(16, "fa-hat-cowboy", 'H')
+                new Icon(1, "dyr/fill.jpg.png", 'F'),
+                new Icon(2, "dyr/lest.jpg.png", 'L'),
+                new Icon(3, "dyr/hundur.jpg.png", 'H'),
+                new Icon(4, "dyr/morgaes.jpg.png", 'M'),
+                new Icon(5, "dyr/moldvarpa.jpg.png", 'M'),
+                new Icon(6, "hlutir/batur.jpg.png", 'B'),
+                new Icon(7, "hlutir/bolti.jpg.png", 'B'),
+                new Icon(8, "hlutir/flugvel.jpg.png", 'F'),
+                new Icon(9, "dyr/kottur.jpg.png", 'K'),
+                new Icon(10, "dyr/ugla.jpg.png", 'U'),
+                new Icon(11, "hlutir/hattur.jpg.png", 'H'),
+                new Icon(12, "hlutir/hjol.jpg.png", 'H'),
+                new Icon(13, "dyr/ljon.jpg.png", 'L'),
+                new Icon(14, "hlutir/glas.jpg.png", 'G'),
+                new Icon(15, "dyr/tigrisdyr.jpg.png", 'T'),
+                new Icon(16, "dyr/snakur.jpg.png", 'S')
         );
 
         initializeGame();
@@ -81,3 +80,4 @@ public class MatchingGameService {
         return false;
     }
 }
+
