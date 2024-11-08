@@ -481,13 +481,6 @@ body::before {
     50% { background-color: #8fd3f4; }
 }
 
-/* Shake Animation for Wrong Matches */
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
-}
-
 /* Shake Animation for Incorrect Matches */
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
