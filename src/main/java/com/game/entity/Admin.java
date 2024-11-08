@@ -1,5 +1,6 @@
 package com.game.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,7 +24,7 @@ public class Admin {
 	@Column(nullable = false)
     private String password;
 
-	@Column()
+	@JsonProperty("isSupervisor")
     private boolean isSupervisor;
 
 	@ManyToOne
@@ -66,12 +67,8 @@ public class Admin {
         return isSupervisor;
     }
 
-    public void setAsSupervisor() {
-        this.isSupervisor = true;
-    }
-
-    public void removeAsSupervisor() {
-        this.isSupervisor = false;
+    public void setSupervisor(boolean isSupervisor) {
+        this.isSupervisor = isSupervisor;
     }
 
     public School getSchool() {
