@@ -2,7 +2,7 @@ body {
     background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
-    height: 100vh;
+    top: 2rem;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -20,8 +20,8 @@ body, h1, p, button {
 .match-icon img, .match-letter img {
     width: 100%;
     height: auto;
-    max-width: 150px; /* or another maximum size you prefer */
-    max-height: 150px; /* maintain within grid size */
+    max-width: 250px; /* or another maximum size you prefer */
+    max-height: 250px; /* maintain within grid size */
     object-fit: cover; /* Ensure the images fit within their container */
     display: block;
     margin: auto; /* Center the images within their container */
@@ -55,6 +55,20 @@ h1 {
     color: #333;
 }
 
+/* Back Button */
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 15px;
+    background-color: #ff8c00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
 /* General Container for the Matching Game */
 .matching-game-container {
     display: flex;
@@ -69,16 +83,16 @@ h1 {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 columns for a balanced layout */
     gap: 15px; /* Space between buttons */
-    max-width: 600px; /* Maximum grid width */
-    width: 90vw; /* Responsive width */
+    max-width: 800px; /* Maximum grid width */
+    width: 800px; /* Set width to match max-width */
 }
 
 /* Styling for Icon and Letter Buttons */
 .match-icon, .match-letter {
-    width: 5rem; /* Adjust width based on content */
+    width: 9rem; /* Adjust width based on content */
     aspect-ratio: 1 / 1; /* Maintain square shape */
     position: relative;
-    font-size: 1.5em;
+    font-size: 5rem;
     border-radius: 8px;
     border: 1px solid #ccc;
     background-color: #f9f9f9;
@@ -177,12 +191,13 @@ h1 {
 /* Responsive Design */
 @media (max-width: 600px) {
     .matching-grid {
-        grid-template-columns: repeat(2, 1fr); /* Adjust to 2 columns for small screens */
-        gap: 10px;
+        max-width: 95vw;
+        width: 95vw;
     }
 
     .match-icon, .match-letter {
-        font-size: 1.2em;
+        width: 4rem;
+        font-size: 1.5rem;
     }
 }
 
