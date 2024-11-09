@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Random;
 
 @Controller
-@SessionAttributes({"game", "username"})
+@SessionAttributes({"game"})
 public class GameController {
 
     @Autowired
@@ -21,13 +21,13 @@ public class GameController {
         return new Game();
     }
 
-    @GetMapping("/")
-    public String index(@SessionAttribute(value = "username", required = false) String username) {
-        if (username == null || username.isEmpty()) {
-            return "redirect:/login";
-        }
-        return "redirect:/letters";
-    }
+    //@GetMapping("/")
+    //public String index(@SessionAttribute(value = "username", required = false) String username) {
+    //    if (username == null || username.isEmpty()) {
+    //        return "redirect:/login";
+    //    }
+    //    return "redirect:/letters";
+    //}
 
     @PostMapping("/check")
     public String checkAnswer(@RequestParam("answer") String answer, @ModelAttribute("game") Game game, Model model) {
@@ -64,21 +64,21 @@ public class GameController {
         return "index";
     }
 
-    @GetMapping("/login")
-    public String loginPage(Model model) {
-        model.addAttribute("username", "Guest");
-        return "login";
-    }
+    //@GetMapping("/login")
+    //public String loginPage(Model model) {
+    //    model.addAttribute("username", "Guest");
+    //    return "login";
+    //}
 
-    @PostMapping("/login")
-    public String handleLogin(@RequestParam String username, Model model) {
-        if (username == null || username.trim().isEmpty()) {
-            model.addAttribute("error", "Username cannot be empty");
-            return "login";
-        }
-        model.addAttribute("username", username);
-        return "redirect:/letters";
-    }
+    //@PostMapping("/login")
+    //public String handleLogin(@RequestParam String username, Model model) {
+    //    if (username == null || username.trim().isEmpty()) {
+    //        model.addAttribute("error", "Username cannot be empty");
+    //        return "login";
+    //    }
+    //    model.addAttribute("username", username);
+    //    return "redirect:/letters";
+    //}
 }
 
 
