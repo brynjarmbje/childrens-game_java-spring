@@ -8,16 +8,24 @@ import com.game.repository.AdminRepository;
 
 @Service
 public class LoginService {
-    @Autowired
-    private AdminRepository adminRepository;
+	@Autowired
+	private AdminRepository adminRepository;
 
-    public Admin authenticate(String username, String password) {
-        Admin admin = adminRepository.findByUsername(username);
-        if (admin != null) {
-            if (admin.getPassword().equals(password)) {
-                return admin;
-            }
-        }
-        return null;
-    }
+	public boolean authenticate(Admin testAdmin) {
+		Admin repoAdmin = adminRepository.findByUsername(testAdmin.getUsername());
+		if (repoAdmin != null) {
+			if (repoAdmin.getPassword().equals(testAdmin.getPassword())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Admin login(Admin admin) {
+		Admin loggedInAdmin = adminRepository.findByUsername(admin.getUsername());
+		//if (authenticate(loggedInAdmin)) {
+			return loggedInAdmin;
+		//}
+		//return null;
+	}
 }

@@ -9,14 +9,14 @@
 	<body>
 		<div class="container">
 			<h1>Login</h1>
-			<form th:action="@{/login}" th:object="${user}" method="post">
+			<form action="*" th:action="@{/}" th:object="${admin}" method="post">
 				<div>
 					<label for="username">Username:</label>
-					<input type="text" id="username" name="username" value="Guest">
+					<input type="text" id="username" name="username" th:field="*{username}">
 				</div>		
 				<div>
 					<label for="password">Password:</label>
-					<input type="password" name="password" id="password" value="">
+					<input type="password" name="password" id="password" th:value="*{password}">
 				</div>
 				<div>
 					<button type="submit">Login</button>
