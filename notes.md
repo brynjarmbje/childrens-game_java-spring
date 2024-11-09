@@ -12,6 +12,13 @@
 # TODO:
 - [ ] ákveða hvernig eigi að geyma questions
 - [ ] laga loginService eftir breytingu á authenticate
-- [ ] ákveða restController, örugglega login og finna almennilega útúr því
+- [ ] Gera restcontroller fyrir allar hina controllera 
 - [ ] 
+### eftir fyrirlestur 25.okt
+- [x] setja upp render db og tengja við verkefnið
+- [ ] Gera ákveðna hluti static sem eiga að vera eina instance af klasanum
+- [ ] við þurfum fyrir hvern punkt að gera basic ui og db dót, þarf að vera alla leið í gegn
+- [ ] mögulega setja upp proxy fyrir repo
 
+### Aðrar pælingar
+- Láta game service ekki deyja þegar game deyr því það þarf að vista session og kannski uppfæra progress áður en það hættir
