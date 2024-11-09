@@ -9,11 +9,36 @@
 <body>
 <div class="container">
   <h1>Login</h1>
-  <form action="/login" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" value="Guest">
-    <button type="submit">Login</button>
-  </form>
+
+  <!-- Admin Login Section -->
+  <section>
+    <h2>Admin Login</h2>
+    <form action="/login" method="post">
+      <label for="admin-username">Username:</label>
+      <input type="text" id="admin-username" name="username" required>
+
+      <label for="admin-password">Password:</label>
+      <input type="password" id="admin-password" name="password" required>
+
+      <button type="submit">Login as Admin</button>
+    </form>
+  </section>
+  <hr>
+
+      <section>
+        <h2>Guest Login</h2>
+        <form action="/login" method="post">
+          <label for="guest-username">Username:</label>
+          <input type="text" id="guest-username" name="username" value="Guest">
+          <button type="submit">Login as Guest</button>
+        </form>
+      </section>
+
+
+
+
+
+
 </div>
 </body>
 </html>

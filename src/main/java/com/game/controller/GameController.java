@@ -141,5 +141,3 @@ public class GameController {
         return "redirect:/matching-game";
     }
 }
-
-
