@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 
 public class PlayAudio {
     private Clip clip;
@@ -77,8 +78,40 @@ public class PlayAudio {
         }
     }
 
+    // Method to copy all .wav files in a directory to .blob files
+    public static void convertAllWavFilesToBlob(String directoryPath) {
+        File directory = new File(directoryPath);
+        if (!directory.isDirectory()) {
+            System.out.println("The specified path is not a directory.");
+            return;
+        }
+
+        File[] files = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".wav"));
+        if (files != null) {
+            for (File wavFile : files) {
+                try {
+                    // Read the .wav file into a byte array
+                    byte[] audioBlob = Files.readAllBytes(wavFile.toPath());
+
+                    // Create a .blob file path by replacing the .wav extension
+                    String blobFilePath = wavFile.getAbsolutePath().replace(".wav", ".blob");
+                    try (FileOutputStream fos = new FileOutputStream(blobFilePath)) {
+                        fos.write(audioBlob);
+                        System.out.println("Converted " + wavFile.getName() + " to blob at: " + blobFilePath);
+                    }
+                } catch (IOException e) {
+                    System.err.println("Failed to convert " + wavFile.getName() + " to blob.");
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            System.out.println("No .wav files found in directory: " + directoryPath);
+        }
+    }
+
     public static void main(String[] args) {
         String filePath = "src/main/resources/static/audio_files/test_audio/audio_test.wav";
+        String blobFilePath = "src/main/resources/static/audio_files/test_audio/audio_test.blob";
         String newFilePath = "src/main/resources/static/audio_files/test_audio/audio_test_copy.wav";
 
         System.out.println("Trying to load audio file from: " + new File(filePath).getAbsolutePath());
@@ -89,6 +122,14 @@ public class PlayAudio {
         // Convert the audio file to a blob (byte array)
         byte[] audioBlob = player.convertAudioFileToBlob(filePath);
         System.out.println("Audio file converted to blob (byte array) of size: " + audioBlob.length + " bytes.");
+
+        // Save the blob as a .blob file
+        try (FileOutputStream fos = new FileOutputStream(blobFilePath)) {
+            fos.write(audioBlob);
+            System.out.println("Blob saved to file at: " + blobFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Write the blob back to a new audio file
         player.writeBlobToAudioFile(audioBlob, newFilePath);
@@ -101,5 +142,20 @@ public class PlayAudio {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        String hlutirDirectoryPath = "src/main/resources/static/audio_files/hlutir";
+        System.out.println("Converting all .wav files in directory: " + new File(hlutirDirectoryPath).getAbsolutePath());
+        convertAllWavFilesToBlob(hlutirDirectoryPath);
+
+        String nedanOfanDirectoryPath = "src/main/resources/static/audio_files/nedan_ofan_haegri_vinstri";
+        System.out.println("Converting all .wav files in directory: " + new File(nedanOfanDirectoryPath).getAbsolutePath());
+        convertAllWavFilesToBlob(nedanOfanDirectoryPath);
+
+        String numerDirectoryPath = "src/main/resources/static/audio_files/numer";
+        System.out.println("Converting all .wav files in directory: " + new File(numerDirectoryPath).getAbsolutePath());
+        convertAllWavFilesToBlob(numerDirectoryPath);
+
+        String stafrofDirectoryPath = "src/main/resources/static/audio_files/stafrof";
+        System.out.println("Converting all .wav files in directory: " + new File(stafrofDirectoryPath).getAbsolutePath());
+        convertAllWavFilesToBlob(stafrofDirectoryPath);
     }
 }
