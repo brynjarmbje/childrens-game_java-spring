@@ -45,17 +45,24 @@ public class LoginController {
 		boolean isAuthenticAdmin = loginService.authenticate(admin);
 		if (isAuthenticAdmin) {
 			Admin loggedInAdmin = loginService.login(admin);
-			model.addAttribute("username", loggedInAdmin);
-			session.setAttribute("username", loggedInAdmin);
-			ifSupervisor(admin, session);
-			System.out.println("Admin login successful, redirecting to index...");
-			return "redirect:/index";
+			model.addAttribute("username", loggedInAdmin.getUsername());
+			session.setAttribute("username", loggedInAdmin.getUsername()); // Save username instead of whole object
+			return ifSupervisor(loggedInAdmin, session); // Return redirect URL based on supervisor status
 		}
 		System.out.println("Admin login failed");
 		model.addAttribute("error", "Incorrect credentials");
 		return "redirect:/login";
 	}
 
+	public String ifSupervisor(Admin admin, HttpSession session) {
+		if (admin.isSupervisor()) { // Corrected method call
+			session.setAttribute("isSupervisor", "true");
+			System.out.println("Supervisor detected, redirecting to /supervisor");
+			return "redirect:/supervisor";
+		}
+		System.out.println("Regular admin detected, redirecting to /index");
+		return "redirect:/index";
+	}
 
 	@PostMapping("/guest-login")
 	public String handleGuestLogin(@RequestParam("guestUsername") String guestUsername, Model model, HttpSession session) {
@@ -71,12 +78,10 @@ public class LoginController {
 		return "index"; // Or "redirect:/" based on your application structure
 	}
 
-	public String ifSupervisor(Admin admin,HttpSession session) {
-		if (admin.isSupervisor()) {
-			session.setAttribute("isSupervisor", "true");
-			return "redirect:/supervisor";
-		}
-		return "redirect:/index";
+	@GetMapping("/supervisor")
+	public String supervisorPage() {
+		// Add logic to prepare any data or handle business logic if necessary
+		return "supervisor"; // This should correspond to the supervisor.html view or template
 	}
 
 }
