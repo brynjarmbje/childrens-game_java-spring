@@ -12,7 +12,7 @@
 		<!-- Admin Login Section -->
 		<section>
 			<h2>Admin Login</h2>
-			<form action="*" th:action="@{/}" th:object="${admin}" method="post">
+			<form th:action="@{/login}" th:object="${admin}" method="post">
 				<label for="username">Username:</label>
 				<input type="text" id="username" name="username" th:field="*{username}" required>
 
@@ -21,14 +21,15 @@
 
 				<button type="submit">Login as Admin</button>
 			</form>
+
 		</section>
 		<hr>
 
 		<section>
 			<h2>Guest Login</h2>
-			<form action="/login" method="post">
+			<form action="/guest-login" method="post">
 				<label for="guest-username">Guest name:</label>
-				<input type="text" id="guest-username" name="guest-username" value="Guest">
+				<input type="text" id="guest-username" name="guestUsername" value="Guest">
 				<button type="submit">Login as Guest</button>
 			</form>
 		</section>
