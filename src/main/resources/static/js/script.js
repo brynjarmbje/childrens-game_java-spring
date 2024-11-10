@@ -41,8 +41,14 @@ document.addEventListener('DOMContentLoaded', function () {
         feedbackDiv.classList.remove('show');
         gameForm.style.display = 'block'; // Show the form again
         newGameButton.style.display = 'none'; // Hide the "Start New Game" button
-        window.location.href = '/reset'; // This triggers the reset in the controller
+        if (window.location.pathname === '/letters') {
+            window.location.href = '/letters/reset'; // This triggers the reset in the controller
+        } else if (window.location.pathname === '/numbers') {
+            window.location.href = '/numbers/reset'; // This triggers the reset in the controller
+        }
     });
+
+
 });
 
 

@@ -42,11 +42,18 @@ public class GameController {
         return "index";
     }
 
-    @GetMapping("/reset")
-    public String resetGame(@ModelAttribute("game") Game game) {
+    @GetMapping("/letters/reset")
+    public String resetLettersGame(@ModelAttribute("game") Game game) {
         game.setOptions(gameService.generateRandomOptions());
         game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
-        return "index";
+        return "redirect:/letters";
+    }
+
+    @GetMapping("/numbers/reset")
+    public String resetNumbersGame(@ModelAttribute("game") Game game) {
+        game.setOptions(gameService.generateRandomNumbers());
+        game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
+        return "redirect:/numbers";
     }
 
     @GetMapping("/letters")
