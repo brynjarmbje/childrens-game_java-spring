@@ -35,19 +35,27 @@ public class LoginController {
 		return "login";
 	}
 
+	@GetMapping("/index")
+	public String showIndexPage() {
+		return "index"; // This should correspond to an `index.html` template
+	}
 
 	@PostMapping("/login")
-	public String loginPost(@ModelAttribute("admin") Admin admin, Model model, HttpSession session) {
+	public String loginPost(Admin admin, Model model, HttpSession session) {
 		boolean isAuthenticAdmin = loginService.authenticate(admin);
 		if (isAuthenticAdmin) {
 			Admin loggedInAdmin = loginService.login(admin);
-			model.addAttribute("username", loggedInAdmin.getUsername()); // Use appropriate attribute
-			session.setAttribute("username", loggedInAdmin.getUsername()); // Store only the username in session
-			return ifSupervisor(loggedInAdmin, session); // Redirect based on supervisor status
+			model.addAttribute("username", loggedInAdmin);
+			session.setAttribute("username", loggedInAdmin);
+			ifSupervisor(admin, session);
+			System.out.println("Admin login successful, redirecting to index...");
+			return "redirect:/index";
 		}
+		System.out.println("Admin login failed");
 		model.addAttribute("error", "Incorrect credentials");
-		return "login";
+		return "redirect:/login";
 	}
+
 
 	@PostMapping("/guest-login")
 	public String handleGuestLogin(@RequestParam("guestUsername") String guestUsername, Model model, HttpSession session) {
