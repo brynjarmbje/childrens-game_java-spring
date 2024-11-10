@@ -7,28 +7,24 @@ import java.util.Random;
 
 @Service
 public class GameService {
-    private Game game;
 
-    public void startGame(int type, int level){
+    private final Random random = new Random();
+
+    public void startGame(Game game, int type, int level) {
         game.setLevel(level);
         game.setType(type);
     }
 
-
-
-//------------------
-    private final Random random = new Random();
-
     public boolean checkAnswer(String answer, Game game) {
         boolean isCorrect = game.getCorrectAnswer().equals(answer);
         if (isCorrect) {
-            game.setScore(game.getScore() + 10);  // Add 10 points for each correct answer
+            game.setScore(game.getScore() + 10);  // Add points for correct answer
         }
         return isCorrect;
     }
 
     public String[] generateRandomOptions() {
-        char[] letters = "AÁBDÐEÉFGHIÍJKLMNOÓPRSTUÚVXYÝÞÆÖ".toCharArray();  // Include Icelandic letters
+        char[] letters = "AÁBDÐEÉFGHIÍJKLMNOÓPRSTUÚVXYÝÞÆÖ".toCharArray(); // Icelandic letters
         String[] options = new String[3];
         for (int i = 0; i < 3; i++) {
             options[i] = String.valueOf(letters[random.nextInt(letters.length)]);
@@ -39,11 +35,12 @@ public class GameService {
     public String[] generateRandomNumbers() {
         String[] options = new String[3];
         for (int i = 0; i < 3; i++) {
-            options[i] = String.valueOf(random.nextInt(100)); // Generate random numbers between 0-99
+            options[i] = String.valueOf(random.nextInt(100)); // Random numbers 0-99
         }
         return options;
     }
 }
+
 
 
 

@@ -15,5 +15,5 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
 	// save session to repository
 	//public void saveSession(Session sessionToSave){
-    }
+
 }

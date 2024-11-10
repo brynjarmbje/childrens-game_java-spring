@@ -1,6 +1,6 @@
 package com.game.controller;
 
-import com.game.model.Game;
+import com.game.entity.Game;
 import com.game.service.GameService;
 import com.game.service.MemoryGameService;
 import com.game.service.MatchingGameService;
