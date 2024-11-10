@@ -24,7 +24,7 @@ public class Admin {
 	@Column(nullable = false)
     private String password;
 
-	@JsonProperty("isSupervisor")
+	@Column(name="issupervisor")
     private boolean isSupervisor;
 
 	@ManyToOne
