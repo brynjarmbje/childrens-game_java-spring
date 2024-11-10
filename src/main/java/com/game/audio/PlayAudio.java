@@ -78,8 +78,8 @@ public class PlayAudio {
     }
 
     public static void main(String[] args) {
-        String filePath = "src/main/audiofiles/test_sound.wav";
-        String newFilePath = "src/main/audiofiles/copied_test_sound.wav";
+        String filePath = "src/main/resources/static/audio_files/test_audio/audio_test.wav";
+        String newFilePath = "src/main/resources/static/audio_files/test_audio/audio_test_copy.wav";
 
         System.out.println("Trying to load audio file from: " + new File(filePath).getAbsolutePath());
 

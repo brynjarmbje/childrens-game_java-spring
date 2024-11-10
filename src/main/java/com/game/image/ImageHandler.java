@@ -59,8 +59,8 @@ public class ImageHandler {
     }
 
     public static void main(String[] args) {
-        String filePath = "src/main/imagefiles/test.png";
-        String newFilePath = "src/main/imagefiles/test_new.png";
+        String filePath = "src/main/resources/static/image_files/test_image/image_test.png";
+        String newFilePath = "src/main/resources/static/image_files/test_image/image_test_copy.png";
 
         System.out.println("Trying to load image file from: " + new File(filePath).getAbsolutePath());
 
