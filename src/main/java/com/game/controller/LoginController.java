@@ -1,5 +1,6 @@
 package com.game.controller;
 
+import com.game.entity.Child;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,8 @@ import com.game.service.LoginService;
 import jakarta.servlet.http.HttpSession;
 
 import com.game.entity.Admin;
+
+import java.util.List;
 
 //@RestController
 @Controller
@@ -76,12 +79,6 @@ public class LoginController {
 
 		// Redirect to index or any other page as needed
 		return "index"; // Or "redirect:/" based on your application structure
-	}
-
-	@GetMapping("/supervisor")
-	public String supervisorPage() {
-		// Add logic to prepare any data or handle business logic if necessary
-		return "supervisor"; // This should correspond to the supervisor.html view or template
 	}
 
 }

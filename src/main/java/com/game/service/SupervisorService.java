@@ -7,6 +7,8 @@ import com.game.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SupervisorService {
 
@@ -26,6 +28,11 @@ public class SupervisorService {
         childRepository.deleteById(id);
     }
 
+    // Get all Children
+    public List<Child> getAllChildren() {
+        return childRepository.findAll();
+    }
+
     // Create a new Admin
     public Admin createAdmin(Admin admin) {
         return adminRepository.save(admin);
@@ -35,5 +42,11 @@ public class SupervisorService {
     public void deleteAdmin(Long id) {
         adminRepository.deleteById(id);
     }
+
+    // Get all Admins
+    public List<Admin> getAllAdmins() {
+        return adminRepository.findAll();
+    }
+
 }
 
