@@ -1,3 +1,14 @@
+## Það sem þarf að laga eða klára
+- Búa til spurningar
+- logga sig út
+- laga gera aftur takkann í tölur
+- gera audio
+- laga myndir í hver er stafurinn
+- game progress 
+
+
+
+
 Simple childrens game using Java Spring, Maven, and more.
 ---
 ## End-Points
