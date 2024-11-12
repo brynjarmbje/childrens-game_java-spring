@@ -1,9 +1,6 @@
 package com.game.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -11,21 +8,32 @@ import java.util.List;
 public class Question {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
+    @Column(nullable = false)
+    private String connectionId;
+
+    @Column(nullable = false)
     private int type;
+
+    @Column(nullable = false)
     private int level;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id") // You can specify a column name here
     private List<Image> group;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "audio_question_id")
     private Audio audioQuestion;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "correct_answer_id")
     private Image correctAnswer;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id") // Assuming wrongAnswers also references question
     private List<Image> wrongAnswers;
 
     // Constructor

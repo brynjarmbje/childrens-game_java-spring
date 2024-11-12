@@ -1,4 +1,4 @@
-package com.game.audio;
+package com.game.data;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -13,11 +13,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 
-public class PlayAudio {
+public class AudioHandler {
     private Clip clip;
 
     // Constructor to initialize the AudioPlayer
-    public PlayAudio(String filePath) {
+    public AudioHandler(String filePath) {
         try {
             // Open an audio input stream from the file path
             File audioFile = new File(filePath);
@@ -116,7 +116,7 @@ public class PlayAudio {
 
         System.out.println("Trying to load audio file from: " + new File(filePath).getAbsolutePath());
 
-        PlayAudio player = new PlayAudio(filePath);
+        AudioHandler player = new AudioHandler(filePath);
         player.play();  // Play once
 
         // Convert the audio file to a blob (byte array)
