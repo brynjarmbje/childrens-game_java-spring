@@ -1,5 +1,7 @@
 package com.game.entity;
 
+import java.sql.Blob;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -26,10 +28,10 @@ public class Image {
 
     @Lob
     @Column(nullable = false)
-    private byte[] imageData;
+    private Blob imageData;
 
     // Constructor
-    public Image(long id, String name, int type, byte[] imageData) {
+    public Image(long id, String name, int type, Blob imageData) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -38,7 +40,7 @@ public class Image {
 
 
     // Constructor with firstLetter
-    public Image(long id, String name, int type, Character firstLetter, byte[] imageData) {
+    public Image(long id, String name, int type, Character firstLetter, Blob imageData) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -47,7 +49,7 @@ public class Image {
     }
 
     // Constructor with isLetter
-    public Image(long id, String name, int type, boolean isLetter, byte[] imageData) {
+    public Image(long id, String name, int type, boolean isLetter, Blob imageData) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -83,11 +85,11 @@ public class Image {
         this.type = type;
     }
 
-    public byte[] getImageData() {
+    public Blob getImageData() {
         return imageData;
     }
 
-    public void setImageData(byte[] imageData) {
+    public void setImageData(Blob imageData) {
         this.imageData = imageData;
     }
 

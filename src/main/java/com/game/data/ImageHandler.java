@@ -1,9 +1,12 @@
 package com.game.data;
 
 import javax.imageio.ImageIO;
+import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.sql.Blob;
+import java.sql.SQLException;
 
 public class ImageHandler {
     private BufferedImage image;
@@ -34,13 +37,14 @@ public class ImageHandler {
         }
     }
 
-    // Convert the image to a byte array (blob-like behavior)
-    public byte[] convertImageToBlob(String format) {
+// Convert the image to a blob 
+public Blob convertImageToBlob(String format) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             ImageIO.write(image, format, outputStream);
-            return outputStream.toByteArray();
-        } catch (IOException e) {
+            byte[] imageBytes = outputStream.toByteArray();
+            return new SerialBlob(imageBytes); // Convert byte array to Blob
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -94,48 +98,48 @@ public class ImageHandler {
     }
 
     public static void main(String[] args) {
-        String filePath = "src/main/resources/static/image_files/test_image/image_test.png";
-        String blobFilePath = "src/main/resources/static/image_files/test_image/image_test.blob";
-        String newFilePath = "src/main/resources/static/image_files/test_image/image_test_copy.png";
-
-        System.out.println("Trying to load image file from: " + new File(filePath).getAbsolutePath());
-
-        ImageHandler handler = new ImageHandler(filePath);
-        handler.display();
-
-        // Convert the image to a blob (byte array)
-        byte[] imageBlob = handler.convertImageToBlob("png");
-        if (imageBlob != null) {
-            System.out.println("Image file converted to blob (byte array) of size: " + imageBlob.length + " bytes.");
-
-            // Save the blob as a .blob file
-            try (FileOutputStream fos = new FileOutputStream(blobFilePath)) {
-                fos.write(imageBlob);
-                System.out.println("Blob saved to file at: " + blobFilePath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            // Write the blob back to a new image file
-            handler.writeBlobToImageFile(imageBlob, newFilePath, "png");
-            System.out.println("New image file created at: " + newFilePath);
-        } else {
-            System.out.println("Failed to convert image to blob.");
-        }
-        String hlutirDirectoryPath = "src/main/resources/static/image_files/hlutir";
-        System.out.println("Converting all .png files in directory: " + new File(hlutirDirectoryPath).getAbsolutePath());
-        convertAllImageFilesToBlob(hlutirDirectoryPath, "png");
-
-        String nedanOfanDirectoryPath = "src/main/resources/static/image_files/nedan_ofan_haegri_vinstri";
-        System.out.println("Converting all .png files in directory: " + new File(nedanOfanDirectoryPath).getAbsolutePath());
-        convertAllImageFilesToBlob(nedanOfanDirectoryPath, "png");
-
-        String numerDirectoryPath = "src/main/resources/static/image_files/numer";
-        System.out.println("Converting all .png files in directory: " + new File(numerDirectoryPath).getAbsolutePath());
-        convertAllImageFilesToBlob(numerDirectoryPath, "png");
-
-        String stafrofDirectoryPath = "src/main/resources/static/image_files/stafrof";
-        System.out.println("Converting all .png files in directory: " + new File(stafrofDirectoryPath).getAbsolutePath());
-        convertAllImageFilesToBlob(stafrofDirectoryPath, "png");
-    }
+    //    String filePath = "src/main/resources/static/image_files/test_image/image_test.png";
+    //    String blobFilePath = "src/main/resources/static/image_files/test_image/image_test.blob";
+    //    String newFilePath = "src/main/resources/static/image_files/test_image/image_test_copy.png";
+    //
+    //    System.out.println("Trying to load image file from: " + new File(filePath).getAbsolutePath());
+    //
+    //    ImageHandler handler = new ImageHandler(filePath);
+    //    handler.display();
+    //
+    //    // Convert the image to a blob (byte array)
+    //    Blob imageBlob = handler.convertImageToBlob("png");
+    //    if (imageBlob != null) {
+    //        System.out.println("Image file converted to blob (byte array) of size: " + imageBlob.length + " bytes.");
+    //
+    //        // Save the blob as a .blob file
+    //        try (FileOutputStream fos = new FileOutputStream(blobFilePath)) {
+    //            fos.write(imageBlob);
+    //            System.out.println("Blob saved to file at: " + blobFilePath);
+    //        } catch (IOException e) {
+    //            e.printStackTrace();
+    //        }
+    //
+    //        // Write the blob back to a new image file
+    //        handler.writeBlobToImageFile(imageBlob, newFilePath, "png");
+    //        System.out.println("New image file created at: " + newFilePath);
+    //    } else {
+    //        System.out.println("Failed to convert image to blob.");
+    //    }
+    //    String hlutirDirectoryPath = "src/main/resources/static/image_files/hlutir";
+    //    System.out.println("Converting all .png files in directory: " + new File(hlutirDirectoryPath).getAbsolutePath());
+    //    convertAllImageFilesToBlob(hlutirDirectoryPath, "png");
+    //
+    //    String nedanOfanDirectoryPath = "src/main/resources/static/image_files/nedan_ofan_haegri_vinstri";
+    //    System.out.println("Converting all .png files in directory: " + new File(nedanOfanDirectoryPath).getAbsolutePath());
+    //    convertAllImageFilesToBlob(nedanOfanDirectoryPath, "png");
+    //
+    //    String numerDirectoryPath = "src/main/resources/static/image_files/numer";
+    //    System.out.println("Converting all .png files in directory: " + new File(numerDirectoryPath).getAbsolutePath());
+    //    convertAllImageFilesToBlob(numerDirectoryPath, "png");
+    //
+    //    String stafrofDirectoryPath = "src/main/resources/static/image_files/stafrof";
+    //    System.out.println("Converting all .png files in directory: " + new File(stafrofDirectoryPath).getAbsolutePath());
+    //    convertAllImageFilesToBlob(stafrofDirectoryPath, "png");
+    //}
 }

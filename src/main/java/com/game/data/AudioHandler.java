@@ -5,6 +5,10 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sql.rowset.serial.SerialBlob;
+
+import com.game.repository.GameRepository;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.sql.Blob;
 
 public class AudioHandler {
     private Clip clip;
@@ -56,7 +61,7 @@ public class AudioHandler {
     }
 
     // Convert the audio file to a byte array (blob-like behavior)
-    public byte[] convertAudioFileToBlob(String filePath) {
+    public static Blob convertAudioFileToBlob(String filePath) {
         File audioFile = new File(filePath);
         byte[] audioBytes = null;
         try (InputStream inputStream = new FileInputStream(audioFile)) {
@@ -65,7 +70,15 @@ public class AudioHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return audioBytes;
+
+        // Convert byte array to Blob
+        Blob blob = null;
+        try {
+            blob = new SerialBlob(audioBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return blob;
     }
 
     // Write a byte array (blob) back to an audio file
@@ -145,6 +158,7 @@ public class AudioHandler {
         String hlutirDirectoryPath = "src/main/resources/static/audio_files/hlutir";
         System.out.println("Converting all .wav files in directory: " + new File(hlutirDirectoryPath).getAbsolutePath());
         convertAllWavFilesToBlob(hlutirDirectoryPath);
+		GameRepository.saveAudio(Blob hlutirDirectoryPath)
 
         String nedanOfanDirectoryPath = "src/main/resources/static/audio_files/nedan_ofan_haegri_vinstri";
         System.out.println("Converting all .wav files in directory: " + new File(nedanOfanDirectoryPath).getAbsolutePath());

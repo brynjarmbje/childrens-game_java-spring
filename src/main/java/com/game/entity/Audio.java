@@ -1,5 +1,7 @@
 package com.game.entity;
 
+import java.sql.Blob;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -20,11 +22,11 @@ public class Audio {
 
     @Lob
     @Column(nullable = false)
-    private byte[] audioData;
+    private Blob audioData;
 
     public Audio() {
     }
-    public Audio(String name, int type, byte[] audioData) {
+    public Audio(String name, int type, Blob audioData) {
         this.name = name;
         this.type = type;
         this.audioData = audioData;
@@ -42,7 +44,7 @@ public class Audio {
         return type;
     }
 
-    public byte[] getAudioData() {
+    public Blob getAudioData() {
         return audioData;
     }
 
@@ -58,7 +60,7 @@ public class Audio {
         this.type = type;
     }
 
-    public void setAudioData(byte[] audioData) {
+    public void setAudioData(Blob audioData) {
         this.audioData = audioData;
     }
 }

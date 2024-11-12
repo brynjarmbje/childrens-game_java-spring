@@ -1,105 +1,85 @@
 package com.game.entity;
 
-import jakarta.persistence.*;
+import java.sql.Blob;
 
-import java.util.List;
+import com.game.data.AudioHandler;
+
+import jakarta.persistence.*;
 
 @Entity
 public class Question {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    @Column(nullable = false)
-    private String connectionId;
+	@Column(nullable = false)
+	private String connectionId;
 
-    @Column(nullable = false)
-    private int type;
+	@Column(nullable = false)
+	private int type;
 
-    @Column(nullable = false)
-    private int level;
+	@Column(nullable = false)
+	private int level;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id") // You can specify a column name here
-    private List<Image> group;
+	@Lob
+	private Blob audioQuestion;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "audio_question_id")
-    private Audio audioQuestion;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "correct_answer_id")
+	private Image correctAnswer;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "correct_answer_id")
-    private Image correctAnswer;
+	// Constructor
+	public Question(String connectionId, int type, int level, String audioQuestionBlobFilePath) {
+		this.connectionId = connectionId;
+		this.type = type;
+		this.level = level;
+		this.audioQuestion = AudioHandler.convertAudioFileToBlob(audioQuestionBlobFilePath);
+	}
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id") // Assuming wrongAnswers also references question
-    private List<Image> wrongAnswers;
+	// Default Constructor
+	public Question() {
+	}
 
-    // Constructor
-    public Question(String id, int type, int level) {
-        this.id = id;
-        this.type = type;
-        this.level = level;
-    }
+	// Getters and Setters
+	public Long getId() {
+		return id;
+	}
 
-    // Default Constructor
-    public Question() {}
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    // Getters and Setters
-    public String getId() {
-        return id;
-    }
+	public int getType() {
+		return type;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setType(int type) {
+		this.type = type;
+	}
 
-    public int getType() {
-        return type;
-    }
+	public int getLevel() {
+		return level;
+	}
 
-    public void setType(int type) {
-        this.type = type;
-    }
+	public void setLevel(int level) {
+		this.level = level;
+	}
 
-    public int getLevel() {
-        return level;
-    }
+	public Blob getAudioQuestion() {
+		return audioQuestion;
+	}
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
+	public void setAudioQuestion(String audioQuestionBlobFilePath) {
+		this.audioQuestion = AudioHandler.convertAudioFileToBlob(audioQuestionBlobFilePath);
+	}
 
-    public List<Image> getGroup() {
-        return group;
-    }
+	public Image getCorrectAnswer() {
+		return correctAnswer;
+	}
 
-    public void setGroup(List<Image> group) {
-        this.group = group;
-    }
+	public void setCorrectAnswer(Image correctAnswer) {
+		this.correctAnswer = correctAnswer;
+	}
 
-    public Audio getAudioQuestion() {
-        return audioQuestion;
-    }
-
-    public void setAudioQuestion(Audio audioQuestion) {
-        this.audioQuestion = audioQuestion;
-    }
-
-    public Image getCorrectAnswer() {
-        return correctAnswer;
-    }
-
-    public void setCorrectAnswer(Image correctAnswer) {
-        this.correctAnswer = correctAnswer;
-    }
-
-    public List<Image> getWrongAnswers() {
-        return wrongAnswers;
-    }
-
-    public void setWrongAnswers(List<Image> wrongAnswers) {
-        this.wrongAnswers = wrongAnswers;
-    }
 }
