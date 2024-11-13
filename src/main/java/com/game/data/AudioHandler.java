@@ -123,7 +123,7 @@ public class AudioHandler {
     }
 
     public static void main(String[] args) {
-        String filePath = "src/main/resources/static/audio_files/test_audio/audio_test.wav";
+        /*String filePath = "src/main/resources/static/audio_files/test_audio/audio_test.wav";
         String blobFilePath = "src/main/resources/static/audio_files/test_audio/audio_test.blob";
         String newFilePath = "src/main/resources/static/audio_files/test_audio/audio_test_copy.wav";
 
@@ -170,6 +170,6 @@ public class AudioHandler {
 
         String stafrofDirectoryPath = "src/main/resources/static/audio_files/stafrof";
         System.out.println("Converting all .wav files in directory: " + new File(stafrofDirectoryPath).getAbsolutePath());
-        convertAllWavFilesToBlob(stafrofDirectoryPath);
+        convertAllWavFilesToBlob(stafrofDirectoryPath);*/
     }
 }

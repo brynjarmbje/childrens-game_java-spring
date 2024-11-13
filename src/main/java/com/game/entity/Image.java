@@ -12,13 +12,13 @@ public class Image {
     private long id;
 
     @Column(nullable = false)
-    private String connectionId;
-
-    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
     private int type;
+
+    @Column(nullable = false)
+    private int level;
 
     @Column(nullable = true)
     private Character firstLetter;
@@ -29,36 +29,6 @@ public class Image {
     @Lob
     @Column(nullable = false)
     private Blob imageData;
-
-    // Constructor
-    public Image(long id, String name, int type, Blob imageData) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.imageData = imageData;
-    }
-
-
-    // Constructor with firstLetter
-    public Image(long id, String name, int type, Character firstLetter, Blob imageData) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.firstLetter = firstLetter;
-        this.imageData = imageData;
-    }
-
-    // Constructor with isLetter
-    public Image(long id, String name, int type, boolean isLetter, Blob imageData) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.isLetter = isLetter;
-        this.imageData = imageData;
-    }
-
-    // Default Constructor
-    public Image() {}
 
     // Getters and Setters
     public long getId() {
@@ -85,12 +55,12 @@ public class Image {
         this.type = type;
     }
 
-    public Blob getImageData() {
-        return imageData;
+    public int getLevel() {
+        return level;
     }
 
-    public void setImageData(Blob imageData) {
-        this.imageData = imageData;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public Character getFirstLetter() {
@@ -101,11 +71,19 @@ public class Image {
         this.firstLetter = firstLetter;
     }
 
-    public boolean getIsLetter() {
+    public boolean isLetter() {
         return isLetter;
     }
 
-    public boolean isLetter() {
-        return isLetter;
+    public void setLetter(boolean letter) {
+        isLetter = letter;
+    }
+
+    public Blob getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(Blob imageData) {
+        this.imageData = imageData;
     }
 }

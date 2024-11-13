@@ -21,6 +21,9 @@ public class ImageHandler {
             e.printStackTrace();
         }
     }
+    // Constructor to initialize the ImageHandler
+    public ImageHandler() {
+    }
 
     // Display the image in a JFrame window
     public void display() {
@@ -37,8 +40,8 @@ public class ImageHandler {
         }
     }
 
-// Convert the image to a blob 
-public Blob convertImageToBlob(String format) {
+    // Convert the image to a blob
+    public static Blob convertImageToBlob(BufferedImage image, String format) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             ImageIO.write(image, format, outputStream);
@@ -141,5 +144,5 @@ public Blob convertImageToBlob(String format) {
     //    String stafrofDirectoryPath = "src/main/resources/static/image_files/stafrof";
     //    System.out.println("Converting all .png files in directory: " + new File(stafrofDirectoryPath).getAbsolutePath());
     //    convertAllImageFilesToBlob(stafrofDirectoryPath, "png");
-    //}
+    }
 }

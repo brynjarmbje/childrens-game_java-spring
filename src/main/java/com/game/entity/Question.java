@@ -6,6 +6,8 @@ import com.game.data.AudioHandler;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Question {
 
@@ -14,7 +16,7 @@ public class Question {
 	private long id;
 
 	@Column(nullable = false)
-	private String connectionId;
+	private String name;
 
 	@Column(nullable = false)
 	private int type;
@@ -25,29 +27,25 @@ public class Question {
 	@Lob
 	private Blob audioQuestion;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "correct_answer_id")
+	@OneToOne
+	@JoinColumn(name = "correct_image_id", referencedColumnName = "id", nullable = true)
 	private Image correctAnswer;
 
-	// Constructor
-	public Question(String connectionId, int type, int level, String audioQuestionFilePath) {
-		this.connectionId = connectionId;
-		this.type = type;
-		this.level = level;
-		this.audioQuestion = AudioHandler.convertAudioFileToBlob(audioQuestionFilePath);
-	}
-
-	// Default Constructor
-	public Question() {
-	}
-
 	// Getters and Setters
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public int getType() {
@@ -70,8 +68,8 @@ public class Question {
 		return audioQuestion;
 	}
 
-	public void setAudioQuestion(String audioQuestionBlobFilePath) {
-		this.audioQuestion = AudioHandler.convertAudioFileToBlob(audioQuestionBlobFilePath);
+	public void setAudioQuestion(Blob audioQuestion) {
+		this.audioQuestion = audioQuestion;
 	}
 
 	public Image getCorrectAnswer() {
@@ -81,5 +79,4 @@ public class Question {
 	public void setCorrectAnswer(Image correctAnswer) {
 		this.correctAnswer = correctAnswer;
 	}
-
 }
