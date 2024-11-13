@@ -5,7 +5,7 @@
 - gera audio
 - laga myndir í hver er stafurinn
 - game progress 
-
+-
 
 
 

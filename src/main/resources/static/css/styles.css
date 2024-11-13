@@ -199,4 +199,28 @@ input[type="text"], input[type="password"], select {
     box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* Positioning the logout button in the bottom-left corner */
+.logout-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+}
 
+/* Styling for the logout button */
+.logout-button {
+    background: linear-gradient(to right, #ff6f61, #ff9a9e);
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.logout-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 7px 15px rgba(0, 0, 0, 0.3);
+}
