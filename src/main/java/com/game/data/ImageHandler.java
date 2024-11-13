@@ -101,7 +101,7 @@ public class ImageHandler {
     }
 
     public static void main(String[] args) {
-    //    String filePath = "src/main/resources/static/image_files/test_image/image_test.png";
+    //    String filePath = "src/main/resources/static/image_files/test/test.png";
     //    String blobFilePath = "src/main/resources/static/image_files/test_image/image_test.blob";
     //    String newFilePath = "src/main/resources/static/image_files/test_image/image_test_copy.png";
     //

@@ -16,22 +16,25 @@ import java.sql.Blob;
 
 @Service
 public class QuestionService {
-
 	@Autowired
 	private QuestionRepository questionRepository;
 
 	@Autowired
 	private ImageRepository imageRepository;
 
-	public void createQuestionWithCorrectImage(
+	public void createQuestion(
 			String questionName,
 			int type,
 			int level,
-			String audioPath, // Path to the audio file
-			String imagePath, // Path to the image file
-			String imageFormat // Image format (e.g., "png", "jpg")
+			String folder, // Folder name for the image file
+			String path, // Path to the audio file
+			String imageFormat, // Image format (e.g., "png", "jpg")
+			boolean isLetter, // Whether the image is a letter
+			Character firstLetter // Whether the image is the first letter
 	) {
 		try {
+			String imagePath = "src/main/resources/static/image_files/" + folder + "/" + path + ".png";
+			System.out.println("Image path: " + imagePath);
 			// Load the image file as a BufferedImage
 			BufferedImage bufferedImage = ImageIO.read(new File(imagePath));
 
@@ -43,11 +46,15 @@ public class QuestionService {
 			correctImage.setName(questionName);
 			correctImage.setType(type);
 			correctImage.setLevel(level);
+			correctImage.setLetter(isLetter);
+			correctImage.setFirstLetter(firstLetter);
 			correctImage.setImageData(imageBlob); // Set the converted image Blob
 
 			// Save the Image entity
 			imageRepository.save(correctImage);
 
+			String audioPath = "src/main/resources/static/audio_files/" + folder + "/" + path + ".wav";
+			System.out.println("Audio path: " + audioPath);
 			// Convert audio file to Blob using AudioHandler
 			Blob audioBlob = AudioHandler.convertAudioFileToBlob(audioPath);
 
