@@ -30,11 +30,11 @@ public class Question {
 	private Image correctAnswer;
 
 	// Constructor
-	public Question(String connectionId, int type, int level, String audioQuestionBlobFilePath) {
+	public Question(String connectionId, int type, int level, String audioQuestionFilePath) {
 		this.connectionId = connectionId;
 		this.type = type;
 		this.level = level;
-		this.audioQuestion = AudioHandler.convertAudioFileToBlob(audioQuestionBlobFilePath);
+		this.audioQuestion = AudioHandler.convertAudioFileToBlob(audioQuestionFilePath);
 	}
 
 	// Default Constructor
