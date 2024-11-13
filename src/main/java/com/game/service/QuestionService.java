@@ -1,6 +1,7 @@
 package com.game.service;
 import com.game.data.AudioHandler;
 import com.game.entity.Image;
+import com.game.errors.QuestionNotFoundException;
 import com.game.repository.ImageRepository;
 import com.game.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Blob;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuestionService {
@@ -21,6 +24,65 @@ public class QuestionService {
 
 	@Autowired
 	private ImageRepository imageRepository;
+
+	// Retrieve a question by ID
+	public Question getQuestionById(Long id) {
+		try {
+			return questionRepository.findById(id)
+					.orElseThrow(() -> new QuestionNotFoundException("Question with ID " + id + " not found"));
+		} catch (Exception e) {
+			throw new RuntimeException("Error while retrieving question by ID: " + id, e);
+		}
+	}
+
+	// Retrieve a question by name
+	public Question getQuestionByName(String name) {
+		try {
+			return questionRepository.findByName(name)
+					.orElseThrow(() -> new QuestionNotFoundException("Question with name '" + name + "' not found"));
+		} catch (Exception e) {
+			throw new RuntimeException("Error while retrieving question by name: " + name, e);
+		}
+	}
+
+	// Retrieve all questions by type
+	public List<Question> getQuestionsByType(int type) {
+		try {
+			List<Question> questions = questionRepository.findByType(type);
+			if (questions.isEmpty()) {
+				throw new QuestionNotFoundException("No questions found with type: " + type);
+			}
+			return questions;
+		} catch (Exception e) {
+			throw new RuntimeException("Error while retrieving questions by type: " + type, e);
+		}
+	}
+
+	// Retrieve all questions by level
+	public List<Question> getQuestionsByLevel(int level) {
+		try {
+			List<Question> questions = questionRepository.findByLevel(level);
+			if (questions.isEmpty()) {
+				throw new QuestionNotFoundException("No questions found with level: " + level);
+			}
+			return questions;
+		} catch (Exception e) {
+			throw new RuntimeException("Error while retrieving questions by level: " + level, e);
+		}
+	}
+
+	public List<Question> getAllLetters() {
+		return questionRepository.findByType(1);
+	}
+
+	public List<Question> getAllAnimalsAndThings() {
+		return questionRepository.findByType(2);
+	}
+
+
+	public List<Question> getAllNedanOfanHaegriVinstri() {
+		return questionRepository.findByType(3);
+	}
 
 	public void createQuestion(
 			String questionName,
