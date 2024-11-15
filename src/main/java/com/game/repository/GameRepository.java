@@ -2,6 +2,7 @@ package com.game.repository;
 
 import com.game.entity.Game;
 import com.game.entity.Image;
+import com.game.entity.Question;
 import com.game.entity.Audio;
 import com.game.entity.Session;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,7 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
 	// save session to repository
 	//public void saveSession(Session sessionToSave){
+//	public void saveQuestion(Question question);
+
 
 }

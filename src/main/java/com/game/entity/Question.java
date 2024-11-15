@@ -1,97 +1,82 @@
 package com.game.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import java.sql.Blob;
+
+import com.game.data.AudioHandler;
+
+import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
 public class Question {
 
-    @Id
-    private String id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    private int type;
-    private int level;
+	@Column(nullable = false)
+	private String name;
 
-    @OneToMany
-    private List<Image> group;
+	@Column(nullable = false)
+	private int type;
 
-    @OneToOne
-    private Audio audioQuestion;
+	@Column(nullable = false)
+	private int level;
 
-    @OneToOne
-    private Image correctAnswer;
+	@Lob
+	private Blob audioQuestion;
 
-    @OneToMany
-    private List<Image> wrongAnswers;
+	@OneToOne
+	@JoinColumn(name = "correct_image_id", referencedColumnName = "id", nullable = true)
+	private Image correctAnswer;
 
-    // Constructor
-    public Question(String id, int type, int level) {
-        this.id = id;
-        this.type = type;
-        this.level = level;
-    }
+	// Getters and Setters
+	public long getId() {
+		return id;
+	}
 
-    // Default Constructor
-    public Question() {}
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    // Getters and Setters
-    public String getId() {
-        return id;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public int getType() {
-        return type;
-    }
+	public int getType() {
+		return type;
+	}
 
-    public void setType(int type) {
-        this.type = type;
-    }
+	public void setType(int type) {
+		this.type = type;
+	}
 
-    public int getLevel() {
-        return level;
-    }
+	public int getLevel() {
+		return level;
+	}
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
+	public void setLevel(int level) {
+		this.level = level;
+	}
 
-    public List<Image> getGroup() {
-        return group;
-    }
+	public Blob getAudioQuestion() {
+		return audioQuestion;
+	}
 
-    public void setGroup(List<Image> group) {
-        this.group = group;
-    }
+	public void setAudioQuestion(Blob audioQuestion) {
+		this.audioQuestion = audioQuestion;
+	}
 
-    public Audio getAudioQuestion() {
-        return audioQuestion;
-    }
+	public Image getCorrectAnswer() {
+		return correctAnswer;
+	}
 
-    public void setAudioQuestion(Audio audioQuestion) {
-        this.audioQuestion = audioQuestion;
-    }
-
-    public Image getCorrectAnswer() {
-        return correctAnswer;
-    }
-
-    public void setCorrectAnswer(Image correctAnswer) {
-        this.correctAnswer = correctAnswer;
-    }
-
-    public List<Image> getWrongAnswers() {
-        return wrongAnswers;
-    }
-
-    public void setWrongAnswers(List<Image> wrongAnswers) {
-        this.wrongAnswers = wrongAnswers;
-    }
+	public void setCorrectAnswer(Image correctAnswer) {
+		this.correctAnswer = correctAnswer;
+	}
 }
