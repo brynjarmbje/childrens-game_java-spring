@@ -100,6 +100,32 @@ public class ImageHandler {
         }
     }
 
+    // Display an image directly from a Blob
+    public void displayBlob(Blob imageBlob) {
+        try {
+            // Convert Blob to InputStream
+            InputStream inputStream = imageBlob.getBinaryStream();
+            // Read InputStream into a BufferedImage
+            BufferedImage blobImage = ImageIO.read(inputStream);
+
+            // Display the image
+            if (blobImage != null) {
+                JFrame frame = new JFrame("Image Display from Blob");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(blobImage.getWidth(), blobImage.getHeight());
+                JLabel label = new JLabel(new ImageIcon(blobImage));
+                frame.add(label);
+                frame.pack();
+                frame.setVisible(true);
+            } else {
+                System.out.println("Failed to decode image from Blob.");
+            }
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+            System.out.println("Error displaying image from Blob.");
+        }
+    }
+
     public static void main(String[] args) {
     //    String filePath = "src/main/resources/static/image_files/test/test.png";
     //    String blobFilePath = "src/main/resources/static/image_files/test_image/image_test.blob";

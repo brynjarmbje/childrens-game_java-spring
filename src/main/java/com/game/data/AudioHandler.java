@@ -9,14 +9,10 @@ import javax.sql.rowset.serial.SerialBlob;
 
 import com.game.repository.GameRepository;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.sql.Blob;
+import java.sql.SQLException;
 
 public class AudioHandler {
     private Clip clip;
@@ -119,6 +115,29 @@ public class AudioHandler {
             }
         } else {
             System.out.println("No .wav files found in directory: " + directoryPath);
+        }
+    }
+
+    // Method to play audio from a Blob
+    public void playAudioBlob(Blob audioBlob) {
+        try {
+            // Extract byte array from Blob
+            byte[] audioBytes = audioBlob.getBytes(1, (int) audioBlob.length());
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(audioBytes);
+
+            // Create an AudioInputStream from the byte array
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(byteArrayInputStream);
+
+            // Get a Clip instance and open the AudioInputStream
+            clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+
+            // Start playing the audio
+            clip.start();
+            System.out.println("Audio from Blob is playing...");
+        } catch (SQLException | IOException | UnsupportedAudioFileException | LineUnavailableException e) {
+            e.printStackTrace();
+            System.err.println("Failed to play audio from Blob.");
         }
     }
 
