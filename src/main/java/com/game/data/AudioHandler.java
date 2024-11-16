@@ -61,7 +61,7 @@ public class AudioHandler {
     }
 
     // Convert the audio file to a byte array (blob-like behavior)
-    public static Blob convertAudioFileToBlob(String filePath) {
+    public static byte[] convertAudioFileToBlob(String filePath) {
         File audioFile = new File(filePath);
         byte[] audioBytes = null;
         try (InputStream inputStream = new FileInputStream(audioFile)) {
@@ -70,15 +70,7 @@ public class AudioHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // Convert byte array to Blob
-        Blob blob = null;
-        try {
-            blob = new SerialBlob(audioBytes);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return blob;
+        return audioBytes;
     }
 
     // Write a byte array (blob) back to an audio file

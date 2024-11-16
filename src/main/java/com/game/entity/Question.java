@@ -2,11 +2,7 @@ package com.game.entity;
 
 import java.sql.Blob;
 
-import com.game.data.AudioHandler;
-
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 public class Question {
@@ -25,7 +21,7 @@ public class Question {
 	private int level;
 
 	@Lob
-	private Blob audioQuestion;
+	private byte[] audioQuestion;
 
 	@OneToOne
 	@JoinColumn(name = "correct_image_id", referencedColumnName = "id", nullable = true)
@@ -64,11 +60,11 @@ public class Question {
 		this.level = level;
 	}
 
-	public Blob getAudioQuestion() {
+	public byte[] getAudioQuestion() {
 		return audioQuestion;
 	}
 
-	public void setAudioQuestion(Blob audioQuestion) {
+	public void setAudioQuestion(byte[] audioQuestion) {
 		this.audioQuestion = audioQuestion;
 	}
 

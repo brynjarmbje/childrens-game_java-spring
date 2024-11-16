@@ -28,7 +28,7 @@ public class Image {
 
     @Lob
     @Column(nullable = false)
-    private Blob imageData;
+    private byte[] imageData;
 
     // Getters and Setters
     public long getId() {
@@ -79,11 +79,11 @@ public class Image {
         isLetter = letter;
     }
 
-    public Blob getImageData() {
+    public byte[] getImageData() {
         return imageData;
     }
 
-    public void setImageData(Blob imageData) {
+    public void setImageData(byte[] imageData) {
         this.imageData = imageData;
     }
 }
