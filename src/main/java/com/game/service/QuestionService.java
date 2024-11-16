@@ -101,7 +101,7 @@ public class QuestionService {
 			BufferedImage bufferedImage = ImageIO.read(new File(imagePath));
 
 			// Convert BufferedImage to Blob using the static method
-			Blob imageBlob = ImageHandler.convertImageToBlob(bufferedImage, imageFormat);
+			byte[] imageBlob = ImageHandler.convertImageToBlob(bufferedImage, imageFormat);
 
 			// Create the Image entity
 			Image correctImage = new Image();

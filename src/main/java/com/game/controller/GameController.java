@@ -1,15 +1,27 @@
 package com.game.controller;
 
+import com.game.data.ImageHandler;
 import com.game.entity.Game;
+import com.game.entity.Image;
+import com.game.entity.Question;
+import com.game.errors.QuestionNotFoundException;
 import com.game.service.GameService;
 import com.game.service.MemoryGameService;
 import com.game.service.MatchingGameService;
+import com.game.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -19,6 +31,9 @@ public class GameController {
 
 	@Autowired
 	private GameService gameService;
+
+	@Autowired
+	private QuestionService questionService;
 
 	@ModelAttribute("game")
 	public Game getGame() {
@@ -35,30 +50,92 @@ public class GameController {
 
 	@GetMapping("/reset")
 	public String resetGame(@ModelAttribute("game") Game game) {
-		game.setOptions(gameService.generateRandomOptions());
+		List<Question> questions = questionService.getAllLetters(); // Reset with letters by default
+		if (questions.isEmpty()) {
+			throw new QuestionNotFoundException("No questions available for letters.");
+		}
+		game.setOptions(gameService.selectRandomQuestionNames(questions));
 		game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
-		return "index";
+		return "index"; // Return the appropriate view
 	}
 
 	@GetMapping("/letters")
-	public String lettersGame(Model model, @ModelAttribute("game") Game game,
-			@SessionAttribute("username") String username) {
-		game.setOptions(gameService.generateRandomOptions());
-		game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
+	public String lettersGame(Model model, @ModelAttribute("game") Game game) {
+		List<Question> questions = gameService.getLetterQuestions();
+		Question selectedQuestion = gameService.selectRandomQuestion(questions);
+
+		// Set the correct answer in the game
+		game.setCorrectAnswer(selectedQuestion.getName());
+
+		// Play the audio associated with the selected question
+		gameService.playAudioForQuestion(selectedQuestion);
+
+		// Pass the question and its image data to the view
+		model.addAttribute("question", selectedQuestion);
 		model.addAttribute("game", game);
-		model.addAttribute("username", username);
-		return "letters";
+
+		return "letters"; // View template for the letters game
+	}
+
+	@GetMapping("/testLetterA")
+	public String testLetterA() {
+		// Fetch the Question entity for the letter "A"
+		Question question = questionService.getQuestionByName("A");
+
+		if (question != null) {
+			// Play the audio for the letter "A"
+			gameService.playAudioForQuestion(question);
+
+			// Display the image for the letter "A"
+			Blob imageBlob = question.getCorrectAnswer().getImageData();
+			if (imageBlob != null) {
+				try {
+					GameService.displayBlob(imageBlob);
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println("Error displaying the image for letter 'A'.");
+				}
+			} else {
+				System.out.println("Image Blob is null for the letter 'A'.");
+			}
+		} else {
+			System.out.println("Question for letter 'A' not found.");
+		}
+
+		return "testLetterA"; // Optional view rendering, can be removed if not needed
+	}
+
+	@GetMapping("/playAudio")
+	public String playAudio(@RequestParam Long questionId) {
+		Question question = questionService.getQuestionById(questionId); // Implement this method in GameService or use an existing method
+		gameService.playAudioForQuestion(question);
+		return "redirect:/letters"; // Redirect back to the letters game
 	}
 
 	@GetMapping("/numbers")
 	public String numbersGame(Model model, @ModelAttribute("game") Game game,
-			@SessionAttribute("username") String username) {
-		game.setOptions(gameService.generateRandomNumbers());
+							  @SessionAttribute("username") String username) {
+		List<Question> questions = questionService.getAllAnimalsAndThings(); // Assuming "AllAnimalsAndThings" is used for numbers
+		if (questions.isEmpty()) {
+			throw new QuestionNotFoundException("No questions available for numbers.");
+		}
+		game.setOptions(gameService.selectRandomQuestionNames(questions));
 		game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
 		model.addAttribute("game", game);
 		model.addAttribute("username", username);
-		return "numbers";
+		return "numbers"; // Return the view for numbers game
 	}
+
+	@GetMapping("/getAudioBlob")
+	public ResponseEntity<byte[]> getAudioBlob(@RequestParam Long questionId) throws SQLException {
+		Question question = questionService.getQuestionById(questionId);
+		Blob audioBlob = question.getAudioQuestion();
+		byte[] audioBytes = audioBlob.getBytes(1, (int) audioBlob.length());
+		return ResponseEntity.ok()
+				.contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.body(audioBytes);
+	}
+
 
 	@Autowired
 	private MatchingGameService matchingGameService;

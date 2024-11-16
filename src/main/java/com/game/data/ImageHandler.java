@@ -1,5 +1,7 @@
 package com.game.data;
 
+import org.springframework.stereotype.Component;
+
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.*;
@@ -8,6 +10,7 @@ import java.io.*;
 import java.sql.Blob;
 import java.sql.SQLException;
 
+// Class to handle image files and image data
 public class ImageHandler {
     private BufferedImage image;
 
@@ -101,7 +104,7 @@ public class ImageHandler {
     }
 
     // Display an image directly from a Blob
-    public void displayBlob(Blob imageBlob) {
+    public static void displayBlob(Blob imageBlob) {
         try {
             // Convert Blob to InputStream
             InputStream inputStream = imageBlob.getBinaryStream();

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Test Letter A</title>
+</head>
+<body>
+<h1>Test Letter "A"</h1>
+
+<!-- Display the image for the letter "A" -->
+<div th:if="${question != null}">
+    <img th:src="@{'/image/' + ${question.correctAnswer.id}}" alt="Letter A Image" />
+</div>
+
+<!-- Display an error message if the question is not found -->
+<div th:if="${error != null}">
+    <p th:text="${error}"></p>
+</div>
+</body>
+</html>

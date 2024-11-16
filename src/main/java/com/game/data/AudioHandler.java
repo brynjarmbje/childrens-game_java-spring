@@ -8,12 +8,14 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.sql.rowset.serial.SerialBlob;
 
 import com.game.repository.GameRepository;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.sql.Blob;
 import java.sql.SQLException;
 
+// Class to handle audio files and audio data
 public class AudioHandler {
     private Clip clip;
 
@@ -57,7 +59,7 @@ public class AudioHandler {
     }
 
     // Convert the audio file to a byte array (blob-like behavior)
-    public static Blob convertAudioFileToBlob(String filePath) {
+    public static byte[] convertAudioFileToBlob(String filePath) {
         File audioFile = new File(filePath);
         byte[] audioBytes = null;
         try (InputStream inputStream = new FileInputStream(audioFile)) {
@@ -66,15 +68,7 @@ public class AudioHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // Convert byte array to Blob
-        Blob blob = null;
-        try {
-            blob = new SerialBlob(audioBytes);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return blob;
+        return audioBytes;
     }
 
     // Write a byte array (blob) back to an audio file
@@ -118,23 +112,21 @@ public class AudioHandler {
         }
     }
 
-    // Method to play audio from a Blob
-    public void playAudioBlob(Blob audioBlob) {
+    // Static method to play audio from a Blob
+    public static void playAudioBlob(byte[] audioBlob) {
         try {
-            // Extract byte array from Blob
+            if (audioBlob == null) {
+                System.err.println("No audio data available.");
+                return;
+            }
+
             byte[] audioBytes = audioBlob.getBytes(1, (int) audioBlob.length());
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(audioBytes);
-
-            // Create an AudioInputStream from the byte array
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(byteArrayInputStream);
-
-            // Get a Clip instance and open the AudioInputStream
-            clip = AudioSystem.getClip();
+            Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
-
-            // Start playing the audio
             clip.start();
-            System.out.println("Audio from Blob is playing...");
+            System.out.println("Playing audio from Blob...");
         } catch (SQLException | IOException | UnsupportedAudioFileException | LineUnavailableException e) {
             e.printStackTrace();
             System.err.println("Failed to play audio from Blob.");
