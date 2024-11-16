@@ -115,21 +115,33 @@ public class AudioHandler {
     // Static method to play audio from a Blob
     public static void playAudioBlob(byte[] audioBlob) {
         try {
-            if (audioBlob == null) {
+            if (audioBlob == null || audioBlob.length == 0) {
                 System.err.println("No audio data available.");
                 return;
             }
 
-            byte[] audioBytes = audioBlob.getBytes(1, (int) audioBlob.length());
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(audioBytes);
+            // Create an InputStream from the byte array
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(audioBlob);
+
+            // Convert the InputStream into an AudioInputStream
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(byteArrayInputStream);
+
+            // Get a Clip instance and open the audio stream
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
-            System.out.println("Playing audio from Blob...");
-        } catch (SQLException | IOException | UnsupportedAudioFileException | LineUnavailableException e) {
+
+            System.out.println("Playing audio...");
+
+            // Keep the method alive while the audio is playing
+            while (clip.isRunning()) {
+                Thread.sleep(50); // Wait for audio to finish playing
+            }
+
+            clip.close();
+        } catch (IOException | UnsupportedAudioFileException | LineUnavailableException | InterruptedException e) {
             e.printStackTrace();
-            System.err.println("Failed to play audio from Blob.");
+            System.err.println("Failed to play audio from byte array.");
         }
     }
 

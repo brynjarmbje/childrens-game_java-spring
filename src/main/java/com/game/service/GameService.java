@@ -58,32 +58,40 @@ public class GameService {
 
     // Directly include the method to play audio from a Blob
     @Transactional
-    public void playAudioBlob(Blob audioBlob) {
-        try {
-            // Access and process the blob as before
-            byte[] audioBytes = audioBlob.getBytes(1, (int) audioBlob.length());
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(audioBytes);
+    public void playAudioBlob(byte[] audioBytes) {
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(audioBytes)) {
+            // Create an AudioInputStream from the byte array
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(byteArrayInputStream);
+
+            // Get a Clip instance and open the AudioInputStream
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
+
+            // Start playing the audio
             clip.start();
-            System.out.println("Audio from Blob is playing...");
-        } catch (SQLException | IOException | UnsupportedAudioFileException | LineUnavailableException e) {
+            System.out.println("Audio is playing...");
+
+            // Keep the method alive while audio is playing
+            while (clip.isRunning()) {
+                Thread.sleep(50); // Polling for completion
+            }
+
+            // Close the clip after playback
+            clip.close();
+        } catch (IOException | UnsupportedAudioFileException | LineUnavailableException | InterruptedException e) {
             e.printStackTrace();
-            System.err.println("Failed to play audio from Blob.");
+            System.err.println("Failed to play audio from byte array.");
         }
     }
 
-    public static void displayBlob(Blob imageBlob) {
-        try {
-            // Convert Blob to InputStream
-            InputStream inputStream = imageBlob.getBinaryStream();
+    public static void displayBlob(byte[] imageBytes) {
+        try (InputStream inputStream = new ByteArrayInputStream(imageBytes)) {
             // Read InputStream into a BufferedImage
             BufferedImage blobImage = ImageIO.read(inputStream);
 
             // Display the image
             if (blobImage != null) {
-                JFrame frame = new JFrame("Image Display from Blob");
+                JFrame frame = new JFrame("Image Display from Bytes");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setSize(blobImage.getWidth(), blobImage.getHeight());
                 JLabel label = new JLabel(new ImageIcon(blobImage));
@@ -91,11 +99,11 @@ public class GameService {
                 frame.pack();
                 frame.setVisible(true);
             } else {
-                System.out.println("Failed to decode image from Blob.");
+                System.out.println("Failed to decode image from byte array.");
             }
-        } catch (SQLException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Error displaying image from Blob.");
+            System.out.println("Error displaying image from byte array.");
         }
     }
 
@@ -141,9 +149,9 @@ public class GameService {
         return isCorrect;
     }
 
-    private void displayImage(Blob imageBlob) {
-        if (imageBlob != null) {
-            ImageHandler.displayBlob(imageBlob);
+    private void displayImage(byte[] imageBytes) {
+        if (imageBytes != null) {
+            ImageHandler.displayBlob(imageBytes);
         } else {
             System.out.println("No image found for this question.");
         }

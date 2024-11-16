@@ -33,11 +33,12 @@ public class ImageController {
             connection.setAutoCommit(false);
             // Fetch Image entity from DB
             Image image = imageService.getImageById(id);
-            // Get Blob data
-            Blob imageBlob = image.getImageData();
+            // Get byte[] data directly
+            byte[] imageBytes = image.getImageData();
 
-            // Convert Blob to byte array
-            byte[] imageBytes = imageBlob.getBytes(1, (int) imageBlob.length());
+            if (imageBytes == null || imageBytes.length == 0) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT); // No image data found
+            }
 
             // Create response headers
             HttpHeaders headers = new HttpHeaders();

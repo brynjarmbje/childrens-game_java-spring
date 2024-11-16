@@ -87,16 +87,16 @@ public class GameController {
 			gameService.playAudioForQuestion(question);
 
 			// Display the image for the letter "A"
-			Blob imageBlob = question.getCorrectAnswer().getImageData();
-			if (imageBlob != null) {
+			byte[] imageBytes = question.getCorrectAnswer().getImageData();
+			if (imageBytes != null) {
 				try {
-					GameService.displayBlob(imageBlob);
+					GameService.displayBlob(imageBytes); // Using the updated displayBlob(byte[]) method
 				} catch (Exception e) {
 					e.printStackTrace();
 					System.out.println("Error displaying the image for letter 'A'.");
 				}
 			} else {
-				System.out.println("Image Blob is null for the letter 'A'.");
+				System.out.println("Image data is null for the letter 'A'.");
 			}
 		} else {
 			System.out.println("Question for letter 'A' not found.");
@@ -127,13 +127,28 @@ public class GameController {
 	}
 
 	@GetMapping("/getAudioBlob")
-	public ResponseEntity<byte[]> getAudioBlob(@RequestParam Long questionId) throws SQLException {
-		Question question = questionService.getQuestionById(questionId);
-		Blob audioBlob = question.getAudioQuestion();
-		byte[] audioBytes = audioBlob.getBytes(1, (int) audioBlob.length());
-		return ResponseEntity.ok()
-				.contentType(MediaType.APPLICATION_OCTET_STREAM)
-				.body(audioBytes);
+	public ResponseEntity<byte[]> getAudioBlob(@RequestParam Long questionId) {
+		try {
+			// Fetch the Question entity by ID
+			Question question = questionService.getQuestionById(questionId);
+
+			// Get the audio data as byte[]
+			byte[] audioBytes = question.getAudioQuestion(); // Assuming getAudioQuestion() now returns byte[]
+
+			if (audioBytes == null || audioBytes.length == 0) {
+				return ResponseEntity.status(HttpStatus.NO_CONTENT)
+						.body(null); // Return 204 if audio data is missing
+			}
+
+			// Return the audio bytes as a response
+			return ResponseEntity.ok()
+					.contentType(MediaType.APPLICATION_OCTET_STREAM)
+					.body(audioBytes);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(null); // Return 500 on error
+		}
 	}
 
 

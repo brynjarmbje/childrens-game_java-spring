@@ -1,7 +1,5 @@
 package com.game.data;
 
-import org.springframework.stereotype.Component;
-
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.*;
@@ -43,15 +41,15 @@ public class ImageHandler {
         }
     }
 
-    // Convert the image to a blob
-    public static Blob convertImageToBlob(BufferedImage image, String format) {
+    public static byte[] convertImageToBlob(BufferedImage image, String format) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
+            // Write the image to the output stream in the specified format
             ImageIO.write(image, format, outputStream);
-            byte[] imageBytes = outputStream.toByteArray();
-            return new SerialBlob(imageBytes); // Convert byte array to Blob
-        } catch (IOException | SQLException e) {
+            return outputStream.toByteArray(); // Return the byte array
+        } catch (IOException e) {
             e.printStackTrace();
+            System.err.println("Failed to convert image to byte array.");
         }
         return null;
     }
@@ -104,10 +102,10 @@ public class ImageHandler {
     }
 
     // Display an image directly from a Blob
-    public static void displayBlob(Blob imageBlob) {
+    public static void displayBlob(byte[] imageBlob) {
         try {
             // Convert Blob to InputStream
-            InputStream inputStream = imageBlob.getBinaryStream();
+            InputStream inputStream = new ByteArrayInputStream(imageBlob);
             // Read InputStream into a BufferedImage
             BufferedImage blobImage = ImageIO.read(inputStream);
 
@@ -123,7 +121,7 @@ public class ImageHandler {
             } else {
                 System.out.println("Failed to decode image from Blob.");
             }
-        } catch (SQLException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error displaying image from Blob.");
         }

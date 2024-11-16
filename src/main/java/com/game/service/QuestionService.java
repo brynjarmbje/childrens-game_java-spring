@@ -118,7 +118,7 @@ public class QuestionService {
 			String audioPath = "src/main/resources/static/audio_files/" + folder + "/" + path + ".wav";
 			System.out.println("Audio path: " + audioPath);
 			// Convert audio file to Blob using AudioHandler
-			Blob audioBlob = AudioHandler.convertAudioFileToBlob(audioPath);
+			byte[] audioBlob = AudioHandler.convertAudioFileToBlob(audioPath);
 
 			// Create the Question entity and associate the correct Image
 			Question question = new Question();
