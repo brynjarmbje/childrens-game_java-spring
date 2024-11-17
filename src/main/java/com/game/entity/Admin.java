@@ -18,28 +18,29 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-	@Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String username;
 
-	@Column(nullable = false)
+    @Column(nullable = false)
     private String password;
 
-	@Column(name="issupervisor")
+    @Column(name = "issupervisor")
     private boolean isSupervisor;
 
-	@ManyToOne
-	@JoinColumn(name = "school")
-	private School school;
+    @ManyToOne
+    @JoinColumn(name = "school")
+    private School school;
 
-	// Default constructor
-    public Admin() {}
+    // Default constructor
+    public Admin() {
+    }
 
     // Parameterized constructor
     public Admin(String username, String password, boolean isSupervisor, School school) {
         this.username = username;
         this.password = password;
         this.isSupervisor = isSupervisor;
-		this.school = school;
+        this.school = school;
     }
 
     // Getters and setters
@@ -72,11 +73,16 @@ public class Admin {
     }
 
     public School getSchool() {
-		return school;
-	}
+        return school;
+    }
 
-	public void setSchool(School school) {
-		this.school = school;
-	}
+    public void setSchool(School school) {
+        this.school = school;
+    }
+
+    public void createAdmin(String username, String password, boolean isSupervisor, School school) {
+        this.username = username;
+        this.password = password;
+        this.isSupervisor = isSupervisor;
+    }
 }
-

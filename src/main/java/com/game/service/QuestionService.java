@@ -92,7 +92,7 @@ public class QuestionService {
 			String path, // Path to the audio file
 			String imageFormat, // Image format (e.g., "png", "jpg")
 			boolean isLetter, // Whether the image is a letter
-			Character firstLetter // Whether the image is the first letter
+			String firstLetter // Whether the image is the first letter
 	) {
 		try {
 			String imagePath = "src/main/resources/static/image_files/" + folder + "/" + path + ".png";
@@ -101,7 +101,7 @@ public class QuestionService {
 			BufferedImage bufferedImage = ImageIO.read(new File(imagePath));
 
 			// Convert BufferedImage to Blob using the static method
-			Blob imageBlob = ImageHandler.convertImageToBlob(bufferedImage, imageFormat);
+			byte[] imageBlob = ImageHandler.convertImageToBlob(bufferedImage, imageFormat);
 
 			// Create the Image entity
 			Image correctImage = new Image();
@@ -118,7 +118,7 @@ public class QuestionService {
 			String audioPath = "src/main/resources/static/audio_files/" + folder + "/" + path + ".wav";
 			System.out.println("Audio path: " + audioPath);
 			// Convert audio file to Blob using AudioHandler
-			Blob audioBlob = AudioHandler.convertAudioFileToBlob(audioPath);
+			byte[] audioBlob = AudioHandler.convertAudioFileToBlob(audioPath);
 
 			// Create the Question entity and associate the correct Image
 			Question question = new Question();

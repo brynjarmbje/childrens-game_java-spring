@@ -12,9 +12,6 @@ public class Audio {
     private long id;
 
     @Column(nullable = false)
-    private String connectionId;
-
-    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
@@ -22,11 +19,11 @@ public class Audio {
 
     @Lob
     @Column(nullable = false)
-    private Blob audioData;
+    private byte[] audioData;
 
     public Audio() {
     }
-    public Audio(String name, int type, Blob audioData) {
+    public Audio(String name, int type, byte[] audioData) {
         this.name = name;
         this.type = type;
         this.audioData = audioData;
@@ -44,7 +41,7 @@ public class Audio {
         return type;
     }
 
-    public Blob getAudioData() {
+    public byte[] getAudioData() {
         return audioData;
     }
 
@@ -60,7 +57,7 @@ public class Audio {
         this.type = type;
     }
 
-    public void setAudioData(Blob audioData) {
+    public void setAudioData(byte[] audioData) {
         this.audioData = audioData;
     }
 }

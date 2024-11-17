@@ -21,14 +21,14 @@ public class Image {
     private int level;
 
     @Column(nullable = true)
-    private Character firstLetter;
+    private String firstLetter;
 
     @Column(nullable = true)
     private boolean isLetter;
 
     @Lob
     @Column(nullable = false)
-    private Blob imageData;
+    private byte[] imageData;
 
     // Getters and Setters
     public long getId() {
@@ -63,11 +63,11 @@ public class Image {
         this.level = level;
     }
 
-    public Character getFirstLetter() {
+    public String getFirstLetter() {
         return firstLetter;
     }
 
-    public void setFirstLetter(Character firstLetter) {
+    public void setFirstLetter(String firstLetter) {
         this.firstLetter = firstLetter;
     }
 
@@ -79,11 +79,11 @@ public class Image {
         isLetter = letter;
     }
 
-    public Blob getImageData() {
+    public byte[] getImageData() {
         return imageData;
     }
 
-    public void setImageData(Blob imageData) {
+    public void setImageData(byte[] imageData) {
         this.imageData = imageData;
     }
 }

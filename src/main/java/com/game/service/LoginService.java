@@ -28,4 +28,11 @@ public class LoginService {
 		//}
 		//return null;
 	}
+	public void createAdmin(String username, String password, boolean isSupervisor) {
+		Admin admin = new Admin();
+		admin.setUsername(username);
+		admin.setPassword(password);
+		admin.setSupervisor(isSupervisor);
+		adminRepository.save(admin);
+	}
 }
