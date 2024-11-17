@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import com.game.entity.Admin;
 import com.game.repository.AdminRepository;
 
+import java.util.List;
+
 @Service
 public class LoginService {
 	@Autowired
@@ -28,11 +30,8 @@ public class LoginService {
 		//}
 		//return null;
 	}
-	public void createAdmin(String username, String password, boolean isSupervisor) {
-		Admin admin = new Admin();
-		admin.setUsername(username);
-		admin.setPassword(password);
-		admin.setSupervisor(isSupervisor);
-		adminRepository.save(admin);
+
+	public List<Admin> getAllAdmins() {
+		return adminRepository.findAll();
 	}
 }

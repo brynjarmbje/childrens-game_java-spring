@@ -5,6 +5,8 @@ import com.game.entity.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Long> {
     // JPA should implement the methods
@@ -14,5 +16,7 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
     Admin save(Admin admin);
 
     void delete(Admin admin);
+
+    List<Admin> findAll();
 
 }
