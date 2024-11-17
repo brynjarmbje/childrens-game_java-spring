@@ -27,12 +27,12 @@ public class QuestionService {
 
 	// Retrieve a question by ID
 	public Question getQuestionById(Long id) {
-		try {
-			return questionRepository.findById(id)
-					.orElseThrow(() -> new QuestionNotFoundException("Question with ID " + id + " not found"));
-		} catch (Exception e) {
-			throw new RuntimeException("Error while retrieving question by ID: " + id, e);
-		}
+		return questionRepository.findById(id)
+				.orElseThrow(() -> {
+					// Log detailed error message for debugging
+					System.err.println("Question with ID " + id + " not found in the database.");
+					return new QuestionNotFoundException("Question with ID " + id + " not found");
+				});
 	}
 
 	// Retrieve a question by name

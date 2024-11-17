@@ -80,5 +80,25 @@ public class LoginController {
 		// Redirect to index or any other page as needed
 		return "index"; // Or "redirect:/" based on your application structure
 	}
+	@GetMapping("/testAdmin")
+	public String testAdmin() {
+		// Fetch the Admin entity with ID 1
+		Admin admin = LoginService.findAdminById(1L);
+
+		if (admin == null) {
+			throw new RuntimeException("Admin with ID 1 not found");
+		}
+
+		// Print admin details
+		System.out.println("Admin Details:");
+		System.out.println("ID: " + admin.getId());
+		System.out.println("Username: " + admin.getUsername());
+		System.out.println("Password: " + admin.getPassword());
+		System.out.println("Is Supervisor: " + admin.isSupervisor());
+		System.out.println("School: " + admin.getSchool());
+
+		// Return a view name
+		return "testAdmin";
+	}
 
 }

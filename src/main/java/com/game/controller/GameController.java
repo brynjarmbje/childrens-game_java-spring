@@ -1,6 +1,7 @@
 package com.game.controller;
 
 import com.game.data.ImageHandler;
+import com.game.entity.Admin;
 import com.game.entity.Game;
 import com.game.entity.Image;
 import com.game.entity.Question;
@@ -77,10 +78,14 @@ public class GameController {
 		return "letters"; // View template for the letters game
 	}
 
+
+
 	@GetMapping("/testLetterA")
 	public String testLetterA() {
 		// Fetch the Question entity for the letter "A"
-		Question question = questionService.getQuestionByName("A");
+		Question question = questionService.getQuestionById(41L);
+		Admin admin = new Admin();
+
 
 		if (question != null) {
 			// Play the audio for the letter "A"
