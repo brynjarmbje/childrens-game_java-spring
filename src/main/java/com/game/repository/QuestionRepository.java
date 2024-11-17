@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     // Find a question by its ID
-    Optional<Question> findById(Long id);
+//    Optional<Question> findById(Long id);
 
     // Find a question by its name
     Optional<Question> findByName(String name);

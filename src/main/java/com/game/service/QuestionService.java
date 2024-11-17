@@ -1,5 +1,6 @@
 package com.game.service;
 import com.game.data.AudioHandler;
+import com.game.entity.Admin;
 import com.game.entity.Image;
 import com.game.errors.QuestionNotFoundException;
 import com.game.repository.ImageRepository;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.game.entity.Question;
 import com.game.data.ImageHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -24,8 +27,24 @@ public class QuestionService {
 
 	@Autowired
 	private ImageRepository imageRepository;
+	private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
 
-	// Retrieve a question by ID
+	public List<Question> getAllQuestions() {
+		try {
+			List<Question> questions = questionRepository.findAll();
+			logger.info("Successfully fetched {} questions from the database", questions.size());
+			return questions;
+		} catch (Exception e) {
+			// Log exception details
+			logger.error("Error fetching questions from the database: {}", e.getMessage(), e);
+
+			// Re-throw the exception if you want it to propagate further
+			throw new RuntimeException("Failed to fetch questions", e);
+		}
+	}
+
+
+    // Retrieve a question by ID
 	public Question getQuestionById(Long id) {
 		try {
 			return questionRepository.findById(id)

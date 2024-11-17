@@ -1,15 +1,19 @@
 package com.game.controller;
 
+import com.game.entity.Admin;
 import com.game.entity.Game;
+import com.game.entity.Question;
 import com.game.service.GameService;
 import com.game.service.MemoryGameService;
 import com.game.service.MatchingGameService;
+import com.game.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -19,6 +23,9 @@ public class GameController {
 
 	@Autowired
 	private GameService gameService;
+
+	@Autowired
+	private QuestionService questionService;
 
 	@ModelAttribute("game")
 	public Game getGame() {
@@ -113,3 +120,4 @@ public class GameController {
 		return "redirect:/matching-game";
 	}
 }
+

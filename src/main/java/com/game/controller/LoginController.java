@@ -80,7 +80,7 @@ public class LoginController {
 		// Redirect to index or any other page as needed
 		return "index"; // Or "redirect:/" based on your application structure
 	}
-	@PostMapping("/getAllAdmins")
+	@GetMapping("/getAllAdmins")
 	@ResponseBody // Ensures JSON response for REST-style interaction
 	public List<Admin> getAllAdmins() {
 		return loginService.getAllAdmins();
