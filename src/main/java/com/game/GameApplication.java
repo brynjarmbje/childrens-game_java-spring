@@ -21,7 +21,7 @@ public class GameApplication{
 //
 //    @Autowired
 //    private LoginService loginService;
-//
+////
     public static void main(String[] args) {
         SpringApplication.run(GameApplication.class, args);
     }
