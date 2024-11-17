@@ -53,6 +53,15 @@ public class QuestionService {
 			throw new RuntimeException("Error while retrieving question by ID: " + id, e);
 		}
 	}
+	public byte[] getAudioQuestionById(Long id) {
+		try {
+			Question question = questionRepository.findById(id)
+					.orElseThrow(() -> new QuestionNotFoundException("Question with ID " + id + " not found"));
+			return question.getAudioQuestion();
+		} catch (Exception e) {
+			throw new RuntimeException("Error while retrieving audio question by ID: " + id, e);
+		}
+	}
 
 	// Retrieve a question by name
 	public Question getQuestionByName(String name) {
