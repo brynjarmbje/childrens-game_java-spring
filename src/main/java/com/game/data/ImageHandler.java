@@ -41,16 +41,17 @@ public class ImageHandler {
     }
 
     // Convert the image to a blob
-    public static Blob convertImageToBlob(BufferedImage image, String format) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
+    public static byte[] convertImageToBlob(BufferedImage image, String format) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            // Write the image data to the output stream in the specified format
             ImageIO.write(image, format, outputStream);
-            byte[] imageBytes = outputStream.toByteArray();
-            return new SerialBlob(imageBytes); // Convert byte array to Blob
-        } catch (IOException | SQLException e) {
+            // Return the byte array representation of the image
+            return outputStream.toByteArray();
+        } catch (IOException e) {
             e.printStackTrace();
+            System.err.println("Failed to convert image to byte array.");
         }
-        return null;
+        return null; // Return null in case of an error
     }
 
     // Write a byte array (blob) back to an image file
@@ -97,32 +98,6 @@ public class ImageHandler {
             }
         } else {
             System.out.println("No image files found in directory: " + directoryPath);
-        }
-    }
-
-    // Display an image directly from a Blob
-    public void displayBlob(Blob imageBlob) {
-        try {
-            // Convert Blob to InputStream
-            InputStream inputStream = imageBlob.getBinaryStream();
-            // Read InputStream into a BufferedImage
-            BufferedImage blobImage = ImageIO.read(inputStream);
-
-            // Display the image
-            if (blobImage != null) {
-                JFrame frame = new JFrame("Image Display from Blob");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(blobImage.getWidth(), blobImage.getHeight());
-                JLabel label = new JLabel(new ImageIcon(blobImage));
-                frame.add(label);
-                frame.pack();
-                frame.setVisible(true);
-            } else {
-                System.out.println("Failed to decode image from Blob.");
-            }
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-            System.out.println("Error displaying image from Blob.");
         }
     }
 
