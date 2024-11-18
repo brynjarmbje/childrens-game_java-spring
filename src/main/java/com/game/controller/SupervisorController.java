@@ -3,6 +3,7 @@ package com.game.controller;
 import com.game.entity.Child;
 import com.game.entity.Admin;
 import com.game.service.SupervisorService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,16 +20,28 @@ public class SupervisorController {
 
     // Display supervisor page with children and admins
     @GetMapping
-    public String supervisorPage(Model model) {
-        // Retrieve all children and admins from the service layer
+    public String supervisorPage(HttpSession session, Model model) {
+        // Check if the user is logged in
+        String username = (String) session.getAttribute("username");
+        if (username == null || username.isEmpty()) {
+            // Redirect to login if not logged in
+            return "redirect:/login";
+        }
+
+        // Check if the user is an admin
+        Boolean isSupervisor = (Boolean) session.getAttribute("isSupervisor");
+        if (isSupervisor == null || !isSupervisor) {
+            // Redirect regular admins to the admin dashboard
+            return "redirect:/admin/" + session.getAttribute("adminId");
+        }
+
+        // If the user is a supervisor, load the supervisor page
         List<Child> children = supervisorService.getAllChildren();
         List<Admin> admins = supervisorService.getAllAdmins();
 
-        // Add the retrieved data to the model
         model.addAttribute("children", children);
         model.addAttribute("admins", admins);
 
-        // Return the view name (assuming it corresponds to a `supervisor.html` template)
         return "supervisor";
     }
 

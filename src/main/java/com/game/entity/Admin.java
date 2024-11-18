@@ -1,14 +1,14 @@
 package com.game.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "admin")
@@ -24,8 +24,19 @@ public class Admin {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "issupervisor")
-    private boolean isSupervisor;
+    @Column(name = "is_supervisor", nullable = false)
+    private boolean isSupervisor = false; // Default to false
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "admin_child",
+            joinColumns = @JoinColumn(name = "admin_id"),
+            inverseJoinColumns = @JoinColumn(name = "child_id")
+    )
+
+    @LazyCollection(LazyCollectionOption.FALSE) // Ensures children are fetched with admin
+    private List<Child> children = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "school")
@@ -36,11 +47,12 @@ public class Admin {
     }
 
     // Parameterized constructor
-    public Admin(String username, String password, boolean isSupervisor, School school) {
+    public Admin(String username, String password, boolean isSupervisor, School school, List<Child> children) {
         this.username = username;
         this.password = password;
         this.isSupervisor = isSupervisor;
         this.school = school;
+        this.children = children;
     }
 
     // Getters and setters
@@ -84,5 +96,20 @@ public class Admin {
         this.username = username;
         this.password = password;
         this.isSupervisor = isSupervisor;
+    }
+
+    public List<Child> getChildren() {
+        return children;
+    }
+    public void setChildren(List<Child> children) {
+        this.children = children;
+    }
+    public void addChild(Child child) {
+        children.add(child);
+        child.getAdmins().add(this);
+    }
+    public void removeChild(Child child) {
+        children.remove(child);
+        child.getAdmins().remove(this);
     }
 }

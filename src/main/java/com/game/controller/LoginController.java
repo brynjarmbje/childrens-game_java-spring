@@ -19,12 +19,30 @@ public class LoginController {
 	private LoginService loginService;
 
 	@GetMapping("/")
-	public String loginGet(@SessionAttribute(value = "username", required = false) String username) {
-		if (username == null || username.isEmpty()){
+	public String loginGet(HttpSession session) {
+		String username = (String) session.getAttribute("username");
+		Boolean isSupervisor = (Boolean) session.getAttribute("isSupervisor");
+		Long adminId = (Long) session.getAttribute("adminId");
+
+		// Redirect non-authenticated users to login
+		if (username == null || username.isEmpty()) {
 			return "redirect:/login";
 		}
-		return "index";
+
+		// Redirect supervisors to /supervisor
+		if (Boolean.TRUE.equals(isSupervisor)) {
+			return "redirect:/supervisor";
+		}
+
+		// Redirect regular admins to /admin/{adminId}
+		if (adminId != null) {
+			return "redirect:/admin/" + adminId;
+		}
+
+		// Default redirect to index for unknown cases
+		return "redirect:/index";
 	}
+
 	@GetMapping("/login")
 	public String loginPage(Model model) {
 		model.addAttribute("admin", new Admin());
@@ -52,31 +70,56 @@ public class LoginController {
 	}
 
 	public String ifSupervisor(Admin admin, HttpSession session) {
-		if (admin.isSupervisor()) { // Corrected method call
-			session.setAttribute("isSupervisor", "true");
+		session.setAttribute("adminId", admin.getId());
+		session.setAttribute("username", admin.getUsername());
+
+		if (admin.isSupervisor()) {
+			session.setAttribute("isSupervisor", true);
 			System.out.println("Supervisor detected, redirecting to /supervisor");
 			return "redirect:/supervisor";
+		} else {
+			session.setAttribute("isSupervisor", false);
+			System.out.println("Regular admin detected, redirecting to /admin/" + admin.getId());
+			return "redirect:/admin/" + admin.getId();
 		}
-		System.out.println("Regular admin detected, redirecting to /index");
-		return "redirect:/admin";
 	}
 
 	@PostMapping("/guest-login")
 	public String handleGuestLogin(@RequestParam("guestUsername") String guestUsername, Model model, HttpSession session) {
-		// Set a default username for guest users
 		if (guestUsername == null || guestUsername.trim().isEmpty()) {
-			guestUsername = "Guest";
+			guestUsername = "Guest"; // Default username for guests
 		}
 
-		model.addAttribute("username", guestUsername);
 		session.setAttribute("username", guestUsername);
+		session.setAttribute("isSupervisor", false); // Guests are not supervisors
+		session.setAttribute("adminId", null); // No admin ID for guests
+		System.out.println("Guest login successful, redirecting to index");
 
-		// Redirect to index or any other page as needed
-		return "index"; // Or "redirect:/" based on your application structure
+		return "redirect:/index"; // Redirect to the guest dashboard or index
 	}
+
 	@GetMapping("/getAllAdmins")
 	@ResponseBody // Ensures JSON response for REST-style interaction
 	public List<Admin> getAllAdmins() {
 		return loginService.getAllAdmins();
+	}
+
+	public String validateSupervisorAccess(HttpSession session) {
+		String username = (String) session.getAttribute("username");
+		Boolean isSupervisor = (Boolean) session.getAttribute("isSupervisor");
+
+		// Redirect non-authenticated users to login
+		if (username == null || username.isEmpty()) {
+			return "redirect:/login";
+		}
+
+		// Redirect regular admins to /admin
+		if (Boolean.FALSE.equals(isSupervisor)) {
+			Long adminId = (Long) session.getAttribute("adminId");
+			return "redirect:/admin/" + adminId;
+		}
+
+		// Allow access for supervisors
+		return null;
 	}
 }

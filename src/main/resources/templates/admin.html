@@ -1,30 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body class="scrollable-page"> <!-- Added scrollable-page class here -->
+<body class="scrollable-page">
 <div class="container">
     <h1>Admin Dashboard</h1>
+    <div>
+        <p>Welcome, <span th:text="${username}">User</span></p>
+    </div>
 
     <!-- Feedback Messages -->
     <div th:if="${success != null}" id="feedback" class="show">
         <p th:text="${success}"></p>
     </div>
-    <div th:if="${error != null}" id="feedback" class="show">
+    <div th:if="${error != null}" id="feedback" class="error">
         <p th:text="${error}"></p>
     </div>
 
     <!-- Child Selection -->
     <section>
         <h2>Select Children</h2>
-        <form action="/admin/add-to-group" method="post">
-            <label for="child-selection">Choose Children:</label>
-            <select id="child-selection" name="childrenIds" multiple required>
-                <option th:each="child : ${children}" th:value="${child.id}" th:text="${child.name}"></option>
+        <form th:action="@{'/{adminId}/add-child'(adminId=${adminId})}" method="post">
+            <label for="child-selection">Choose a Child:</label>
+            <select id="child-selection" name="childId" required>
+                <!-- Available children (not yet managed by the admin) -->
+                <option th:each="child : ${availableChildren}" th:value="${child.id}" th:text="${child.name}"></option>
             </select>
             <button type="submit" class="selection-button">Add to Group</button>
         </form>
@@ -33,11 +37,16 @@
     <!-- Current Group -->
     <section>
         <h2>Current Group</h2>
-        <form action="/admin/clear-group" method="post">
-            <select id="group-container" name="currentGroup" class="scrollable-list" multiple>
-                <option th:each="child : ${group}" th:value="${child.id}" th:text="${child.name}"></option>
+        <form th:action="@{'/{adminId}/remove-child'(adminId=${adminId})}" method="post">
+            <label for="current-group">Managed Children:</label>
+            <select id="current-group" name="childId" required>
+                <!-- Dynamically populate options from managedChildren -->
+                <option th:each="child : ${managedChildren}" th:value="${child.id}" th:text="${child.name}"></option>
             </select>
-            <button type="submit" class="selection-button">Clear Group</button>
+            <button type="submit" class="selection-button">Remove from Group</button>
+        </form>
+        <form th:action="@{'/{adminId}/clear-group'(adminId=${adminId})}" method="post">
+            <button type="submit" class="selection-button">Clear All</button>
         </form>
     </section>
 

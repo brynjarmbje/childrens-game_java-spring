@@ -58,7 +58,7 @@ public class SupervisorService {
 
     // Get all Admins
     public List<Admin> getAllAdmins() {
-        return adminRepository.findAll();
+        return adminRepository.findByIsSupervisorFalse();
     }
 
     // Get an Admin by ID
