@@ -32,41 +32,6 @@ public class GameController {
 		return new Game();
 	}
 
-	@PostMapping("/check")
-	public String checkAnswer(@RequestParam("answer") String answer, @ModelAttribute("game") Game game, Model model) {
-		boolean isCorrect = gameService.checkAnswer(answer, game);
-		model.addAttribute("isCorrect", isCorrect);
-		model.addAttribute("game", game);
-		return "index";
-	}
-
-	@GetMapping("/reset")
-	public String resetGame(@ModelAttribute("game") Game game) {
-		game.setOptions(gameService.generateRandomOptions());
-		game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
-		return "index";
-	}
-
-	@GetMapping("/letters")
-	public String lettersGame(Model model, @ModelAttribute("game") Game game,
-			@SessionAttribute("username") String username) {
-		game.setOptions(gameService.generateRandomOptions());
-		game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
-		model.addAttribute("game", game);
-		model.addAttribute("username", username);
-		return "letters";
-	}
-
-	@GetMapping("/numbers")
-	public String numbersGame(Model model, @ModelAttribute("game") Game game,
-			@SessionAttribute("username") String username) {
-		game.setOptions(gameService.generateRandomNumbers());
-		game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
-		model.addAttribute("game", game);
-		model.addAttribute("username", username);
-		return "numbers";
-	}
-
 	@Autowired
 	private MatchingGameService matchingGameService;
 

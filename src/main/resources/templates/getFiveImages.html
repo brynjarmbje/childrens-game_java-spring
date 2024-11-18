@@ -1,0 +1,16 @@
+<div id="imageContainer"></div>
+<script>
+    fetch('/getFiveImages')
+        .then(response => response.json())
+        .then(images => {
+            const container = document.getElementById('imageContainer');
+            images.forEach(base64Image => {
+                const img = document.createElement('img');
+                img.src = `data:image/png;base64,${base64Image}`;
+                container.appendChild(img);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching images:', error);
+        });
+</script>

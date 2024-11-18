@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.sql.Blob;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class QuestionService {
@@ -53,6 +54,20 @@ public class QuestionService {
 			throw new RuntimeException("Error while retrieving question by ID: " + id, e);
 		}
 	}
+
+	public Question getQuestionByType(int type) {
+		try {
+			Random random = new Random();
+
+
+
+			return questionRepository.findQuestionByType(type)
+					.orElseThrow(() -> new QuestionNotFoundException("Question with Type " + type + " not found"));
+		} catch (Exception e) {
+			throw new RuntimeException("Error while retrieving question by ID: " + type, e);
+		}
+	}
+
 	public byte[] getAudioQuestionById(Long id) {
 		try {
 			Question question = questionRepository.findById(id)
@@ -86,6 +101,16 @@ public class QuestionService {
 		}
 	}
 
+	public Question getRandomQuestionByType(int type) {
+		List<Question> questions = getQuestionsByType(type);
+		if (questions.isEmpty()) {
+			throw new QuestionNotFoundException("No questions found with type: " + type);
+		}
+		Random random = new Random();
+		return questions.get(random.nextInt(questions.size())); // Randomly pick a question
+	}
+
+
 	// Retrieve all questions by level
 	public List<Question> getQuestionsByLevel(int level) {
 		try {
@@ -97,6 +122,10 @@ public class QuestionService {
 		} catch (Exception e) {
 			throw new RuntimeException("Error while retrieving questions by level: " + level, e);
 		}
+	}
+
+	public Question getRandomLetter() {
+		return questionRepository.findRandomLetter();
 	}
 
 	public List<Question> getAllLetters() {

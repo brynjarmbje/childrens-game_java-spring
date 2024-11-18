@@ -5,4 +5,5 @@ import com.game.entity.Image;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
     // Additional query methods if needed
+
 }

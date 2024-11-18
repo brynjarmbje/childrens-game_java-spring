@@ -1,27 +1,53 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stafirnir okkar</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <title>Letters Game</title>
 </head>
 <body>
-<button class="back-button" onclick="location.href='/'">⬅️ Til baka</button>
-<h1>Stafirnir okkar</h1>
+<h1>Letters Game</h1>
 
-<div class="container">
-    <button id="listenButton">HLUSTA</button>
-    <form id="gameForm" action="/check" method="post">
-        <button type="submit" name="answer" value="A" th:text="${game.options[0]}">${game.options[0]}</button>
-        <button type="submit" name="answer" value="B" th:text="${game.options[1]}">${game.options[1]}</button>
-        <button type="submit" name="answer" value="C" th:text="${game.options[2]}">${game.options[2]}</button>
-    </form>
-    <div id="feedback" class="feedback"></div>
-    <button id="newGameButton" style="display:none;">Aftur!</button>
-    <p id="scoreDisplay">Stig: 0</p>
+<!-- Display the image -->
+<img th:src="@{'/getImage/' + ${currentQuestion.id}}" alt="Question Image" width="200" height="200" />
+
+<!-- Button to play audio for the question -->
+<button onclick="playAudio([[${currentQuestion.id}]])">HLUSTA</button>
+
+<!-- Options for the game -->
+<div>
+    <button onclick="handleOptionClick(1)">Option 1</button>
+    <button onclick="handleOptionClick(2)">Option 2 (Correct)</button>
+    <button onclick="handleOptionClick(3)">Option 3</button>
 </div>
 
-<script th:src="@{/js/script.js}"></script> <!-- Optional if you have specific JS for letters game -->
+<script>
+        function playAudio(questionId) {
+            fetch('/playQuestion/' + questionId)
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    }
+                    throw new Error('Audio fetch failed');
+                })
+                .then(audioBlob => {
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const audio = new Audio(audioUrl);
+                    audio.play();
+                })
+                .catch(error => {
+                    console.error('Error playing audio:', error);
+                    alert('Error playing audio');
+                });
+        }
+
+        function handleOptionClick(selectedOption) {
+            // Implement game logic here
+            if (selectedOption === 2) { // Example correct option check
+                alert('Húrra! Vel gert!');
+                // Logic to generate a new question
+            } else {
+                alert('Reyndu aftur!');
+            }
+        }
+    </script>
 </body>
 </html>
