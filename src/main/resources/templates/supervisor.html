@@ -6,45 +6,54 @@
     <title>Supervisor Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
+<body class="scrollable-page">
 <div class="container">
     <h1>Supervisor Dashboard</h1>
 
-    <!-- Create Child -->
+    <!-- Create Child Section -->
     <section>
         <h2>Create Child</h2>
         <form th:action="@{/supervisor/child/create}" method="post">
             <input type="text" name="name" placeholder="Child Name" required>
-            <button type="submit">Create Child</button>
+            <button type="submit" class="selection-button">Create Child</button>
         </form>
     </section>
 
-    <!-- Children List -->
+    <!-- Children List with Delete Functionality -->
     <section>
         <h3>Children</h3>
-        <ul class="scrollable-list">
-            <li th:each="child : ${children}" th:text="${child.name}"></li>
-        </ul>
+        <form th:action="@{/supervisor/child/delete}" method="post">
+
+            <select id="child-selection" name="id" multiple required>
+                <option th:each="child : ${children}" th:value="${child.id}" th:text="${child.name}"></option>
+            </select>
+            <button type="submit" class="delete-button">Delete Child</button>
+        </form>
     </section>
 
-    <!-- Create Admin -->
+    <!-- Create Admin Section -->
     <section>
         <h2>Create Admin</h2>
         <form th:action="@{/supervisor/admin/create}" method="post">
             <input type="text" name="username" placeholder="Admin Username" required>
             <input type="password" name="password" placeholder="Admin Password" required>
-            <button type="submit">Create Admin</button>
+            <button type="submit" class="selection-button">Create Admin</button>
         </form>
     </section>
 
-    <!-- Admins List -->
+    <!-- Admins List with Delete Functionality -->
     <section>
         <h3>Admins</h3>
-        <ul class="scrollable-list">
-            <li th:each="admin : ${admins}" th:text="${admin.username}"></li>
-        </ul>
+        <form th:action="@{/supervisor/admin/delete}" method="post">
+
+            <select id="admin-selection" name="id" multiple required>
+                <option th:each="admin : ${admins}" th:value="${admin.id}" th:text="${admin.username}"></option>
+            </select>
+            <button type="submit" class="delete-button">Delete Admin</button>
+        </form>
     </section>
 
+    <!-- Logout Button -->
     <div class="logout-container">
         <form th:action="@{/logout}" method="post">
             <button type="submit" class="logout-button">Log Out</button>

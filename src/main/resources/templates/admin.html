@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
+<body class="scrollable-page"> <!-- Added scrollable-page class here -->
 <div class="container">
     <h1>Admin Dashboard</h1>
 
@@ -33,13 +33,10 @@
     <!-- Current Group -->
     <section>
         <h2>Current Group</h2>
-        <div id="group-container" class="scrollable-list">
-            <p th:if="${group == null}" id="no-children-text">No children selected yet.</p>
-            <ul th:if="${group != null}">
-                <li th:each="child : ${group}" th:text="${child.name}"></li>
-            </ul>
-        </div>
         <form action="/admin/clear-group" method="post">
+            <select id="group-container" name="currentGroup" class="scrollable-list" multiple>
+                <option th:each="child : ${group}" th:value="${child.id}" th:text="${child.name}"></option>
+            </select>
             <button type="submit" class="selection-button">Clear Group</button>
         </form>
     </section>
