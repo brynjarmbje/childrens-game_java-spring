@@ -1,94 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supervisor Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<!-- scrollable page -->
-<body class="scrollable-page">
+<body>
 <div class="container">
     <h1>Supervisor Dashboard</h1>
 
-    <!-- Create and Display Children Section -->
+    <!-- Create Child -->
     <section>
-        <div>
-            <h2>Create Child</h2>
-            <form th:action="@{/supervisor/child/create}" method="post">
-                <label for="child-name">Child Name:</label>
-                <input type="text" id="child-name" name="name" required>
-                <button type="submit">Create Child</button>
-            </form>
-        </div>
-        <div>
-            <h3>Children</h3>
-            <ul>
-                <li th:each="child : ${children}">
-                    <span th:text="${child.name}"></span>
-                </li>
-            </ul>
-        </div>
-    </section>
-    <section>
-        <div>
-            <h2>Create Admin</h2>
-            <form th:action="@{/supervisor/admin/create}" method="post">
-                <label for="admin-name">Admin Name:</label>
-                <input type="text" id="admin-name" name="username" required>
-                <label for="admin-password">Password:</label>
-                <input type="password" id="admin-password" name="password" required>
-                <button type="submit">Create Admin</button>
-            </form>
-        </div>
-            <h3>Admins</h3>
-            <div class="scrollable-list">
-                <ul id="admins-display" th:if="${admins != null}">
-                    <li th:each="admin : ${admins}" th:text="${admin.username}">Admin Name</li>
-                </ul>
-            </div>
-    </section>
-    <section>
-        <div>
-            <h2>Delete Child</h2>
-            <form id="delete-child-form" action="/supervisor/child/delete" method="post">
-                <label for="child-selection">Select Child to Delete:</label>
-                <div class="selection-box">
-                    <select id="child-selection" name="id" required>
-                        <option value="">Select a child...</option>
-                        <!-- Options for children will be added here dynamically -->
-                        <option th:each="child : ${children}" th:value="${child.id}" th:text="${child.name}">Child Name</option>
-                    </select>
-                </div>
-                <button class="selection-button" type="submit">Delete Child</button>
-            </form>
-
-        </div>
-        <div>
-            <h2>Delete Admin</h2>
-            <form id="delete-admin-form" action="/supervisor/admin/delete" method="post">
-                <label for="admin-selection">Select Admin to Delete:</label>
-                <div class="selection-box">
-                    <select id="admin-selection" name="id" required>
-                        <option value="">Select an admin...</option>
-                        <!-- Options for admins will be added here dynamically -->
-                        <option th:each="admin : ${admins}" th:value="${admin.id}" th:text="${admin.username}">Admin Name</option>
-                    </select>
-                </div>
-                <button class="selection-button" type="submit">Delete Admin</button>
-            </form>
-        </div>
+        <h2>Create Child</h2>
+        <form th:action="@{/supervisor/child/create}" method="post">
+            <input type="text" name="name" placeholder="Child Name" required>
+            <button type="submit">Create Child</button>
+        </form>
     </section>
 
-    <hr>
+    <!-- Children List -->
+    <section>
+        <h3>Children</h3>
+        <ul class="scrollable-list">
+            <li th:each="child : ${children}" th:text="${child.name}"></li>
+        </ul>
+    </section>
+
+    <!-- Create Admin -->
+    <section>
+        <h2>Create Admin</h2>
+        <form th:action="@{/supervisor/admin/create}" method="post">
+            <input type="text" name="username" placeholder="Admin Username" required>
+            <input type="password" name="password" placeholder="Admin Password" required>
+            <button type="submit">Create Admin</button>
+        </form>
+    </section>
+
+    <!-- Admins List -->
+    <section>
+        <h3>Admins</h3>
+        <ul class="scrollable-list">
+            <li th:each="admin : ${admins}" th:text="${admin.username}"></li>
+        </ul>
+    </section>
+
     <div class="logout-container">
         <form th:action="@{/logout}" method="post">
             <button type="submit" class="logout-button">Log Out</button>
         </form>
     </div>
-
-
 </div>
 </body>
 </html>
-

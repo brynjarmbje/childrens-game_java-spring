@@ -28,10 +28,23 @@ public class SupervisorService {
         childRepository.deleteById(id);
     }
 
+    // Get a Child by ID
+    public Child getChildById(Long id) {
+        return childRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("Child not found with id: " + id));
+    }
+
     // Get all Children
     public List<Child> getAllChildren() {
         return childRepository.findAll();
     }
+
+    // Find Children by Name
+    public List<Child> getChildrenByName(String name) {
+        return childRepository.findByName(name);
+    }
+
+
 
     // Create a new Admin
     public Admin createAdmin(Admin admin) {
@@ -46,6 +59,12 @@ public class SupervisorService {
     // Get all Admins
     public List<Admin> getAllAdmins() {
         return adminRepository.findAll();
+    }
+
+    // Get an Admin by ID
+    public Admin getAdminById(Long id) {
+        return adminRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("Admin not found with id: " + id));
     }
 
 }
