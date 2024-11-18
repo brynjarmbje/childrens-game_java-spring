@@ -3,6 +3,6 @@ COPY . .
 Run mvn clean package -DskipTests
 
 FROM openjdk:17.0.1-jdk-slim
-COPY --from=build /target/game-0.0.1-SNAPSHOT.jar BornLaeraLeikur.jar
+COPY --from=build /target/game-0.0.1-SNAPSHOT.jar game.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar","BornLaeraLeikur"]
