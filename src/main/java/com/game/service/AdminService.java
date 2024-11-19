@@ -6,6 +6,7 @@ import com.game.repository.AdminRepository;
 import com.game.repository.ChildRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -51,6 +52,7 @@ public class AdminService {
      * @param adminId The ID of the admin.
      * @param childId The ID of the child to add.
      */
+    @Transactional
     public void addChildToAdmin(Long adminId, Long childId) {
         Admin admin = adminRepository.findById(adminId).orElseThrow(() ->
                 new IllegalArgumentException("Admin not found with id: " + adminId));
@@ -72,6 +74,7 @@ public class AdminService {
      *
      * @param adminId The ID of the admin.
      */
+    @Transactional
     public void clearChildrenFromAdmin(Long adminId) {
         Admin admin = adminRepository.findById(adminId).orElseThrow(() ->
                 new IllegalArgumentException("Admin not found with id: " + adminId));
@@ -89,6 +92,7 @@ public class AdminService {
      * @param adminId The ID of the admin.
      * @param childId The ID of the child to remove.
      */
+    @Transactional
     public void removeChildFromAdmin(Long adminId, Long childId) {
         Admin admin = adminRepository.findById(adminId).orElseThrow(() ->
                 new IllegalArgumentException("Admin not found with id: " + adminId));
@@ -105,4 +109,19 @@ public class AdminService {
 
         System.out.println("Child " + childId + " removed from Admin " + adminId); // Debug log
     }
+//    public void addChildToAdmin(Long adminId, Long childName) {
+//        Admin admin = adminRepository.findById(adminId).orElseThrow(() ->
+//                new IllegalArgumentException("Admin not found with id: " + adminId));
+//
+//        Child child = childRepository.findById(childName).orElseThrow(() ->
+//                new IllegalArgumentException("Child not found with id: " + childId));
+//
+//        if (!admin.getChildren().contains(child)) {
+//            admin.getChildren().add(child); // Add child to admin
+//        } else {
+//            throw new IllegalArgumentException("Child is already managed by this admin.");
+//        }
+//
+//        adminRepository.save(admin); // Persist changes
+//    }
 }

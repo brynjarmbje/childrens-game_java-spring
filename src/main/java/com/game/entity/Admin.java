@@ -29,7 +29,7 @@ public class Admin {
 
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "admin_id") // Defines the foreign key in the 'child' table
+    @JoinColumn(name = "admin_id") // Foreign key in the 'child' table
     private List<Child> children = new ArrayList<>();
 
 
@@ -86,18 +86,14 @@ public class Admin {
         this.school = school;
     }
 
-//    public void createAdmin(String username, String password, boolean isSupervisor, School school) {
-//        this.username = username;
-//        this.password = password;
-//        this.isSupervisor = isSupervisor;
-//    }
+    public void createAdmin(String username, String password, boolean isSupervisor, School school) {
+        this.username = username;
+        this.password = password;
+        this.isSupervisor = isSupervisor;
+    }
 
     public List<Child> getChildren() {
         return children;
-    }
-
-    public void addChild(Child child) {
-        this.children.add(child);
     }
 
     public void setChildren(List<Child> children) {
