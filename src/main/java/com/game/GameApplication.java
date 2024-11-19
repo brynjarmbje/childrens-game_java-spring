@@ -18,6 +18,10 @@ public class GameApplication{
 //    private AdminService adminService;
 
 //    public void createUsers() {
+//
+//
+//    @Override
+//    public void run(String... args) throws Exception {
 //        try {
 //            System.out.println("Starting createAdmin...");
 //            Child child = new Child("child");

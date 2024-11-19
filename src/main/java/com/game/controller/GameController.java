@@ -12,59 +12,90 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Controller
 @SessionAttributes({ "game" })
 public class GameController {
 
 	@Autowired
-	private GameService gameService;
+	private QuestionService questionService;
 
 	@Autowired
-	private QuestionService questionService;
+	private GameService gameService;
+
+	private static final int LETTERS_MIN_ID = 41;
+	private static final int LETTERS_MAX_ID = 70;
+
+	@GetMapping("/letters")
+	public String startLettersGame(Model model) {
+		// Generate a random question for the letters game
+		Question question = gameService.generateRandomQuestion(LETTERS_MIN_ID, LETTERS_MAX_ID);
+
+		// Generate IDs for wrong options
+		List<Long> wrongOptionIds = gameService.generateWrongOptions(question.getId(), LETTERS_MIN_ID, LETTERS_MAX_ID);
+
+		// Combine correct and wrong option IDs into one list
+		List<Long> optionIds = new ArrayList<>(wrongOptionIds);
+		optionIds.add(question.getId()); // Add correct option
+		Collections.shuffle(optionIds); // Randomize the order
+
+		// Pass data to the model
+		model.addAttribute("correctId", question.getId());
+		model.addAttribute("optionIds", optionIds);
+
+		return "letters"; // This loads letters.html
+	}
+
+	private static final int NUMBERS_MIN_ID = 1;
+	private static final int NUMBERS_MAX_ID = 40;
+
+	@GetMapping("/numbers")
+	public String startNumbersGame(Model model) {
+		// Generate a random question for the numbers game
+		Question question = gameService.generateRandomQuestion(NUMBERS_MIN_ID, NUMBERS_MAX_ID);
+
+		// Generate IDs for wrong options
+		List<Long> wrongOptionIds = gameService.generateWrongOptions(question.getId(), NUMBERS_MIN_ID, NUMBERS_MAX_ID);
+
+		// Combine correct and wrong option IDs into one list
+		List<Long> optionIds = new ArrayList<>(wrongOptionIds);
+		optionIds.add(question.getId()); // Add correct option
+		Collections.shuffle(optionIds); // Randomize the order
+
+		// Pass data to the model
+		model.addAttribute("correctId", question.getId());
+		model.addAttribute("optionIds", optionIds);
+
+		return "numbers"; // This loads numbers.html
+	}
+
+	private static final int LOCATE_MIN_ID = 100;
+	private static final int LOCATE_MAX_ID = 135;
+
+	@GetMapping("/locate-game")
+	public String startLocateGame(Model model) {
+		// Generate a random question for the numbers game
+		Question question = gameService.generateRandomQuestion(LOCATE_MIN_ID, LOCATE_MAX_ID);
+
+		// Generate IDs for wrong options
+		List<Long> wrongOptionIds = gameService.generateWrongOptions(question.getId(), LOCATE_MIN_ID, LOCATE_MAX_ID);
+
+		// Combine correct and wrong option IDs into one list
+		List<Long> optionIds = new ArrayList<>(wrongOptionIds);
+		optionIds.add(question.getId()); // Add correct option
+		Collections.shuffle(optionIds); // Randomize the order
+
+		// Pass data to the model
+		model.addAttribute("correctId", question.getId());
+		model.addAttribute("optionIds", optionIds);
+
+		return "locate-game"; // This loads numbers.html
+	}
 
 	@ModelAttribute("game")
 	public Game getGame() {
 		return new Game();
-	}
-
-	@PostMapping("/check")
-	public String checkAnswer(@RequestParam("answer") String answer, @ModelAttribute("game") Game game, Model model) {
-		boolean isCorrect = gameService.checkAnswer(answer, game);
-		model.addAttribute("isCorrect", isCorrect);
-		model.addAttribute("game", game);
-		return "index";
-	}
-
-	@GetMapping("/reset")
-	public String resetGame(@ModelAttribute("game") Game game) {
-		game.setOptions(gameService.generateRandomOptions());
-		game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
-		return "index";
-	}
-
-	@GetMapping("/letters")
-	public String lettersGame(Model model, @ModelAttribute("game") Game game,
-			@SessionAttribute("username") String username) {
-		game.setOptions(gameService.generateRandomOptions());
-		game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
-		model.addAttribute("game", game);
-		model.addAttribute("username", username);
-		return "letters";
-	}
-
-	@GetMapping("/numbers")
-	public String numbersGame(Model model, @ModelAttribute("game") Game game,
-			@SessionAttribute("username") String username) {
-		game.setOptions(gameService.generateRandomNumbers());
-		game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
-		model.addAttribute("game", game);
-		model.addAttribute("username", username);
-		return "numbers";
 	}
 
 	@Autowired
@@ -75,8 +106,9 @@ public class GameController {
 
 	@GetMapping("/memory-game")
 	public String memoryGame(Model model) {
+		memoryGameService.initializeGame();
 		model.addAttribute("cards", memoryGameService.getCards());
-		return "memory-game"; // Ensure this matches the name of your Thymeleaf template
+		return "memory-game"; // Loads memory-game.html
 	}
 
 	@PostMapping("/memory-game/flip")
@@ -86,7 +118,7 @@ public class GameController {
 		if (memoryGameService.isGameComplete()) {
 			model.addAttribute("gameComplete", true);
 		}
-		return "memory-game"; // Return the updated state to the same template
+		return "memory-game"; // Returns updated state
 	}
 
 	@PostMapping("/memory-game/reset")
