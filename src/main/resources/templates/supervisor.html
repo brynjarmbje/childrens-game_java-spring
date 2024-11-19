@@ -3,60 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supervisor Dashboard</title>
+    <title>Skólastjóri</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body class="scrollable-page">
 <div class="container">
-    <h1>Supervisor Dashboard</h1>
+    <h1>Skólastjóri</h1>
 
     <!-- Create Child Section -->
     <section>
-        <h2>Create Child</h2>
+        <h2>Skrá barn</h2>
         <form th:action="@{/supervisor/child/create}" method="post">
             <input type="text" name="name" placeholder="Child Name" required>
-            <button type="submit" class="selection-button">Create Child</button>
+            <button type="submit" class="selection-button">Búa til barn</button>
         </form>
     </section>
 
     <!-- Children List with Delete Functionality -->
     <section>
-        <h3>Children</h3>
+        <h3>Börn</h3>
         <form th:action="@{/supervisor/child/delete}" method="post">
 
             <select id="child-selection" name="id" multiple required>
                 <option th:each="child : ${children}" th:value="${child.id}" th:text="${child.name}"></option>
             </select>
-            <button type="submit" class="delete-button">Delete Child</button>
+            <button type="submit" class="delete-button">Eyða barni</button>
         </form>
     </section>
 
     <!-- Create Admin Section -->
     <section>
-        <h2>Create Admin</h2>
+        <h2>Skrá kennara</h2>
         <form th:action="@{/supervisor/admin/create}" method="post">
             <input type="text" name="username" placeholder="Admin Username" required>
             <input type="password" name="password" placeholder="Admin Password" required>
-            <button type="submit" class="selection-button">Create Admin</button>
+            <button type="submit" class="selection-button">Búa til kennara</button>
         </form>
     </section>
 
     <!-- Admins List with Delete Functionality -->
     <section>
-        <h3>Admins</h3>
+        <h3>Kennarar</h3>
         <form th:action="@{/supervisor/admin/delete}" method="post">
 
             <select id="admin-selection" name="id" multiple required>
                 <option th:each="admin : ${admins}" th:value="${admin.id}" th:text="${admin.username}"></option>
             </select>
-            <button type="submit" class="delete-button">Delete Admin</button>
+            <button type="submit" class="delete-button">Eyða kennara</button>
         </form>
     </section>
 
     <!-- Logout Button -->
     <div class="logout-container">
         <form th:action="@{/logout}" method="post">
-            <button type="submit" class="logout-button">Log Out</button>
+            <button type="submit" class="logout-button">Skrá út</button>
         </form>
     </div>
 </div>

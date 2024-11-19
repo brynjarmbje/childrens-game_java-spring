@@ -1,7 +1,5 @@
 package com.game.entity;
 
-import java.sql.Blob;
-
 import jakarta.persistence.*;
 
 @Entity

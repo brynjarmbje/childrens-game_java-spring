@@ -31,6 +31,37 @@ body {
     max-width: 500px;
 }
 
+/* Game Selection Container */
+.game-selection {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center;
+    gap: 15px; /* Space between buttons */
+    margin-top: 20px;
+}
+
+.game-selection a {
+    text-decoration: none; /* Remove underline */
+    font-size: 1.2em; /* Larger font for visibility */
+    padding: 15px 30px; /* Button padding */
+    border-radius: 10px;
+    background: linear-gradient(to right, #84fab0, #8fd3f4); /* Consistent gradient */
+    color: white;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+}
+
+.game-selection a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    background: #45aaf2; /* Brighten on hover */
+}
+
+.game-selection a:active {
+    transform: scale(0.9);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 /* Scrollable List */
 .scrollable-list {
     max-height: 200px; /* Restricts list height */
@@ -97,6 +128,7 @@ input, select {
     left: 20px;
     z-index: 1000;
 }
+
 /* Dropdown styling */
 select {
     width: 100%;
@@ -108,9 +140,9 @@ select {
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Delete Button Styling */
-.delete-button {
-    background: linear-gradient(to right, #ff6f61, #ff9a9e);
+/* General Button Styling */
+button, .game-selection a {
+    background: linear-gradient(to right, #ff6f61, #ff9a9e); /* Gradient background */
     border: none;
     border-radius: 10px;
     padding: 10px 20px;
@@ -122,13 +154,15 @@ select {
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.delete-button:hover {
+/* Button Hover Effect */
+button:hover, .game-selection a:hover {
     transform: scale(1.1);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-    background: #e63946;
+    background: #ff8566; /* Slightly brighter color on hover */
 }
 
-.delete-button:active {
+/* Button Active Effect */
+button:active, .game-selection a:active {
     transform: scale(0.9);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

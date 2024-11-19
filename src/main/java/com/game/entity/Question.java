@@ -1,12 +1,6 @@
 package com.game.entity;
 
-import java.sql.Blob;
-
-import com.game.data.AudioHandler;
-
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 public class Question {

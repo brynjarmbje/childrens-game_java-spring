@@ -1,15 +1,7 @@
 package com.game;
 
-import com.game.entity.Child;
-import com.game.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 public class GameApplication{

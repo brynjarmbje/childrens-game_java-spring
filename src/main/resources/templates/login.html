@@ -3,15 +3,15 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Login</title>
+	<title>Innskráning</title>
 	<link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body class="scrollable-page">
 <div class="container">
-	<h1>Login</h1>
+	<h1>Innskráning</h1>
 	<!-- Admin Login Section -->
 	<section>
-		<h2>Admin Login</h2>
+		<h2>Innskráning kennara</h2>
 		<form th:action="@{/login}" th:object="${admin}" method="post">
 			<label for="username">Username:</label>
 			<input type="text" id="username" name="username" th:field="*{username}" required>
@@ -19,7 +19,7 @@
 			<label for="password">Password:</label>
 			<input type="password" id="password" name="password" th:field="*{password}" required>
 
-			<button type="submit">Login as Admin</button>
+			<button type="submit">Skrá inn sem kennari</button>
 		</form>
 	</section>
 
@@ -27,11 +27,11 @@
 
 	<!-- Guest Login Section -->
 	<section>
-		<h2>Guest Login</h2>
+		<h2>Gesta innskráning</h2>
 		<form action="/guest-login" method="post">
 			<label for="guest-username">Guest name:</label>
 			<input type="text" id="guest-username" name="guestUsername" value="Guest">
-			<button type="submit">Login as Guest</button>
+			<button type="submit">Skrá inn sem gestur</button>
 		</form>
 	</section>
 </div>

@@ -8,9 +8,9 @@
 </head>
 <body class="scrollable-page">
 <div class="container">
-    <h1>Admin Dashboard</h1>
+    <h1>Kennara síða</h1>
     <div>
-        <p>Welcome, <span th:text="${username}">User</span></p>
+        <p>Velkomin/nn, <span th:text="${username}">User</span></p>
     </div>
 
     <!-- Feedback Messages -->
@@ -21,25 +21,12 @@
         <p th:text="${error}"></p>
     </div>
 
-    <!-- Child Selection -->
+    <!-- Current Group Section (Moved Above Select Children) -->
     <section>
-        <h2>Select Children</h2>
-        <form th:action="@{'/{adminId}/add-child'(adminId=${adminId})}" method="post">
-            <label for="child-selection">Choose a Child:</label>
-            <select id="child-selection" name="childId" required>
-                <!-- Available children (not yet managed by the admin) -->
-                <option th:each="child : ${availableChildren}" th:value="${child.id}" th:text="${child.name}"></option>
-            </select>
-            <button type="submit" class="selection-button">Add to Group</button>
-        </form>
-    </section>
-
-    <!-- Current Group -->
-    <section>
-        <h2>Current Group</h2>
+        <h2>Hópur</h2>
         <form th:action="@{'/{adminId}/remove-child'(adminId=${adminId})}" method="post">
             <label for="current-group">Managed Children:</label>
-            <select id="current-group" name="childId" required>
+            <select id="current-group" name="childId" multiple required class="scrollable-list">
                 <!-- Dynamically populate options from managedChildren -->
                 <option th:each="child : ${managedChildren}" th:value="${child.id}" th:text="${child.name}"></option>
             </select>
@@ -50,18 +37,31 @@
         </form>
     </section>
 
+    <!-- Child Selection Section -->
+    <section>
+        <h2>Veldu barn</h2>
+        <form th:action="@{'/{adminId}/add-child'(adminId=${adminId})}" method="post">
+            <label for="child-selection">Choose a Child:</label>
+            <select id="child-selection" name="childId" required class="scrollable-list">
+                <!-- Available children (not yet managed by the admin) -->
+                <option th:each="child : ${availableChildren}" th:value="${child.id}" th:text="${child.name}"></option>
+            </select>
+            <button type="submit" class="selection-button">Bæta í hóp</button>
+        </form>
+    </section>
+
     <hr>
 
     <!-- Play Button -->
     <section>
         <form th:action="@{/index}" method="get">
-            <button type="submit" class="selection-button">Play</button>
+            <button type="submit" class="selection-button">Spila</button>
         </form>
     </section>
 
     <div class="logout-container">
         <form th:action="@{/logout}" method="post">
-            <button type="submit" class="logout-button">Log Out</button>
+            <button type="submit" class="logout-button">Skrá út</button>
         </form>
     </div>
 </div>
