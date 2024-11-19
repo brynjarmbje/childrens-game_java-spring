@@ -3,6 +3,8 @@ package com.game.repository;
 import com.game.entity.Child;
 import com.game.entity.School;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
@@ -15,4 +17,7 @@ public interface ChildRepository extends JpaRepository<Child, Long> {
     List<Child> findByName(String name);
 
     List<Child> findBySchool(School school);
+
+    @Query("SELECT c FROM Child c WHERE c.id NOT IN (SELECT mc.id FROM Admin a JOIN a.children mc WHERE a.id = :adminId)")
+    List<Child> findUnmanagedChildrenByAdminId(@Param("adminId") Long adminId);
 }

@@ -2,6 +2,7 @@ package com.game.service;
 
 import com.game.entity.Admin;
 import com.game.entity.Child;
+import com.game.errors.AdminNotFoundException;
 import com.game.repository.AdminRepository;
 import com.game.repository.ChildRepository;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AdminService {
@@ -104,24 +106,19 @@ public class AdminService {
         Child child = childRepository.findById(childId).orElseThrow(() ->
                 new IllegalArgumentException("Child not found with id: " + childId));
 
-        admin.removeChild(child);
+        admin.removeChildFromAdmin(child);
         adminRepository.save(admin);
 
         System.out.println("Child " + childId + " removed from Admin " + adminId); // Debug log
     }
-//    public void addChildToAdmin(Long adminId, Long childName) {
-//        Admin admin = adminRepository.findById(adminId).orElseThrow(() ->
-//                new IllegalArgumentException("Admin not found with id: " + adminId));
-//
-//        Child child = childRepository.findById(childName).orElseThrow(() ->
-//                new IllegalArgumentException("Child not found with id: " + childId));
-//
-//        if (!admin.getChildren().contains(child)) {
-//            admin.getChildren().add(child); // Add child to admin
-//        } else {
-//            throw new IllegalArgumentException("Child is already managed by this admin.");
-//        }
-//
-//        adminRepository.save(admin); // Persist changes
-//    }
+    public String getUsername(Long adminId) {
+        Admin admin = adminRepository.findById(adminId).orElseThrow(() ->
+                new AdminNotFoundException("Admin not found with id: " + adminId));
+        System.out.println("Username: " + admin.getUsername());
+        return admin.getUsername();
+    }
+    public List<Child> getUnmanagedChildren(Long adminId) {
+        return childRepository.findUnmanagedChildrenByAdminId(adminId);
+    }
+
 }

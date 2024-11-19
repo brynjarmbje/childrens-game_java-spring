@@ -3,15 +3,21 @@ package com.game.controller;
 import com.game.entity.Child;
 import com.game.service.AdminService;
 import com.game.service.SupervisorService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+
+import java.beans.Transient;
 import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
+@SessionAttributes("username")
 public class AdminController {
 
     @Autowired
@@ -27,7 +33,6 @@ public class AdminController {
      */
     @GetMapping("/{adminId}")
     public String adminPage(@PathVariable Long adminId, Model model) {
-        model.addAttribute("adminId", adminId);
         try {
             // Get children managed by the admin
             List<Child> managedChildren = adminService.getChildrenManagedByAdmin(adminId);
@@ -58,13 +63,28 @@ public class AdminController {
      * @return A redirect to the admin page.
      */
     @PostMapping("/{adminId}/add-child")
+    @Transactional
     public String addChildToGroup(@PathVariable Long adminId, @RequestParam Long childId, Model model) {
+        Logger logger = LoggerFactory.getLogger(AdminController.class);
+
+        logger.info("Received request to add child with ID {} to admin with ID {}", childId, adminId);
+
         try {
+            // Attempt to add the child to the admin's group
             adminService.addChildToAdmin(adminId, childId);
             model.addAttribute("success", "Child added to the group successfully!");
+
+            // Log success message
+            logger.info("Successfully added child with ID {} to admin with ID {}", childId, adminId);
         } catch (Exception e) {
+            // Log the error details
+            logger.error("Failed to add child with ID {} to admin with ID {}: {}", childId, adminId, e.getMessage(), e);
             model.addAttribute("error", "Failed to add child to the group: " + e.getMessage());
         }
+
+        // Log the redirection URL
+        logger.debug("Redirecting to /admin/{}", adminId);
+
         return "redirect:/admin/" + adminId;
     }
 
@@ -77,13 +97,24 @@ public class AdminController {
      * @return A redirect to the admin page.
      */
     @PostMapping("/{adminId}/remove-child")
+    @Transactional
     public String removeChildFromGroup(@PathVariable Long adminId, @RequestParam Long childId, Model model) {
         try {
+            // Remove the child from the admin
             adminService.removeChildFromAdmin(adminId, childId);
+
+            // Fetch updated lists
+            List<Child> managedChildren = adminService.getChildrenManagedByAdmin(adminId);
+            List<Child> unmanagedChildren = adminService.getUnmanagedChildren(adminId);
+
+            // Update the model
+            model.addAttribute("managedChildren", managedChildren);
+            model.addAttribute("availableChildren", unmanagedChildren);
             model.addAttribute("success", "Child removed from the group successfully!");
         } catch (Exception e) {
             model.addAttribute("error", "Failed to remove child from the group: " + e.getMessage());
         }
+
         return "redirect:/admin/" + adminId;
     }
 
@@ -95,6 +126,7 @@ public class AdminController {
      * @return A redirect to the admin page.
      */
     @PostMapping("/{adminId}/clear-group")
+    @Transactional
     public String clearGroup(@PathVariable Long adminId, Model model) {
         try {
             adminService.clearChildrenFromAdmin(adminId);

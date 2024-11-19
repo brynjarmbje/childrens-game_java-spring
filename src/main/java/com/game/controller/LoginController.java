@@ -76,10 +76,12 @@ public class LoginController {
 		if (admin.isSupervisor()) {
 			session.setAttribute("isSupervisor", true);
 			System.out.println("Supervisor detected, redirecting to /supervisor");
+
 			return "redirect:/supervisor";
 		} else {
 			session.setAttribute("isSupervisor", false);
 			System.out.println("Regular admin detected, redirecting to /admin/" + admin.getId());
+
 			return "redirect:/admin/" + admin.getId();
 		}
 	}

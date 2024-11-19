@@ -28,7 +28,7 @@ public class Admin {
     private boolean isSupervisor = false; // Default to false
 
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "admin_id") // Foreign key in the 'child' table
     private List<Child> children = new ArrayList<>();
 
@@ -99,8 +99,9 @@ public class Admin {
     public void setChildren(List<Child> children) {
         this.children = children;
     }
-    public void removeChild(Child child) {
-        this.children.remove(child);
+
+    public void removeChildFromAdmin(Child child) {
+        children.remove(child);
     }
 
 }
