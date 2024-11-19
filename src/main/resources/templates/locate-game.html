@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hvar er hann?</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <!-- Use Thymeleaf's JavaScript inlining -->
+  <script th:inline="javascript">
+        // Extract Thymeleaf variables into JavaScript
+        const correctId = [[${correctId}]];
+        const optionIds = [[${optionIds}]];
+
+        // Function to play audio
+        function playAudio() {
+            const audio = new Audio('/playAudio?id=' + correctId);
+            audio.play();
+        }
+
+        // Function to check the user's answer
+        function checkAnswer(selectedId) {
+            if (selectedId === correctId) {
+                alert('Húrra! Vel gert!');
+                document.getElementById('nextGame').style.display = 'block'; // Show "Aftur" button
+            } else {
+                alert('Reyndu aftur!');
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Hvar er dýrið?</h1>
+<button class="back-button" onclick="location.href='/'">⬅️ Til baka</button>
+<p>Ýttu á réttu myndina! Röddin segir hvar dýrið er og þú velur rétta mynd!</p>
+<button type="button" onclick="playAudio()">Hlusta</button>
+
+<!-- Displaying options -->
+<div id="optionsContainer"></div>
+
+<!-- "Aftur" button for restarting -->
+<div id="nextGame" style="display: none;">
+  <button onclick="location.reload()">Aftur!</button>
+</div>
+
+<!-- Adding a script to create buttons dynamically -->
+<script th:inline="javascript">
+        // Function to render buttons with image options
+        function renderOptions() {
+            const optionsContainer = document.getElementById('optionsContainer');
+            const correctId = [[${correctId}]];
+            const optionIds = [[${optionIds}]];
+
+            optionIds.forEach(id => {
+                // Create a button element
+                const button = document.createElement('button');
+                button.type = 'button';
+
+                // Set onclick function for button
+                button.onclick = () => checkAnswer(id);
+
+                // Create an img element
+                const img = document.createElement('img');
+                img.src = '/getImage?id=' + id;
+                img.alt = 'Option Image';
+
+                // Append img to button, and button to container
+                button.appendChild(img);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // Call the function to render options
+        renderOptions();
+    </script>
+</body>
+</html>

@@ -70,6 +70,29 @@ public class GameController {
 		return "numbers"; // This loads numbers.html
 	}
 
+	private static final int LOCATE_MIN_ID = 100;
+	private static final int LOCATE_MAX_ID = 135;
+
+	@GetMapping("/locate-game")
+	public String startLocateGame(Model model) {
+		// Generate a random question for the numbers game
+		Question question = gameService.generateRandomQuestion(LOCATE_MIN_ID, LOCATE_MAX_ID);
+
+		// Generate IDs for wrong options
+		List<Long> wrongOptionIds = gameService.generateWrongOptions(question.getId(), LOCATE_MIN_ID, LOCATE_MAX_ID);
+
+		// Combine correct and wrong option IDs into one list
+		List<Long> optionIds = new ArrayList<>(wrongOptionIds);
+		optionIds.add(question.getId()); // Add correct option
+		Collections.shuffle(optionIds); // Randomize the order
+
+		// Pass data to the model
+		model.addAttribute("correctId", question.getId());
+		model.addAttribute("optionIds", optionIds);
+
+		return "locate-game"; // This loads numbers.html
+	}
+
 	@ModelAttribute("game")
 	public Game getGame() {
 		return new Game();
