@@ -26,8 +26,7 @@ public class Image {
     @Column(nullable = true)
     private boolean isLetter;
 
-    @Lob
-    @Column(nullable = false)
+    @Column(columnDefinition = "BYTEA") // This hints to store the data as a byte array
     private byte[] imageData;
 
     // Getters and Setters

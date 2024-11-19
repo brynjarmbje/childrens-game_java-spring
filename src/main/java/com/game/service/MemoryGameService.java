@@ -1,40 +1,64 @@
 package com.game.service;
 
+import com.game.entity.Question;
 import com.game.model.Card;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class MemoryGameService {
+
+    @Autowired
+    private QuestionService questionService;
+
+    private static final int ANIMALS_THINGS_MIN_ID = 73;
+    private static final int ANIMALS_THINGS_MAX_ID = 99;
 
     private List<Card> cards;
     private Card firstSelectedCard;
     private Card secondSelectedCard;
 
-    public MemoryGameService() {
-        initializeGame();
-    }
-
     public void initializeGame() {
         cards = new ArrayList<>();
-        cards.addAll(Arrays.asList(
-                new Card(1, "fa-apple", 'A'), new Card(2, "fa-ambulance", 'A'),
-                new Card(3, "fa-bug", 'B'), new Card(4, "fa-bus", 'B'),
-                new Card(5, "fa-cat", 'C'), new Card(6, "fa-carrot", 'C'),
-                new Card(7, "fa-dog", 'D'), new Card(8, "fa-dove", 'D'),
-                new Card(9, "fa-elephant", 'E'), new Card(10, "fa-envelope", 'E'),
-                new Card(11, "fa-fish", 'F'), new Card(12, "fa-frog", 'F'),
-                new Card(13, "fa-ghost", 'G'), new Card(14, "fa-guitar", 'G'),
-                new Card(15, "fa-horse", 'H'), new Card(16, "fa-hat-cowboy", 'H')
-                // ... include 16 unique icons here ...
-        ));
+        Map<String, List<Question>> letterGroups = new HashMap<>();
+        Set<Long> usedIds = new HashSet<>();
+
+        // Create pairs for cards using random IDs
+        while (cards.size() < 16) {
+            long randomId = generateUniqueRandomId(usedIds);
+            Question question = questionService.getQuestionById(randomId);
+
+            if (question != null && question.getCorrectAnswer() != null) {
+                String firstLetter = question.getCorrectAnswer().getFirstLetter();
+                letterGroups.putIfAbsent(firstLetter, new ArrayList<>());
+                letterGroups.get(firstLetter).add(question);
+
+                // Only add if we have a pair (2 cards)
+                if (letterGroups.get(firstLetter).size() == 2 || letterGroups.get(firstLetter).size() == 4) {
+                    for (Question q : letterGroups.get(firstLetter)) {
+                        String imageUrl = "/getImage?id=" + q.getId(); // Generate image URL
+                        cards.add(new Card(cards.size(), imageUrl, firstLetter.charAt(0)));
+                    }
+                    // Reset list for this letter
+                    letterGroups.remove(firstLetter);
+                }
+            }
+        }
+
         Collections.shuffle(cards);
         firstSelectedCard = null;
         secondSelectedCard = null;
+    }
+
+    private long generateUniqueRandomId(Set<Long> usedIds) {
+        long randomId;
+        do {
+            randomId = ANIMALS_THINGS_MIN_ID + new Random().nextInt(ANIMALS_THINGS_MAX_ID - ANIMALS_THINGS_MIN_ID + 1);
+        } while (usedIds.contains(randomId));
+        usedIds.add(randomId);
+        return randomId;
     }
 
     public List<Card> getCards() {
@@ -43,8 +67,9 @@ public class MemoryGameService {
 
     public void flipCard(int id) {
         Card card = cards.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
-        if (card != null && !card.isMatched()) {
-            card.setFlipped(!card.isFlipped());
+        if (card != null && !card.isMatched() && !card.isFlipped()) {
+            card.setFlipped(true);
+
             if (firstSelectedCard == null) {
                 firstSelectedCard = card;
             } else if (secondSelectedCard == null && card != firstSelectedCard) {
@@ -57,11 +82,21 @@ public class MemoryGameService {
     private void checkForMatch() {
         if (firstSelectedCard != null && secondSelectedCard != null) {
             if (firstSelectedCard.getLetter() == secondSelectedCard.getLetter()) {
+                // Match found
                 firstSelectedCard.setMatched(true);
                 secondSelectedCard.setMatched(true);
             } else {
-                firstSelectedCard.setFlipped(false);
-                secondSelectedCard.setFlipped(false);
+                // No match, flip back after delay
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        firstSelectedCard.setFlipped(false);
+                        secondSelectedCard.setFlipped(false);
+                        firstSelectedCard = null;
+                        secondSelectedCard = null;
+                    }
+                }, 1000); // 1-second delay
             }
             firstSelectedCard = null;
             secondSelectedCard = null;
@@ -76,4 +111,3 @@ public class MemoryGameService {
         initializeGame();
     }
 }
-

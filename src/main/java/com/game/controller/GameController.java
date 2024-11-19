@@ -106,8 +106,9 @@ public class GameController {
 
 	@GetMapping("/memory-game")
 	public String memoryGame(Model model) {
+		memoryGameService.initializeGame();
 		model.addAttribute("cards", memoryGameService.getCards());
-		return "memory-game"; // Ensure this matches the name of your Thymeleaf template
+		return "memory-game"; // Loads memory-game.html
 	}
 
 	@PostMapping("/memory-game/flip")
@@ -117,7 +118,7 @@ public class GameController {
 		if (memoryGameService.isGameComplete()) {
 			model.addAttribute("gameComplete", true);
 		}
-		return "memory-game"; // Return the updated state to the same template
+		return "memory-game"; // Returns updated state
 	}
 
 	@PostMapping("/memory-game/reset")

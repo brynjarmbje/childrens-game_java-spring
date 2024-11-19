@@ -24,8 +24,9 @@ public class Question {
 	@Column(nullable = false)
 	private int level;
 
-	@Lob
+	@Column(columnDefinition = "BYTEA") // This hints to store the data as a byte array
 	private byte[] audioQuestion;
+
 
 	@OneToOne
 	@JoinColumn(name = "correct_image_id", referencedColumnName = "id", nullable = true)

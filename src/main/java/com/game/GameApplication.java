@@ -15,13 +15,13 @@ import java.util.List;
 @SpringBootApplication
 public class GameApplication{
 //public class GameApplication implements CommandLineRunner {
+
+    @Autowired
+    private QuestionService questionService;
+
+    @Autowired
+    private LoginService loginService;
 //
-//    @Autowired
-//    private QuestionService questionService;
-//
-//    @Autowired
-//    private LoginService loginService;
-////
     public static void main(String[] args) {
         SpringApplication.run(GameApplication.class, args);
     }
