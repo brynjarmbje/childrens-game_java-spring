@@ -19,8 +19,8 @@ public class SupervisorRestController {
 
     // Create a new Child
     @PostMapping("/child/create")
-    public ResponseEntity<Child> createChild(@RequestBody Child child) {
-        Child newChild = supervisorService.createChild(child);
+    public ResponseEntity<Child> createChild(@RequestBody Child child, @RequestParam Long supervisorId) {
+        Child newChild = supervisorService.createChild(child, supervisorId);
         return new ResponseEntity<>(newChild, HttpStatus.CREATED);
     }
 
@@ -40,8 +40,8 @@ public class SupervisorRestController {
 
     // Create a new Admin
     @PostMapping("/admin/create")
-    public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin) {
-        Admin newAdmin = supervisorService.createAdmin(admin);
+    public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin, @RequestParam Long supervisorId) {
+        Admin newAdmin = supervisorService.createAdmin(admin, supervisorId);
         return new ResponseEntity<>(newAdmin, HttpStatus.CREATED);
     }
 

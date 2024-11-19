@@ -34,11 +34,13 @@ public class LoginService {
 	public List<Admin> getAllAdmins() {
 		return adminRepository.findAll();
 	}
-	public void createAdmin(String username, String password, boolean isSupervisor) {
+	public void createAdmin(String username, String password) {
 		Admin admin = new Admin();
 		admin.setUsername(username);
 		admin.setPassword(password);
-		admin.setSupervisor(isSupervisor);
+		admin.setSupervisor(false);
 		adminRepository.save(admin);
 	}
+
+
 }

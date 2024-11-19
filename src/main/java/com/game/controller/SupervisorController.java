@@ -47,8 +47,8 @@ public class SupervisorController {
 
     // Create a new Child (Form submission)
     @PostMapping("/child/create")
-    public String createChild(@ModelAttribute Child child, Model model) {
-        supervisorService.createChild(child);
+    public String createChild(@RequestParam Long id, @ModelAttribute Child child, Model model) {
+        supervisorService.createChild(child, id);
 
         // Redirect to refresh the list of children displayed on the supervisor page
         return "redirect:/supervisor";
@@ -71,8 +71,8 @@ public class SupervisorController {
 
     // Create a new Admin (Form submission)
     @PostMapping("/admin/create")
-    public String createAdmin(@ModelAttribute Admin admin, Model model) {
-        supervisorService.createAdmin(admin);
+    public String createAdmin(@RequestParam Long id ,@ModelAttribute Admin admin, Model model) {
+        supervisorService.createAdmin(admin, id);
 
         // Redirect to refresh the list of admins displayed on the supervisor page
         return "redirect:/supervisor";

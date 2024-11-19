@@ -18,8 +18,13 @@ public class SupervisorService {
     @Autowired
     private AdminRepository adminRepository;
 
-    // Create a new Child
-    public Child createChild(Child child) {
+    // Create a new Child and assign the supervisor's school
+    public Child createChild(Child child, Long supervisorId) {
+        Admin supervisor = adminRepository.findById(supervisorId).orElseThrow(() ->
+                new IllegalArgumentException("Supervisor not found with id: " + supervisorId));
+
+        // Assign the supervisor's school to the child
+        child.setSchool(supervisor.getSchool());
         return childRepository.save(child);
     }
 
@@ -47,10 +52,14 @@ public class SupervisorService {
 
 
     // Create a new Admin
-    public Admin createAdmin(Admin admin) {
+    public Admin createAdmin(Admin admin, Long supervisorId) {
+        Admin supervisor = adminRepository.findById(supervisorId).orElseThrow(() ->
+                new IllegalArgumentException("Supervisor not found with id: " + supervisorId));
+
+        // Assign the supervisor's school to the admin
+        admin.setSchool(supervisor.getSchool());
         return adminRepository.save(admin);
     }
-
     // Delete an existing Admin
     public void deleteAdmin(Long id) {
         adminRepository.deleteById(id);
