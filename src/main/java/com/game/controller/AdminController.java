@@ -15,9 +15,6 @@ import java.util.List;
 public class AdminController {
 
     @Autowired
-    private SupervisorService supervisorService;
-
-    @Autowired
     private AdminService adminService;
 
     /**
@@ -63,7 +60,7 @@ public class AdminController {
     @PostMapping("/{adminId}/add-child")
     public String addChildToGroup(@PathVariable Long adminId, @RequestParam Long childId, Model model) {
         try {
-//            adminService.addChildToAdmin(adminId, childId);
+            adminService.addChildToAdmin(adminId, childId);
             model.addAttribute("success", "Child added to the group successfully!");
         } catch (Exception e) {
             model.addAttribute("error", "Failed to add child to the group: " + e.getMessage());
