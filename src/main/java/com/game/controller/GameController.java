@@ -12,20 +12,63 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Controller
 @SessionAttributes({ "game" })
 public class GameController {
 
 	@Autowired
-	private GameService gameService;
+	private QuestionService questionService;
 
 	@Autowired
-	private QuestionService questionService;
+	private GameService gameService;
+
+	private static final int LETTERS_MIN_ID = 41;
+	private static final int LETTERS_MAX_ID = 70;
+
+	@GetMapping("/letters")
+	public String startLettersGame(Model model) {
+		// Generate a random question for the letters game
+		Question question = gameService.generateRandomQuestion(LETTERS_MIN_ID, LETTERS_MAX_ID);
+
+		// Generate IDs for wrong options
+		List<Long> wrongOptionIds = gameService.generateWrongOptions(question.getId(), LETTERS_MIN_ID, LETTERS_MAX_ID);
+
+		// Combine correct and wrong option IDs into one list
+		List<Long> optionIds = new ArrayList<>(wrongOptionIds);
+		optionIds.add(question.getId()); // Add correct option
+		Collections.shuffle(optionIds); // Randomize the order
+
+		// Pass data to the model
+		model.addAttribute("correctId", question.getId());
+		model.addAttribute("optionIds", optionIds);
+
+		return "letters"; // This loads letters.html
+	}
+
+	private static final int NUMBERS_MIN_ID = 1;
+	private static final int NUMBERS_MAX_ID = 40;
+
+	@GetMapping("/numbers")
+	public String startNumbersGame(Model model) {
+		// Generate a random question for the numbers game
+		Question question = gameService.generateRandomQuestion(NUMBERS_MIN_ID, NUMBERS_MAX_ID);
+
+		// Generate IDs for wrong options
+		List<Long> wrongOptionIds = gameService.generateWrongOptions(question.getId(), NUMBERS_MIN_ID, NUMBERS_MAX_ID);
+
+		// Combine correct and wrong option IDs into one list
+		List<Long> optionIds = new ArrayList<>(wrongOptionIds);
+		optionIds.add(question.getId()); // Add correct option
+		Collections.shuffle(optionIds); // Randomize the order
+
+		// Pass data to the model
+		model.addAttribute("correctId", question.getId());
+		model.addAttribute("optionIds", optionIds);
+
+		return "numbers"; // This loads numbers.html
+	}
 
 	@ModelAttribute("game")
 	public Game getGame() {

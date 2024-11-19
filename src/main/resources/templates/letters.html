@@ -1,53 +1,78 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Letters Game</title>
-</head>
-<body>
-<h1>Letters Game</h1>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stafa leitin!</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <!-- Use Thymeleaf's JavaScript inlining -->
+    <script th:inline="javascript">
+        // Extract Thymeleaf variables into JavaScript
+        const correctId = [[${correctId}]];
+        const optionIds = [[${optionIds}]];
 
-<!-- Display the image -->
-<img th:src="@{'/getImage/' + ${currentQuestion.id}}" alt="Question Image" width="200" height="200" />
-
-<!-- Button to play audio for the question -->
-<button onclick="playAudio([[${currentQuestion.id}]])">HLUSTA</button>
-
-<!-- Options for the game -->
-<div>
-    <button onclick="handleOptionClick(1)">Option 1</button>
-    <button onclick="handleOptionClick(2)">Option 2 (Correct)</button>
-    <button onclick="handleOptionClick(3)">Option 3</button>
-</div>
-
-<script>
-        function playAudio(questionId) {
-            fetch('/playQuestion/' + questionId)
-                .then(response => {
-                    if (response.ok) {
-                        return response.blob();
-                    }
-                    throw new Error('Audio fetch failed');
-                })
-                .then(audioBlob => {
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    const audio = new Audio(audioUrl);
-                    audio.play();
-                })
-                .catch(error => {
-                    console.error('Error playing audio:', error);
-                    alert('Error playing audio');
-                });
+        // Function to play audio
+        function playAudio() {
+            const audio = new Audio('/playAudio?id=' + correctId);
+            audio.play();
         }
 
-        function handleOptionClick(selectedOption) {
-            // Implement game logic here
-            if (selectedOption === 2) { // Example correct option check
+        // Function to check the user's answer
+        function checkAnswer(selectedId) {
+            if (selectedId === correctId) {
                 alert('Húrra! Vel gert!');
-                // Logic to generate a new question
+                document.getElementById('nextGame').style.display = 'block'; // Show "Aftur" button
             } else {
                 alert('Reyndu aftur!');
             }
         }
     </script>
+</head>
+<body>
+<h1>Stafa leitin!</h1>
+<button class="back-button" onclick="location.href='/'">⬅️ Til baka</button>
+<p>Ýttu stafinn sem þú heyrir í!</p>
+<button type="button" onclick="playAudio()">Hlusta</button>
+
+<!-- Displaying options -->
+<div id="optionsContainer"></div>
+
+<!-- "Aftur" button for restarting -->
+<div id="nextGame" style="display: none;">
+    <button onclick="location.reload()">Aftur!</button>
+</div>
+
+<!-- Adding a script to create buttons dynamically -->
+<script th:inline="javascript">
+        // Function to render buttons with image options
+        function renderOptions() {
+            const optionsContainer = document.getElementById('optionsContainer');
+            const correctId = [[${correctId}]];
+            const optionIds = [[${optionIds}]];
+
+            optionIds.forEach(id => {
+                // Create a button element
+                const button = document.createElement('button');
+                button.type = 'button';
+
+                // Set onclick function for button
+                button.onclick = () => checkAnswer(id);
+
+                // Create an img element
+                const img = document.createElement('img');
+                img.src = '/getImage?id=' + id;
+                img.alt = 'Option Image';
+
+                // Append img to button, and button to container
+                button.appendChild(img);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // Call the function to render options
+        renderOptions();
+    </script>
 </body>
+
 </html>
+

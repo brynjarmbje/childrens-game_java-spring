@@ -1,44 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Letters</title>
+    <title>Tölu leitin!</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <!-- Use Thymeleaf's JavaScript inlining -->
+    <script th:inline="javascript">
+        // Extract Thymeleaf variables into JavaScript
+        const correctId = [[${correctId}]];
+        const optionIds = [[${optionIds}]];
+
+        // Function to play audio
+        function playAudio() {
+            const audio = new Audio('/playAudio?id=' + correctId);
+            audio.play();
+        }
+
+        // Function to check the user's answer
+        function checkAnswer(selectedId) {
+            if (selectedId === correctId) {
+                alert('Húrra! Vel gert!');
+                document.getElementById('nextGame').style.display = 'block'; // Show "Aftur" button
+            } else {
+                alert('Reyndu aftur!');
+            }
+        }
+    </script>
 </head>
 <body>
-<h1>Letters</h1>
+<h1>Tölu leitin!</h1>
+<button class="back-button" onclick="location.href='/'">⬅️ Til baka</button>
+<p>Ýttu töluna sem þú heyrir í!</p>
+<button type="button" onclick="playAudio()">Hlusta</button>
 
-<!-- Displayed correct image -->
-<img id="displayedImage" alt="Fetched Image" src="/getImage?minId=1&maxId=40" />
+<!-- Displaying options -->
+<div id="optionsContainer"></div>
 
-<!-- Button to play audio -->
-<button id="playAudio">HLUSTA</button>
-<audio id="audioQuestion" src="/playAudio"></audio>
-
-<!-- Answer buttons -->
-<div id="answerButtons">
-    <button class="answerBtn" id="correctAnswerBtn" onclick="checkAnswer('correct')">Correct Answer</button>
-    <img id="wrongImage1" src="/getWrongImage" alt="Wrong Option 1" onclick="checkAnswer('wrong')">
-    <img id="wrongImage2" src="/getWrongImage" alt="Wrong Option 2" onclick="checkAnswer('wrong')">
+<!-- "Aftur" button for restarting -->
+<div id="nextGame" style="display: none;">
+    <button onclick="location.reload()">Aftur!</button>
 </div>
 
-<script>
-    // Add functionality to play audio on button click
-    document.getElementById('playAudio').addEventListener('click', function() {
-        const audio = document.getElementById('audioQuestion');
-        audio.play();
-    });
+<!-- Adding a script to create buttons dynamically -->
+<script th:inline="javascript">
+        // Function to render buttons with image options
+        function renderOptions() {
+            const optionsContainer = document.getElementById('optionsContainer');
+            const correctId = [[${correctId}]];
+            const optionIds = [[${optionIds}]];
 
-    // Function to check answer
-    function checkAnswer(answer) {
-        if (answer === 'correct') {
-            alert('Húrra! Vel gert!');
-            // Optionally, reload page or load new question
-        } else {
-            alert('Reyndu aftur!');
+            optionIds.forEach(id => {
+                // Create a button element
+                const button = document.createElement('button');
+                button.type = 'button';
+
+                // Set onclick function for button
+                button.onclick = () => checkAnswer(id);
+
+                // Create an img element
+                const img = document.createElement('img');
+                img.src = '/getImage?id=' + id;
+                img.alt = 'Option Image';
+
+                // Append img to button, and button to container
+                button.appendChild(img);
+                optionsContainer.appendChild(button);
+            });
         }
-    }
-</script>
-</body>
-</html>
 
+        // Call the function to render options
+        renderOptions();
+    </script>
+</body>
+
+</html>
