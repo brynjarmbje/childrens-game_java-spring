@@ -60,7 +60,6 @@ public class AdminService {
 
         if (!admin.getChildren().contains(child)) {
             admin.getChildren().add(child); // Add child to admin
-            child.getAdmins().add(admin);  // Add admin to child (bidirectional relationship)
         } else {
             throw new IllegalArgumentException("Child is already managed by this admin.");
         }
@@ -76,17 +75,10 @@ public class AdminService {
     public void clearChildrenFromAdmin(Long adminId) {
         Admin admin = adminRepository.findById(adminId).orElseThrow(() ->
                 new IllegalArgumentException("Admin not found with id: " + adminId));
-
         if (admin.isSupervisor()) {
             throw new IllegalArgumentException("Supervisors cannot use AdminService.");
         }
-
-        // Clear the relationship bi-directionally
-        for (Child child : admin.getChildren()) {
-            child.getAdmins().remove(admin);
-        }
         admin.getChildren().clear();
-
         adminRepository.save(admin);
         System.out.println("All children removed from Admin " + adminId); // Debug log
     }

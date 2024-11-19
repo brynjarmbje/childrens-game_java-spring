@@ -31,7 +31,6 @@ public class AdminController {
     @GetMapping("/{adminId}")
     public String adminPage(@PathVariable Long adminId, Model model) {
         model.addAttribute("adminId", adminId);
-
         try {
             // Get children managed by the admin
             List<Child> managedChildren = adminService.getChildrenManagedByAdmin(adminId);
@@ -64,7 +63,7 @@ public class AdminController {
     @PostMapping("/{adminId}/add-child")
     public String addChildToGroup(@PathVariable Long adminId, @RequestParam Long childId, Model model) {
         try {
-            adminService.addChildToAdmin(adminId, childId);
+//            adminService.addChildToAdmin(adminId, childId);
             model.addAttribute("success", "Child added to the group successfully!");
         } catch (Exception e) {
             model.addAttribute("error", "Failed to add child to the group: " + e.getMessage());

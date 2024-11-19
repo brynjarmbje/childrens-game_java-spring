@@ -24,19 +24,14 @@ public class Admin {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "is_supervisor", nullable = false)
+    @Column(name = "is_supervisor")
     private boolean isSupervisor = false; // Default to false
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "admin_child",
-            joinColumns = @JoinColumn(name = "admin_id"),
-            inverseJoinColumns = @JoinColumn(name = "child_id")
-    )
-
-    @LazyCollection(LazyCollectionOption.FALSE) // Ensures children are fetched with admin
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "admin_id") // Defines the foreign key in the 'child' table
     private List<Child> children = new ArrayList<>();
+
 
     @ManyToOne
     @JoinColumn(name = "school")
@@ -47,12 +42,11 @@ public class Admin {
     }
 
     // Parameterized constructor
-    public Admin(String username, String password, boolean isSupervisor, School school, List<Child> children) {
+    public Admin(String username, String password, boolean isSupervisor, School school) {
         this.username = username;
         this.password = password;
         this.isSupervisor = isSupervisor;
         this.school = school;
-        this.children = children;
     }
 
     // Getters and setters
@@ -92,24 +86,25 @@ public class Admin {
         this.school = school;
     }
 
-    public void createAdmin(String username, String password, boolean isSupervisor, School school) {
-        this.username = username;
-        this.password = password;
-        this.isSupervisor = isSupervisor;
-    }
+//    public void createAdmin(String username, String password, boolean isSupervisor, School school) {
+//        this.username = username;
+//        this.password = password;
+//        this.isSupervisor = isSupervisor;
+//    }
 
     public List<Child> getChildren() {
         return children;
     }
+
+    public void addChild(Child child) {
+        this.children.add(child);
+    }
+
     public void setChildren(List<Child> children) {
         this.children = children;
     }
-    public void addChild(Child child) {
-        children.add(child);
-        child.getAdmins().add(this);
-    }
     public void removeChild(Child child) {
-        children.remove(child);
-        child.getAdmins().remove(this);
+        this.children.remove(child);
     }
+
 }

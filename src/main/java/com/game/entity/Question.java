@@ -24,7 +24,7 @@ public class Question {
 	@Column(nullable = false)
 	private int level;
 
-	@Lob
+	@Column(columnDefinition = "BYTEA")
 	private byte[] audioQuestion;
 
 	@OneToOne
