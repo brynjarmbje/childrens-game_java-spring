@@ -2,7 +2,9 @@ package com.game.controller;
 
 import com.game.entity.Admin;
 import com.game.entity.Game;
+import com.game.entity.Image;
 import com.game.entity.Question;
+import com.game.model.Card;
 import com.game.service.GameService;
 import com.game.service.MemoryGameService;
 import com.game.service.MatchingGameService;
@@ -25,7 +27,7 @@ public class GameController {
 	private GameService gameService;
 
 	private static final int LETTERS_MIN_ID = 41;
-	private static final int LETTERS_MAX_ID = 70;
+	private static final int LETTERS_MAX_ID = 72;
 
 	@GetMapping("/letters")
 	public String startLettersGame(Model model) {
@@ -112,14 +114,17 @@ public class GameController {
 	}
 
 	@PostMapping("/memory-game/flip")
-	public String flipCard(@RequestParam int id, Model model) {
+	@ResponseBody
+	public Map<String, Object> flipCard(@RequestParam int id) {
 		memoryGameService.flipCard(id);
-		model.addAttribute("cards", memoryGameService.getCards());
-		if (memoryGameService.isGameComplete()) {
-			model.addAttribute("gameComplete", true);
-		}
-		return "memory-game"; // Returns updated state
+
+		// Always return the updated state of the game
+		Map<String, Object> response = new HashMap<>();
+		response.put("cards", memoryGameService.getCards());
+		response.put("gameComplete", memoryGameService.isGameComplete());
+		return response;
 	}
+
 
 	@PostMapping("/memory-game/reset")
 	public String resetGame() {
@@ -129,27 +134,11 @@ public class GameController {
 
 	@GetMapping("/matching-game")
 	public String matchingGame(Model model) {
-		if (matchingGameService.getIcons() == null || matchingGameService.getIcons().isEmpty()) {
-			matchingGameService.initializeGame();
-		}
-		model.addAttribute("icons", matchingGameService.getIcons());
-		model.addAttribute("letters", matchingGameService.getLetters());
-		return "matching-game";
-	}
-
-	@PostMapping("/matching-game/match")
-	@ResponseBody // Ensure JSON response for AJAX
-	public Map<String, Boolean> matchIcon(@RequestParam int iconId, @RequestParam char letter) {
-		boolean isMatch = matchingGameService.checkMatch(iconId, letter);
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("isMatch", isMatch);
-		return response;
-	}
-
-	@PostMapping("/matching-game/reset")
-	public String resetMatchingGame() {
 		matchingGameService.initializeGame();
-		return "redirect:/matching-game";
+		model.addAttribute("imageCards", matchingGameService.getImageCards());
+		model.addAttribute("letterCards", matchingGameService.getLetterCards());
+		return "matching-game"; // Load matching-game.html
 	}
+
 }
 

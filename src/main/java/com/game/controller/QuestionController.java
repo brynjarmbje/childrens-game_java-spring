@@ -34,11 +34,15 @@ public class QuestionController {
     @GetMapping("/playAudio")
     public ResponseEntity<byte[]> playAudio(@RequestParam long id) {
         Question question = questionService.getQuestionById(id);
+        if (question == null || question.getAudioQuestion() == null) {
+            return ResponseEntity.notFound().build();
+        }
         byte[] audioData = question.getAudioQuestion();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf("audio/mpeg"));
         return new ResponseEntity<>(audioData, headers, HttpStatus.OK);
     }
+
 
     @GetMapping("/getAllQuestions")
     @ResponseBody

@@ -29,7 +29,6 @@ body, h1, p, button {
    cursor: pointer;
    background-color: #f1f1f1;
    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-   transition: transform 0.3s ease;
 }
 
 
@@ -48,15 +47,16 @@ body, h1, p, button {
 }
 
 
-/* Matched and Flipped States */
-.memory-game .matched {
-   background-color: #84fab0; /* Green for matched cards */
+.memory-game button {
+   transform: rotateY(0);
+   transition: transform 0.6s ease-in-out;
 }
 
-
-.memory-game .flip {
-   background-color: #ff9a9e; /* Light red for flipped cards */
+.memory-game button.matched {
+   background-color: #c8e6c9; /* Indicate match found */
+   cursor: not-allowed;
 }
+
 
 
 /* Rainbow Background for Matched Pairs */
@@ -76,6 +76,7 @@ body, h1, p, button {
    border: 3px solid transparent;
    background-clip: padding-box;
    box-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
+   cursor: not-allowed;
 }
 
 
@@ -125,13 +126,6 @@ body::before {
    100% { background-position: 0% 50%; }
 }
 
-
-/* Fun Background for Each Card Flip */
-.flip {
-   animation: flipEffect 1s ease;
-   background-color: #ff6f61 !important; /* Add a bright background on flip */
-   color: white;
-}
 
 @keyframes flipEffect {
    0% { transform: rotateY(0); }

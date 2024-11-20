@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class MemoryGameService {
@@ -22,27 +23,22 @@ public class MemoryGameService {
 
     public void initializeGame() {
         cards = new ArrayList<>();
+        List<Question> questions = questionService.getQuestionsInRange(ANIMALS_THINGS_MIN_ID, ANIMALS_THINGS_MAX_ID);
         Map<String, List<Question>> letterGroups = new HashMap<>();
-        Set<Long> usedIds = new HashSet<>();
 
-        // Create pairs for cards using random IDs
-        while (cards.size() < 16) {
-            long randomId = generateUniqueRandomId(usedIds);
-            Question question = questionService.getQuestionById(randomId);
+        for (Question question : questions) {
+            String firstLetter = question.getCorrectAnswer().getFirstLetter();
+            letterGroups.putIfAbsent(firstLetter, new ArrayList<>());
+            letterGroups.get(firstLetter).add(question);
+        }
 
-            if (question != null && question.getCorrectAnswer() != null) {
-                String firstLetter = question.getCorrectAnswer().getFirstLetter();
-                letterGroups.putIfAbsent(firstLetter, new ArrayList<>());
-                letterGroups.get(firstLetter).add(question);
-
-                // Only add if we have a pair (2 cards)
-                if (letterGroups.get(firstLetter).size() == 2 || letterGroups.get(firstLetter).size() == 4) {
-                    for (Question q : letterGroups.get(firstLetter)) {
-                        String imageUrl = "/getImage?id=" + q.getId(); // Generate image URL
-                        cards.add(new Card(cards.size(), imageUrl, firstLetter.charAt(0)));
-                    }
-                    // Reset list for this letter
-                    letterGroups.remove(firstLetter);
+        for (Map.Entry<String, List<Question>> entry : letterGroups.entrySet()) {
+            List<Question> group = entry.getValue();
+            if (group.size() >= 2) {
+                for (int i = 0; i < 2; i++) { // Ensure exactly 2 cards per letter
+                    Question q = group.get(i);
+                    String imageUrl = "/getImage?id=" + q.getId();
+                    cards.add(new Card(cards.size(), imageUrl, Character.toUpperCase(entry.getKey().charAt(0)), q.getId())); // Convert to uppercase
                 }
             }
         }
@@ -51,6 +47,7 @@ public class MemoryGameService {
         firstSelectedCard = null;
         secondSelectedCard = null;
     }
+
 
     private long generateUniqueRandomId(Set<Long> usedIds) {
         long randomId;
@@ -67,37 +64,48 @@ public class MemoryGameService {
 
     public void flipCard(int id) {
         Card card = cards.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
-        if (card != null && !card.isMatched() && !card.isFlipped()) {
-            card.setFlipped(true);
+        if (card == null || card.isMatched() || card.isFlipped()) {
+            return;
+        }
 
-            if (firstSelectedCard == null) {
-                firstSelectedCard = card;
-            } else if (secondSelectedCard == null && card != firstSelectedCard) {
-                secondSelectedCard = card;
-                checkForMatch();
-            }
+        card.setFlipped(true);
+        System.out.println("Card flipped: " + card.getId() + " (" + card.getLetter() + ")");
+
+        if (firstSelectedCard == null) {
+            firstSelectedCard = card;
+            System.out.println("First card selected: " + firstSelectedCard.getId());
+        } else if (secondSelectedCard == null) {
+            secondSelectedCard = card;
+            System.out.println("Second card selected: " + secondSelectedCard.getId());
+            checkForMatch();
         }
     }
 
     private void checkForMatch() {
         if (firstSelectedCard != null && secondSelectedCard != null) {
-            if (firstSelectedCard.getLetter() == secondSelectedCard.getLetter()) {
-                // Match found
-                firstSelectedCard.setMatched(true);
-                secondSelectedCard.setMatched(true);
+            Card card1 = firstSelectedCard;
+            Card card2 = secondSelectedCard;
+
+            System.out.println("Checking match: " + card1.getId() + " (" + card1.getLetter() + ") vs "
+                    + card2.getId() + " (" + card2.getLetter() + ")");
+
+            if (card1.getLetter() == card2.getLetter()) {
+                card1.setMatched(true);
+                card2.setMatched(true);
+                System.out.println("Match found! Cards locked: " + card1.getId() + ", " + card2.getId());
             } else {
-                // No match, flip back after delay
+                System.out.println("No match. Flipping back cards: " + card1.getId() + ", " + card2.getId());
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        firstSelectedCard.setFlipped(false);
-                        secondSelectedCard.setFlipped(false);
-                        firstSelectedCard = null;
-                        secondSelectedCard = null;
+                        card1.setFlipped(false);
+                        card2.setFlipped(false);
+                        System.out.println("Cards reset: " + card1.getId() + ", " + card2.getId());
                     }
-                }, 1000); // 1-second delay
+                }, 1000);
             }
+
             firstSelectedCard = null;
             secondSelectedCard = null;
         }
@@ -108,6 +116,11 @@ public class MemoryGameService {
     }
 
     public void resetGame() {
+        cards.clear();
+        firstSelectedCard = null;
+        secondSelectedCard = null;
         initializeGame();
     }
+
+
 }

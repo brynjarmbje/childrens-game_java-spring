@@ -6,6 +6,8 @@ import com.game.errors.QuestionNotFoundException;
 import com.game.repository.ImageRepository;
 import com.game.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.game.entity.Question;
 import com.game.data.ImageHandler;
@@ -44,6 +46,17 @@ public class QuestionService {
 		}
 	}
 
+	public List<Question> getQuestionsInRange(long minId, long maxId) {
+		try {
+			List<Question> questions = questionRepository.findByIdBetween(minId, maxId);
+			if (questions.isEmpty()) {
+				throw new QuestionNotFoundException("No questions found in the specified range");
+			}
+			return questions;
+		} catch (Exception e) {
+			throw new RuntimeException("Error while retrieving questions in the specified range", e);
+		}
+	}
 
     // Retrieve a question by ID
 	public Question getQuestionById(Long id) {
@@ -124,9 +137,15 @@ public class QuestionService {
 		}
 	}
 
-	public Question getRandomLetter() {
-		return questionRepository.findRandomLetter();
+	public List<Question> getEightRandomQuestionsByType(int type) {
+		Pageable limit = PageRequest.of(0, 8); // Fetch only 8 questions
+		List<Question> questions = questionRepository.findRandomQuestionsByType(type, limit);
+		if (questions.size() < 8) {
+			throw new RuntimeException("Not enough questions found with Type: " + type);
+		}
+		return questions;
 	}
+
 
 	public List<Question> getAllLetters() {
 		return questionRepository.findByType(1);
