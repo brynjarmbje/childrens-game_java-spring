@@ -1,13 +1,7 @@
 package com.game.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,6 +24,8 @@ public class Admin {
     @ManyToOne
     @JoinColumn(name = "school")
     private School school;
+
+
 
     @ManyToMany
     @JoinTable(

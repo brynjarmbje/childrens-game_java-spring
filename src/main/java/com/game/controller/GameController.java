@@ -1,12 +1,10 @@
 package com.game.controller;
 
 import com.game.entity.Game;
-import com.game.entity.Image;
 import com.game.entity.Question;
-import com.game.model.Card;
 import com.game.service.GameService;
-import com.game.service.MemoryGameService;
 import com.game.service.MatchingGameService;
+import com.game.service.MemoryGameService;
 import com.game.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

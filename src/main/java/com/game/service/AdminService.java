@@ -5,12 +5,11 @@ import com.game.entity.Child;
 import com.game.errors.AdminNotFoundException;
 import com.game.repository.AdminRepository;
 import com.game.repository.ChildRepository;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AdminService {
@@ -116,5 +115,17 @@ public class AdminService {
     public List<Child> getUnmanagedChildren(Long adminId) {
         return childRepository.findUnmanagedChildrenByAdminIdAndSchoolId(adminId);
     }
+
+    public String getSchoolNameByAdminId(Long adminId) {
+        Admin admin = adminRepository.findById(adminId).orElseThrow(() ->
+                new IllegalArgumentException("Admin fannst ekki með id: " + adminId));
+
+        if (admin.getSchool() == null) {
+            throw new IllegalArgumentException("Admin er ekki skráður í neinn skóla.");
+        }
+
+        return admin.getSchool().getName(); // Assuming `School` has a `getName()` method
+    }
+
 
 }

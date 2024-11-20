@@ -3,13 +3,12 @@ package com.game.controller;
 import com.game.entity.Child;
 import com.game.service.AdminService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 import java.util.List;
 
@@ -37,9 +36,12 @@ public class AdminController {
 
             List<Child> unmanagedChildren = adminService.getUnmanagedChildren(adminId);
 
+            // Get the admin's school
+            String schoolName = adminService.getSchoolNameByAdminId(adminId);
             // Add data to the model
             model.addAttribute("managedChildren", managedChildren);
             model.addAttribute("availableChildren", unmanagedChildren);
+            model.addAttribute("schoolName", schoolName);
 
             return "admin"; // Return the admin.html template
         } catch (Exception e) {
@@ -113,6 +115,7 @@ public class AdminController {
 
         return "redirect:/admin/" + adminId;
     }
+
 
     /**
      * Handles POST requests to clear all children from the admin's group.

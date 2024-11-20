@@ -90,5 +90,16 @@ public class SupervisorService {
     public List <Admin> getAllAdminsInSameSchool(Long adminId) {
         return adminRepository.findAdminsInSameSchoolNotSupervisor(adminId);
     }
+    public String getSchoolNameByAdminId(Long adminId) {
+        Admin admin = adminRepository.findById(adminId).orElseThrow(() ->
+                new IllegalArgumentException("Admin fannst ekki með ID: " + adminId));
+
+        if (admin.getSchool() == null) {
+            throw new IllegalArgumentException("Admin er ekki skráður í neinn skóla.");
+        }
+
+        return admin.getSchool().getName(); // Skila nafni skólans
+    }
+
 }
 

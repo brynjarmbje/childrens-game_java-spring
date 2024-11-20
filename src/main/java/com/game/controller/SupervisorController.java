@@ -43,6 +43,8 @@ public class SupervisorController {
 
         List<Child> children = supervisorService.getAllChildrenInSameSchool(adminId);
         List<Admin> admins = supervisorService.getAllAdminsInSameSchool(adminId);
+        String schoolName = supervisorService.getSchoolNameByAdminId(adminId);
+        model.addAttribute("schoolName", schoolName);
         model.addAttribute("children", children);
         model.addAttribute("admins", admins);
 

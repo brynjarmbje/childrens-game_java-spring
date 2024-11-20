@@ -11,8 +11,9 @@
     <h1>Kennara síða</h1>
     <div>
         <p>Velkomin/nn, <span th:text="${username}">User</span></p>
-    </div>
+        <p>Skóli: <span th:text="${schoolName}">School Name</span></p>
 
+    </div>
     <!-- Feedback Messages -->
     <div th:if="${success != null}" id="feedback" class="show">
         <p th:text="${success}"></p>
