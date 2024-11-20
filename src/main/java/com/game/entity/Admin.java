@@ -106,14 +106,12 @@ public class Admin {
     public void addChildToAdmin(Child child) {
         if (!children.contains(child)) {
             children.add(child);
-            child.getAdmins().add(this); // Maintain bi-directional relationship
         }
     }
 
     public void removeChildFromAdmin(Child child) {
         if (children.contains(child)) {
             children.remove(child);
-            child.getAdmins().remove(this); // Maintain bi-directional relationship
         }
     }
 

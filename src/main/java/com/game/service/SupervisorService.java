@@ -34,12 +34,6 @@ public class SupervisorService {
         Child child = childRepository.findById(childId).orElseThrow(() ->
                 new IllegalArgumentException("Child not found with id: " + childId));
 
-        // Remove references to this child from all associated admins
-        for (Admin admin : child.getAdmins()) {
-            admin.getChildren().remove(child);
-            adminRepository.save(admin); // Save admin to persist changes
-        }
-
         // Delete the child after clearing references
         childRepository.deleteById(childId);
     }

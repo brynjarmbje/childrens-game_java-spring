@@ -16,9 +16,6 @@ public class Child {
 	@Column(unique = true, nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "children") // Inverse side, references the field in Admin
-    private List<Admin> admins = new ArrayList<>();
-
     @ManyToOne
 	@JoinColumn(name = "school") // NOTE: veit ekki alveg afh ég gerði þetta svona, mögulegabreyta
 	private School school;
@@ -104,21 +101,5 @@ public class Child {
         this.school = school;
     }
 
-    public List<Admin> getAdmins() {
-        return admins;
-    }
 
-    public void addAdmin(Admin admin) {
-        if (!admins.contains(admin)) {
-            admins.add(admin);
-            admin.getChildren().add(this); // Maintain bi-directional relationship
-        }
-    }
-
-    public void removeAdmin(Admin admin) {
-        if (admins.contains(admin)) {
-            admins.remove(admin);
-            admin.getChildren().remove(this); // Maintain bi-directional relationship
-        }
-    }
 }
