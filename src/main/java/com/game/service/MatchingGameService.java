@@ -1,83 +1,69 @@
 package com.game.service;
 
+import com.game.entity.Question;
+import com.game.model.Card;
 import com.game.model.Icon;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class MatchingGameService {
 
-    private List<Icon> icons;
-    private List<Character> letters;
-    private final List<Icon> fullIconSet; // Store all 16 icons
+    @Autowired
+    private QuestionService questionService;
 
-    public MatchingGameService() {
-        // Initialize the full set of 16 icons with image paths
-        fullIconSet = List.of(
-                new Icon(1, "dyr/fill.jpg.png", 'F'),
-                new Icon(2, "dyr/lest.jpg.png", 'L'),
-                new Icon(3, "dyr/hundur.jpg.png", 'H'),
-                new Icon(4, "dyr/morgaes.jpg.png", 'M'),
-                new Icon(5, "dyr/moldvarpa.jpg.png", 'M'),
-                new Icon(6, "hlutir/batur.jpg.png", 'B'),
-                new Icon(7, "hlutir/bolti.jpg.png", 'B'),
-                new Icon(8, "hlutir/flugvel.jpg.png", 'F'),
-                new Icon(9, "dyr/kottur.jpg.png", 'K'),
-                new Icon(10, "dyr/ugla.jpg.png", 'U'),
-                new Icon(11, "hlutir/hattur.jpg.png", 'H'),
-                new Icon(12, "hlutir/hjol.jpg.png", 'H'),
-                new Icon(13, "dyr/ljon.jpg.png", 'L'),
-                new Icon(14, "hlutir/glas.jpg.png", 'G'),
-                new Icon(15, "dyr/tigrisdyr.jpg.png", 'T'),
-                new Icon(16, "dyr/snakur.jpg.png", 'S')
-        );
+    private static final int ANIMALS_THINGS_MIN_ID = 73;
+    private static final int ANIMALS_THINGS_MAX_ID = 99;
 
-        initializeGame();
-    }
+    private List<Card> imageCards;
+    private List<Card> letterCards;
 
     public void initializeGame() {
-        icons = new ArrayList<>();
-        letters = new ArrayList<>();
+        List<Question> imageQuestions = questionService.getQuestionsInRange(ANIMALS_THINGS_MIN_ID, ANIMALS_THINGS_MAX_ID);
+        List<Question> letterQuestions = questionService.getQuestionsInRange(41, 72);
 
-        // Randomly select 8 icons with unique starting letters
-        List<Character> usedLetters = new ArrayList<>();
-        Random random = new Random();
-
-        while (icons.size() < 8) {
-            // Randomly pick an icon from the full set
-            Icon candidate = fullIconSet.get(random.nextInt(fullIconSet.size()));
-            // Ensure the letter is unique in this game instance
-            if (!usedLetters.contains(candidate.getLetter())) {
-                icons.add(candidate);
-                letters.add(candidate.getLetter());
-                usedLetters.add(candidate.getLetter());
-            }
+        if (imageQuestions.size() < 6 || letterQuestions.size() < 6) {
+            throw new IllegalStateException("Not enough questions for the game!");
         }
 
-        // Shuffle icons and letters to randomize order
-        Collections.shuffle(icons);
-        Collections.shuffle(letters);
-    }
-
-    public List<Icon> getIcons() {
-        return icons;
-    }
-
-    public List<Character> getLetters() {
-        return letters;
-    }
-
-    public boolean checkMatch(int iconId, char letter) {
-        Icon selectedIcon = icons.stream().filter(icon -> icon.getId() == iconId).findFirst().orElse(null);
-        if (selectedIcon != null && selectedIcon.getLetter() == letter) {
-            selectedIcon.setMatched(true);
-            return true;
+        Map<Character, Question> letterQuestionMap = new HashMap<>();
+        for (Question letterQ : letterQuestions) {
+            char firstLetter = Character.toUpperCase(letterQ.getCorrectAnswer().getFirstLetter().charAt(0));
+            letterQuestionMap.put(firstLetter, letterQ);
         }
-        return false;
+
+        Collections.shuffle(imageQuestions);
+
+        imageCards = new ArrayList<>();
+        letterCards = new ArrayList<>();
+        int cardId = 0;
+
+        for (int i = 0; i < 6; i++) {
+            Question imageQ = imageQuestions.get(i);
+            char firstLetter = Character.toUpperCase(imageQ.getCorrectAnswer().getFirstLetter().charAt(0));
+
+            // Ensure we have a matching letter
+            if (!letterQuestionMap.containsKey(firstLetter)) continue;
+
+            Question letterQ = letterQuestionMap.get(firstLetter);
+
+            // Create cards for the image and letter
+            imageCards.add(new Card(cardId++, "/getImage?id=" + imageQ.getId(), firstLetter, imageQ.getId()));
+            letterCards.add(new Card(cardId++, "/getImage?id=" + letterQ.getId(), firstLetter, letterQ.getId()));
+        }
+
+        // Shuffle letter cards for random placement
+        Collections.shuffle(letterCards);
+    }
+
+    public List<Card> getImageCards() {
+        return imageCards;
+    }
+
+    public List<Card> getLetterCards() {
+        return letterCards;
     }
 }
 

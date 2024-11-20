@@ -6,13 +6,23 @@ public class Card {
     private char letter;
     private boolean flipped;
     private boolean matched;
+    private long questionId;
 
-    public Card(int id, String imageUrl, char letter) {
+    public Card(int id, String imageUrl, char letter, long questionId) {
         this.id = id;
         this.imageUrl = imageUrl;
         this.letter = letter;
         this.flipped = false;
         this.matched = false;
+        this.questionId = questionId;
+    }
+
+    public long getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(long questionId) {
+        this.questionId = questionId;
     }
 
     public int getId() {
