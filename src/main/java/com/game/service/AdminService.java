@@ -127,5 +127,12 @@ public class AdminService {
         return admin.getSchool().getName(); // Assuming `School` has a `getName()` method
     }
 
+    // get child to display on index page after admin selection
+    public Child getChildById(Long childId) {
+        return childRepository.findById(childId).orElse(null);
+    }
 
+    public Admin getAdminById(Long adminId) {
+        return adminRepository.findById(adminId).orElse(null);
+    }
 }

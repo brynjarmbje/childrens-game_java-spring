@@ -211,4 +211,13 @@ public class QuestionService {
 			throw new RuntimeException("Failed to process image or audio file", e);
 		}
 	}
+
+	public List<Long> getQuestionIdsInRange(int lettersMinId, int lettersMaxId) {
+		List<Question> questions = questionRepository.findByIdBetween(lettersMinId, lettersMaxId);
+		if (questions.isEmpty()) {
+			throw new QuestionNotFoundException("No questions found in the specified range");
+		}
+		List<Long> questionIds = questions.stream().map(Question::getId).toList();
+		return questionIds;
+	}
 }

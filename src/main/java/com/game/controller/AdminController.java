@@ -2,6 +2,7 @@ package com.game.controller;
 
 import com.game.entity.Child;
 import com.game.service.AdminService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +37,13 @@ public class AdminController {
 
             List<Child> unmanagedChildren = adminService.getUnmanagedChildren(adminId);
 
+            // Get the admin's details
+            com.game.entity.Admin admin = adminService.getAdminById(adminId);
+
             // Get the admin's school
             String schoolName = adminService.getSchoolNameByAdminId(adminId);
             // Add data to the model
+            model.addAttribute("username", admin.getUsername());
             model.addAttribute("managedChildren", managedChildren);
             model.addAttribute("availableChildren", unmanagedChildren);
             model.addAttribute("schoolName", schoolName);
@@ -135,6 +140,17 @@ public class AdminController {
         }
         return "redirect:/admin/" + adminId;
     }
+
+    @PostMapping("/{adminId}/select-child")
+    public String selectChild(@PathVariable Long adminId, @RequestParam Long childId, HttpSession session) {
+        Child selectedChild = adminService.getChildById(childId);
+        if (selectedChild != null) {
+            session.setAttribute("selectedChild", selectedChild);
+            return "redirect:/index";
+        }
+        return "redirect:/admin/" + adminId + "?error=Child+not+found";
+    }
+
 
     /**
      * Redirects to the login page if the admin ID is missing.

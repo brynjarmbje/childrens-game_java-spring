@@ -1,7 +1,10 @@
 package com.game.controller;
 
 import com.game.entity.Admin;
+import com.game.entity.Child;
+import com.game.entity.Session;
 import com.game.service.LoginService;
+import com.game.service.SessionService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +20,9 @@ import java.util.List;
 public class LoginController {
 	@Autowired
 	private LoginService loginService;
+
+	@Autowired
+	private SessionService sessionService;
 
 	@GetMapping("/")
 	public String loginGet(HttpSession session) {
@@ -51,8 +57,16 @@ public class LoginController {
 	}
 
 	@GetMapping("/index")
-	public String showIndexPage() {
-		return "index"; // This should correspond to an `index.html` template
+	public String gameMenu(HttpSession session, Model model) {
+		Child selectedChild = (Child) session.getAttribute("selectedChild");
+		if (selectedChild != null) {
+			Session childSession = sessionService.findOrCreateSessionForChild(selectedChild);
+			model.addAttribute("username", selectedChild.getName());
+			model.addAttribute("childSession", childSession);
+		} else {
+			model.addAttribute("username", "Guest");
+		}
+		return "index";
 	}
 
 	@PostMapping("/login")

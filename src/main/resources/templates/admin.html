@@ -40,23 +40,14 @@
 
     <!-- Child Selection Section -->
     <section>
-        <h2>Veldu barn</h2>
-        <form th:action="@{/admin/{adminId}/add-child(adminId=${adminId})}" method="post">
+        <h2>Choose a Child to Play</h2>
+        <form th:action="@{/admin/{adminId}/select-child(adminId=${adminId})}" method="post">
             <label for="child-selection">Choose a Child:</label>
             <select id="child-selection" name="childId" required class="scrollable-list">
-                <!-- Available children (not yet managed by the admin) -->
-                <option th:each="child : ${availableChildren}" th:value="${child.id}" th:text="${child.name}"></option>
+                <!-- Dynamically populate options from managedChildren -->
+                <option th:each="child : ${managedChildren}" th:value="${child.id}" th:text="${child.name}"></option>
             </select>
-            <button type="submit" class="selection-button">Bæta í hóp</button>
-        </form>
-    </section>
-
-    <hr>
-
-    <!-- Play Button -->
-    <section>
-        <form th:action="@{/index}" method="get">
-            <button type="submit" class="selection-button">Spila</button>
+            <button type="submit" class="selection-button">Start Game</button>
         </form>
     </section>
 

@@ -10,19 +10,19 @@ public class Session {
     @Id
     private String id;
 
-    private String name;
+    private int level;
+    private int progress; // Games won in the current level
 
     @OneToOne
-    private Session lastSession;
+    private Child child;
 
-    // Constructor
-    public Session(String id, String name, Session lastSession) {
+    public Session(String id, int level, int progress, Child child) {
         this.id = id;
-        this.name = name;
-        this.lastSession = lastSession;
+        this.level = level;
+        this.progress = progress;
+        this.child = child;
     }
 
-    // Default Constructor
     public Session() {}
 
     // Getters and Setters
@@ -34,19 +34,27 @@ public class Session {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public int getLevel() {
+        return level;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
-    public Session getLastSession() {
-        return lastSession;
+    public int getProgress() {
+        return progress;
     }
 
-    public void setLastSession(Session lastSession) {
-        this.lastSession = lastSession;
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
+
+    public Child getChild() {
+        return child;
+    }
+
+    public void setChild(Child child) {
+        this.child = child;
     }
 }

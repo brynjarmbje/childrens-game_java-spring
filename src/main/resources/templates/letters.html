@@ -10,6 +10,7 @@
         // Extract Thymeleaf variables into JavaScript
         const correctId = [[${correctId}]];
         const optionIds = [[${optionIds}]];
+        const level = [[${level}]]; // Extract the level
 
         // Function to play audio
         function playAudio() {
@@ -17,19 +18,40 @@
             audio.play();
         }
 
-        // Function to check the user's answer
-        function checkAnswer(selectedId) {
+        async function checkAnswer(selectedId) {
             if (selectedId === correctId) {
                 alert('Húrra! Vel gert!');
                 document.getElementById('nextGame').style.display = 'block'; // Show "Aftur" button
+
+                // Notify backend about the correct answer
+                await fetch('/letters/answer', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ correct: true })
+                });
+
+                // Update the level display
+                await updateLevelDisplay();
             } else {
                 alert('Reyndu aftur!');
+            }
+        }
+
+        async function updateLevelDisplay() {
+            const response = await fetch('/letters/current-level', {
+                method: 'GET'
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('levelDisplay').textContent = data.level;
             }
         }
     </script>
 </head>
 <body>
 <h1>Stafa leitin!</h1>
+<p>Level: <span id="levelDisplay" th:text="${level}">1</span></p> <!-- Add level display -->
 <button class="back-button" onclick="location.href='/'">⬅️ Til baka</button>
 <p>Ýttu stafinn sem þú heyrir í!</p>
 <button type="button" onclick="playAudio()">Hlusta</button>
@@ -44,35 +66,35 @@
 
 <!-- Adding a script to create buttons dynamically -->
 <script th:inline="javascript">
-        // Function to render buttons with image options
-        function renderOptions() {
-            const optionsContainer = document.getElementById('optionsContainer');
-            const correctId = [[${correctId}]];
-            const optionIds = [[${optionIds}]];
+    // Function to render buttons with image options
+    function renderOptions() {
+        const optionsContainer = document.getElementById('optionsContainer');
+        const correctId = [[${correctId}]];
+        const optionIds = [[${optionIds}]];
 
-            optionIds.forEach(id => {
-                // Create a button element
-                const button = document.createElement('button');
-                button.type = 'button';
+        optionIds.forEach(id => {
+            // Create a button element
+            const button = document.createElement('button');
+            button.type = 'button';
 
-                // Set onclick function for button
-                button.onclick = () => checkAnswer(id);
+            // Set onclick function for button
+            button.onclick = () => checkAnswer(id);
 
-                // Create an img element
-                const img = document.createElement('img');
-                img.src = '/getImage?id=' + id;
-                img.alt = 'Option Image';
+            // Create an img element
+            const img = document.createElement('img');
+            img.src = '/getImage?id=' + id;
+            img.alt = 'Option Image';
 
-                // Append img to button, and button to container
-                button.appendChild(img);
-                optionsContainer.appendChild(button);
-            });
-        }
+            // Append img to button, and button to container
+            button.appendChild(img);
+            optionsContainer.appendChild(button);
+        });
+    }
 
-        // Call the function to render options
-        renderOptions();
-    </script>
+    // Call the function to render options
+    renderOptions();
+</script>
 </body>
-
 </html>
+
 
