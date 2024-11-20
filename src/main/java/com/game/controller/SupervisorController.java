@@ -13,32 +13,36 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/supervisor")
+@SessionAttributes({"username", "isSupervisor", "adminId"})
 public class SupervisorController {
 
     @Autowired
     private SupervisorService supervisorService;
 
+    private static final String DEFAULT_USERNAME = "gestur";
+    private static final boolean DEFAULT_IS_SUPERVISOR = false;
+    private static final long DEFAULT_ADMIN_ID = 0L;
+
+    private void ensureSessionAttributes(HttpSession session) {
+        if (session.getAttribute("username") == null) {
+            session.setAttribute("username", DEFAULT_USERNAME);
+        }
+        if (session.getAttribute("isSupervisor") == null) {
+            session.setAttribute("isSupervisor", DEFAULT_IS_SUPERVISOR);
+        }
+        if (session.getAttribute("adminId") == null) {
+            session.setAttribute("adminId", DEFAULT_ADMIN_ID);
+        }
+    }
+
     // Display supervisor page with children and admins
-    @GetMapping
-    public String supervisorPage(HttpSession session, Model model) {
-        // Check if the user is logged in
-        String username = (String) session.getAttribute("username");
-        if (username == null || username.isEmpty()) {
-            // Redirect to login if not logged in
-            return "redirect:/login";
-        }
+    @GetMapping("/{adminId}")
+    public String supervisorPage(@PathVariable Long adminId, HttpSession session, Model model) {
+        ensureSessionAttributes(session);
+        model.addAttribute("adminId", adminId); // Add adminId to the model
 
-        // Check if the user is an admin
-        Boolean isSupervisor = (Boolean) session.getAttribute("isSupervisor");
-        if (isSupervisor == null || !isSupervisor) {
-            // Redirect regular admins to the admin dashboard
-            return "redirect:/admin/" + session.getAttribute("adminId");
-        }
-
-        // If the user is a supervisor, load the supervisor page
-        List<Child> children = supervisorService.getAllChildren();
-        List<Admin> admins = supervisorService.getAllAdmins();
-
+        List<Child> children = supervisorService.getAllChildrenInSameSchool(adminId);
+        List<Admin> admins = supervisorService.getAllAdminsInSameSchool(adminId);
         model.addAttribute("children", children);
         model.addAttribute("admins", admins);
 
@@ -47,49 +51,50 @@ public class SupervisorController {
 
     // Create a new Child (Form submission)
     @PostMapping("/child/create")
-    public String createChild(@RequestParam Long id, @ModelAttribute Child child, Model model) {
-        supervisorService.createChild(child, id);
+    public String createChild(@RequestParam Long adminId, @ModelAttribute Child child, Model model) {
+        supervisorService.createChild(child, adminId);
 
         // Redirect to refresh the list of children displayed on the supervisor page
-        return "redirect:/supervisor";
+        return "redirect:/supervisor/" + adminId;
     }
 
     // Delete a Child by ID (Form submission)
     @PostMapping("/child/delete")
-    public String deleteChild(@RequestParam Long id, Model model) {
+    public String deleteChild(@RequestParam Long adminId, @RequestParam Long id, Model model) {
         if (id == null || id <= 0) {
             // Handle invalid or missing ID
             model.addAttribute("error", "Invalid child ID.");
-            return "redirect:/supervisor";
+            return "redirect:/supervisor/" + adminId;
         }
 
         supervisorService.deleteChild(id);
 
         // Redirect to refresh the list of children displayed on the supervisor page
-        return "redirect:/supervisor";
+        return "redirect:/supervisor/" + adminId;
     }
 
     // Create a new Admin (Form submission)
     @PostMapping("/admin/create")
-    public String createAdmin(@RequestParam Long id ,@ModelAttribute Admin admin, Model model) {
-        supervisorService.createAdmin(admin, id);
+    public String createAdmin(@RequestParam Long adminId, @ModelAttribute Admin admin, Model model) {
+        supervisorService.createAdmin(admin, adminId);
 
         // Redirect to refresh the list of admins displayed on the supervisor page
-        return "redirect:/supervisor";
+        return "redirect:/supervisor/" + adminId;
     }
 
     // Delete an Admin by ID (Form submission)
     @PostMapping("/admin/delete")
-    public String deleteAdmin(@RequestParam Long id, Model model) {
+    public String deleteAdmin(@RequestParam Long adminId, @RequestParam Long id, Model model) {
         if (id == null || id <= 0) {
             // Handle invalid or missing ID
             model.addAttribute("error", "Invalid admin ID.");
-            return "redirect:/supervisor";
+            return "redirect:/supervisor/" + adminId;
         }
         supervisorService.deleteAdmin(id);
 
         // Redirect to refresh the list of admins displayed on the supervisor page
-        return "redirect:/supervisor";
+        return "redirect:/supervisor/" + adminId;
     }
+
 }
 

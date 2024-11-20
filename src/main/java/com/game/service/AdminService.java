@@ -48,14 +48,6 @@ public class AdminService {
         return managedChildren;
     }
 
-    public List<Child> getAllChildrenInSameSchool(Long adminId) {
-        Admin admin = adminRepository.findById(adminId).orElseThrow(() ->
-                new IllegalArgumentException("Admin not found with id: " + adminId));
-
-        // Return all children in the same school as the admin
-        return childRepository.findBySchool(admin.getSchool());
-    }
-
     /**
      * Add a child to the admin's managed group.
      *
@@ -107,18 +99,14 @@ public class AdminService {
         Admin admin = adminRepository.findById(adminId).orElseThrow(() ->
                 new IllegalArgumentException("Admin not found with id: " + adminId));
 
-        if (admin.isSupervisor()) {
-            throw new IllegalArgumentException("Supervisors cannot use AdminService.");
-        }
-
         Child child = childRepository.findById(childId).orElseThrow(() ->
                 new IllegalArgumentException("Child not found with id: " + childId));
 
+        // Remove the relationship
         admin.removeChildFromAdmin(child);
-        adminRepository.save(admin);
-
-        System.out.println("Child " + childId + " removed from Admin " + adminId); // Debug log
+        adminRepository.save(admin); // Persist changes
     }
+
     public String getUsername(Long adminId) {
         Admin admin = adminRepository.findById(adminId).orElseThrow(() ->
                 new AdminNotFoundException("Admin not found with id: " + adminId));

@@ -33,11 +33,11 @@ public class Admin {
 
     @ManyToMany
     @JoinTable(
-            name = "admin_child", // Name of the join table
-            joinColumns = @JoinColumn(name = "admin_id"), // Foreign key for Admin
-            inverseJoinColumns = @JoinColumn(name = "child_id") // Foreign key for Child
+            name = "admin_child",
+            joinColumns = @JoinColumn(name = "admin_id"),
+            inverseJoinColumns = @JoinColumn(name = "child_id")
     )
-    private List<Child> children = new ArrayList<>();
+    private List<Child> children;
 
 
     // Parameterized constructor
@@ -103,12 +103,20 @@ public class Admin {
         this.children = children;
     }
 
-    public void removeChildFromAdmin(Child child) {
-        children.remove(child);
-    }
     public void addChildToAdmin(Child child) {
-        children.add(child);
+        if (!children.contains(child)) {
+            children.add(child);
+            child.getAdmins().add(this); // Maintain bi-directional relationship
+        }
     }
+
+    public void removeChildFromAdmin(Child child) {
+        if (children.contains(child)) {
+            children.remove(child);
+            child.getAdmins().remove(this); // Maintain bi-directional relationship
+        }
+    }
+
     public void clearChildrenFromAdmin() {
         children.clear();
     }

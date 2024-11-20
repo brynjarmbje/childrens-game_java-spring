@@ -2,7 +2,6 @@ package com.game.controller;
 
 import com.game.entity.Child;
 import com.game.service.AdminService;
-import com.game.service.SupervisorService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-import java.beans.Transient;
 import java.util.List;
 
 @Controller

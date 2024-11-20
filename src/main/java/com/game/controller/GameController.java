@@ -1,6 +1,5 @@
 package com.game.controller;
 
-import com.game.entity.Admin;
 import com.game.entity.Game;
 import com.game.entity.Question;
 import com.game.service.GameService;

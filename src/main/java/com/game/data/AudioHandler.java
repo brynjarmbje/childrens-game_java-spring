@@ -38,28 +38,6 @@ public class AudioHandler {
         }
     }
 
-    // Play or resume the audio clip
-    public void play() {
-        if (clip != null && !clip.isRunning()) {
-            clip.start();
-        }
-    }
-
-    // Stop the clip
-    public void stop() {
-        if (clip != null && clip.isRunning()) {
-            clip.stop();
-            clip.setFramePosition(0);  // rewind to the beginning
-        }
-    }
-
-    // Close the clip and release resources
-    public void close() {
-        if (clip != null) {
-            clip.close();
-        }
-    }
-
     // Convert the audio file to a byte array (blob-like behavior)
     public static byte[] convertAudioFileToBlob(String filePath) {
         File audioFile = new File(filePath);

@@ -14,7 +14,8 @@
     <section>
         <h2>Skrá barn</h2>
         <form th:action="@{/supervisor/child/create}" method="post">
-            <input type="text" name="name" placeholder="Child Name" required>
+            <input type="hidden" name="adminId" th:value="${adminId}"/>
+            <input type="text" name="name" placeholder="Barn" required>
             <button type="submit" class="selection-button">Búa til barn</button>
         </form>
     </section>
@@ -23,7 +24,7 @@
     <section>
         <h3>Börn</h3>
         <form th:action="@{/supervisor/child/delete}" method="post">
-
+            <input type="hidden" name="adminId" th:value="${adminId}"/>
             <select id="child-selection" name="id" multiple required>
                 <option th:each="child : ${children}" th:value="${child.id}" th:text="${child.name}"></option>
             </select>
@@ -35,6 +36,7 @@
     <section>
         <h2>Skrá kennara</h2>
         <form th:action="@{/supervisor/admin/create}" method="post">
+            <input type="hidden" name="adminId" th:value="${adminId}"/>
             <input type="text" name="username" placeholder="Admin Username" required>
             <input type="password" name="password" placeholder="Admin Password" required>
             <button type="submit" class="selection-button">Búa til kennara</button>
@@ -45,7 +47,7 @@
     <section>
         <h3>Kennarar</h3>
         <form th:action="@{/supervisor/admin/delete}" method="post">
-
+            <input type="hidden" name="adminId" th:value="${adminId}"/>
             <select id="admin-selection" name="id" multiple required>
                 <option th:each="admin : ${admins}" th:value="${admin.id}" th:text="${admin.username}"></option>
             </select>
@@ -55,6 +57,7 @@
 
     <!-- Logout Button -->
     <div class="logout-container">
+        <h3>Skrá út</h3>
         <form th:action="@{/logout}" method="post">
             <button type="submit" class="logout-button">Skrá út</button>
         </form>

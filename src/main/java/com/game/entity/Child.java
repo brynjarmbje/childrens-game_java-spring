@@ -1,6 +1,7 @@
 package com.game.entity;
 
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,11 +108,17 @@ public class Child {
         return admins;
     }
 
-    public void setAdmins(List<Admin> admins) {
-        this.admins = admins;
+    public void addAdmin(Admin admin) {
+        if (!admins.contains(admin)) {
+            admins.add(admin);
+            admin.getChildren().add(this); // Maintain bi-directional relationship
+        }
     }
 
-    public void addAdmin(Admin admin) {
-        admins.add(admin);
+    public void removeAdmin(Admin admin) {
+        if (admins.contains(admin)) {
+            admins.remove(admin);
+            admin.getChildren().remove(this); // Maintain bi-directional relationship
+        }
     }
 }

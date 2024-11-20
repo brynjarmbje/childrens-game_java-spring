@@ -31,7 +31,7 @@ public class LoginController {
 
 		// Redirect supervisors to /supervisor
 		if (Boolean.TRUE.equals(isSupervisor)) {
-			return "redirect:/supervisor";
+			return "redirect:/supervisor" + adminId;
 		}
 
 		// Redirect regular admins to /admin/{adminId}
@@ -70,14 +70,18 @@ public class LoginController {
 	}
 
 	public String ifSupervisor(Admin admin, HttpSession session) {
+		if (admin.getId() == null) {
+			throw new IllegalStateException("Admin ID is null. Cannot redirect.");
+		}
 		session.setAttribute("adminId", admin.getId());
 		session.setAttribute("username", admin.getUsername());
 
 		if (admin.isSupervisor()) {
 			session.setAttribute("isSupervisor", true);
-			System.out.println("Supervisor detected, redirecting to /supervisor");
+			System.out.println("Supervisor detected, redirecting to /supervisor/" + admin.getId());
 
-			return "redirect:/supervisor";
+			// Correct concatenation
+			return "redirect:/supervisor/" + admin.getId();
 		} else {
 			session.setAttribute("isSupervisor", false);
 			System.out.println("Regular admin detected, redirecting to /admin/" + admin.getId());

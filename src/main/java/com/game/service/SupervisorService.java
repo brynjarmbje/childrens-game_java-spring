@@ -6,6 +6,7 @@ import com.game.repository.ChildRepository;
 import com.game.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,9 +29,19 @@ public class SupervisorService {
         return childRepository.save(child);
     }
 
-    // Delete an existing Child
-    public void deleteChild(Long id) {
-        childRepository.deleteById(id);
+    @Transactional
+    public void deleteChild(Long childId) {
+        Child child = childRepository.findById(childId).orElseThrow(() ->
+                new IllegalArgumentException("Child not found with id: " + childId));
+
+        // Remove references to this child from all associated admins
+        for (Admin admin : child.getAdmins()) {
+            admin.getChildren().remove(child);
+            adminRepository.save(admin); // Save admin to persist changes
+        }
+
+        // Delete the child after clearing references
+        childRepository.deleteById(childId);
     }
 
     // Get a Child by ID
@@ -76,5 +87,14 @@ public class SupervisorService {
                 new IllegalArgumentException("Admin not found with id: " + id));
     }
 
+    public List<Child> getAllChildrenInSameSchool(Long adminId) {
+        Admin admin = adminRepository.findById(adminId).orElseThrow(() ->
+                new IllegalArgumentException("Admin not found with id: " + adminId));
+        // Return all children in the same school as the admin
+        return childRepository.findBySchool(admin.getSchool());
+    }
+    public List <Admin> getAllAdminsInSameSchool(Long adminId) {
+        return adminRepository.findAdminsInSameSchoolNotSupervisor(adminId);
+    }
 }
 

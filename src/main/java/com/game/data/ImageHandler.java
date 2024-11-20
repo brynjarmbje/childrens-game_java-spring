@@ -51,15 +51,4 @@ public class ImageHandler {
         }
         return null; // Return null in case of an error
     }
-
-    // Write a byte array (blob) back to an image file
-    public void writeBlobToImageFile(byte[] imageBlob, String outputFilePath, String format) {
-        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(imageBlob)) {
-            BufferedImage newImage = ImageIO.read(inputStream);
-            ImageIO.write(newImage, format, new File(outputFilePath));
-            System.out.println("Image file written to: " + new File(outputFilePath).getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
