@@ -18,6 +18,8 @@ public interface ChildRepository extends JpaRepository<Child, Long> {
 
     List<Child> findBySchool(School school);
 
-    @Query("SELECT c FROM Child c WHERE c.id NOT IN (SELECT mc.id FROM Admin a JOIN a.children mc WHERE a.id = :adminId)")
-    List<Child> findUnmanagedChildrenByAdminId(@Param("adminId") Long adminId);
+    @Query("SELECT c FROM Child c " +
+            "WHERE c.school.id = (SELECT a.school.id FROM Admin a WHERE a.id = :adminId) " +
+            "AND c.id NOT IN (SELECT mc.id FROM Admin a JOIN a.children mc WHERE a.id = :adminId)")
+    List<Child> findUnmanagedChildrenByAdminIdAndSchoolId(@Param("adminId") Long adminId);
 }

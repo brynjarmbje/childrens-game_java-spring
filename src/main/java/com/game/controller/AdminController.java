@@ -37,13 +37,11 @@ public class AdminController {
             // Get children managed by the admin
             List<Child> managedChildren = adminService.getChildrenManagedByAdmin(adminId);
 
-            // Get all children and filter out those already managed
-            List<Child> allChildren = adminService.getAllChildren();
-            allChildren.removeAll(managedChildren);
+            List<Child> unmanagedChildren = adminService.getUnmanagedChildren(adminId);
 
             // Add data to the model
             model.addAttribute("managedChildren", managedChildren);
-            model.addAttribute("availableChildren", allChildren);
+            model.addAttribute("availableChildren", unmanagedChildren);
 
             return "admin"; // Return the admin.html template
         } catch (Exception e) {

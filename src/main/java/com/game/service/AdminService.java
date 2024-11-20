@@ -48,6 +48,14 @@ public class AdminService {
         return managedChildren;
     }
 
+    public List<Child> getAllChildrenInSameSchool(Long adminId) {
+        Admin admin = adminRepository.findById(adminId).orElseThrow(() ->
+                new IllegalArgumentException("Admin not found with id: " + adminId));
+
+        // Return all children in the same school as the admin
+        return childRepository.findBySchool(admin.getSchool());
+    }
+
     /**
      * Add a child to the admin's managed group.
      *
@@ -118,7 +126,7 @@ public class AdminService {
         return admin.getUsername();
     }
     public List<Child> getUnmanagedChildren(Long adminId) {
-        return childRepository.findUnmanagedChildrenByAdminId(adminId);
+        return childRepository.findUnmanagedChildrenByAdminIdAndSchoolId(adminId);
     }
 
 }

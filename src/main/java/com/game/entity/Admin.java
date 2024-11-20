@@ -27,19 +27,18 @@ public class Admin {
     @Column(name = "is_supervisor")
     private boolean isSupervisor = false; // Default to false
 
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "admin_id") // Foreign key in the 'child' table
-    private List<Child> children = new ArrayList<>();
-
-
     @ManyToOne
     @JoinColumn(name = "school")
     private School school;
 
-    // Default constructor
-    public Admin() {
-    }
+    @ManyToMany
+    @JoinTable(
+            name = "admin_child", // Name of the join table
+            joinColumns = @JoinColumn(name = "admin_id"), // Foreign key for Admin
+            inverseJoinColumns = @JoinColumn(name = "child_id") // Foreign key for Child
+    )
+    private List<Child> children = new ArrayList<>();
+
 
     // Parameterized constructor
     public Admin(String username, String password, boolean isSupervisor, School school) {
@@ -47,6 +46,10 @@ public class Admin {
         this.password = password;
         this.isSupervisor = isSupervisor;
         this.school = school;
+    }
+
+    public Admin() {
+
     }
 
     // Getters and setters
@@ -102,6 +105,20 @@ public class Admin {
 
     public void removeChildFromAdmin(Child child) {
         children.remove(child);
+    }
+    public void addChildToAdmin(Child child) {
+        children.add(child);
+    }
+    public void clearChildrenFromAdmin() {
+        children.clear();
+    }
+    public void removeChildFromAdmin(Long childId) {
+        for (Child child : children) {
+            if (child.getId().equals(childId)) {
+                children.remove(child);
+                break;
+            }
+        }
     }
 
 }

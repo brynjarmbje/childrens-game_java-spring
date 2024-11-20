@@ -12,13 +12,13 @@ public class Child {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-	@Column()
+	@Column(unique = true, nullable = false)
     private String name;
 
-    @ManyToMany()
+    @ManyToMany(mappedBy = "children") // Inverse side, references the field in Admin
     private List<Admin> admins = new ArrayList<>();
 
-	@ManyToOne
+    @ManyToOne
 	@JoinColumn(name = "school") // NOTE: veit ekki alveg afh ég gerði þetta svona, mögulegabreyta
 	private School school;
 
@@ -101,5 +101,17 @@ public class Child {
 
     public void setSchool(School school) {
         this.school = school;
+    }
+
+    public List<Admin> getAdmins() {
+        return admins;
+    }
+
+    public void setAdmins(List<Admin> admins) {
+        this.admins = admins;
+    }
+
+    public void addAdmin(Admin admin) {
+        admins.add(admin);
     }
 }
