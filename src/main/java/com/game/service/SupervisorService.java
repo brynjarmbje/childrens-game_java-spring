@@ -101,5 +101,12 @@ public class SupervisorService {
         return admin.getSchool().getName(); // Skila nafni skólans
     }
 
+    public void changeAdminPassword(Long adminId, String newPassword) {
+        Admin admin = adminRepository.findById(adminId)
+                .orElseThrow(() -> new IllegalArgumentException("Kennari fannst ekki með þetta auðkenni."));
+
+        admin.setPassword(newPassword); // Assume passwords are stored securely (e.g., hashed)
+        adminRepository.save(admin);
+    }
 }
 

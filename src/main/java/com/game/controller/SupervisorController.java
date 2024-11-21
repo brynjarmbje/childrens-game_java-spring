@@ -98,5 +98,22 @@ public class SupervisorController {
         return "redirect:/supervisor/" + adminId;
     }
 
+    @PostMapping("/admin/change-password")
+    public String changeAdminPassword(
+            @RequestParam Long adminId,
+            @RequestParam Long id,
+            @RequestParam String newPassword,
+            Model model) {
+        try {
+            supervisorService.changeAdminPassword(id, newPassword);
+            model.addAttribute("success", "Lykilorð hefur verið breytt.");
+        } catch (Exception e) {
+            model.addAttribute("error", "Villa kom upp við að breyta lykilorði: " + e.getMessage());
+        }
+
+        return "redirect:/supervisor/" + adminId;
+    }
+
+
 }
 
