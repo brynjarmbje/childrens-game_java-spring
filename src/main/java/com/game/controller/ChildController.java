@@ -1,5 +1,6 @@
 package com.game.controller;
 
+import com.game.entity.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,12 +14,18 @@ import com.game.repository.AdminRepository;
 import com.game.service.AdminService;
 import com.game.service.GameService;
 
+import java.util.Collections;
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin/{adminId}/child/")
 @SessionAttributes("username")
 public class ChildController {
 	@Autowired
 	private AdminService adminService;
+
+	@Autowired
+	private GameService gameService;
 
 	/**
 	 * Handles GET requests to the /child/{childId} endpoint.
@@ -77,8 +84,8 @@ public class ChildController {
 	// }
 	// }
 
-	@GetMapping("/{childId}/playgame/1")
-	public String playGameLetters(@PathVariable Long childId, Model model) {
+	@GetMapping("/letters")
+	public String playGameLetters(@PathVariable Long childId,@PathVariable Long adminId, Model model) {
 		try {
 			int gameType = 1;
 			model.addAttribute("gameType", gameType);
@@ -86,7 +93,7 @@ public class ChildController {
 			// and add as model attribute
 			// model.addAttribute("gamelevel", gameLevel);
 
-			return "letters";
+			return "redirect:/admin/" + adminId + "/child/" + childId + "/letters";
 		} catch (Exception e) {
 			// Handle errors gracefully
 			e.printStackTrace();
@@ -95,8 +102,8 @@ public class ChildController {
 		}
 	}
 
-	@GetMapping("/{childId}/playgame/2")
-	public String playGameNumbers(@PathVariable Long childId, Model model) {
+	@GetMapping("/numbers")
+	public String playGameNumbers(@PathVariable Long childId,@PathVariable Long adminId, Model model) {
 		try {
 			int gameType = 2;
 			model.addAttribute("gameType", gameType);
@@ -104,7 +111,7 @@ public class ChildController {
 			// and add as model attribute
 			// model.addAttribute("gamelevel", gameLevel);
 
-			return "numbers";
+			return "redirect:/admin/" + adminId + "/child/" + childId + "/numbers";
 		} catch (Exception e) {
 			// Handle errors gracefully
 			e.printStackTrace();
@@ -113,8 +120,8 @@ public class ChildController {
 		}
 	}
 
-	@GetMapping("/{childId}/playgame/3")
-	public String playGameMemory(@PathVariable Long childId, Model model) {
+	@GetMapping("/memory-game")
+	public String playGameMemory(@PathVariable Long childId,@PathVariable Long adminId, Model model) {
 		try {
 			int gameType = 3;
 			model.addAttribute("gameType", gameType);
@@ -122,7 +129,7 @@ public class ChildController {
 			// and add as model attribute
 			// model.addAttribute("gamelevel", gameLevel);
 
-			return "memory-game";
+			return "redirect:/admin/" + adminId + "/child/" + childId + "/memory-game";
 		} catch (Exception e) {
 			// Handle errors gracefully
 			e.printStackTrace();
@@ -131,8 +138,8 @@ public class ChildController {
 		}
 	}
 
-	@GetMapping("/{childId}/playgame/4")
-	public String playGameMatching(@PathVariable Long childId, Model model) {
+	@GetMapping("/matching-game")
+	public String playGameMatching(@PathVariable Long childId,@PathVariable Long adminId, Model model) {
 		try {
 			int gameType = 4;
 			model.addAttribute("gameType", gameType);
@@ -140,7 +147,7 @@ public class ChildController {
 			// and add as model attribute
 			// model.addAttribute("gamelevel", gameLevel);
 
-			return "matching-game";
+			return "redirect:/admin/" + adminId + "/child/" + childId + "/matching-game";
 		} catch (Exception e) {
 			// Handle errors gracefully
 			e.printStackTrace();
@@ -149,8 +156,8 @@ public class ChildController {
 		}
 	}
 
-	@GetMapping("/{childId}/playgame/5")
-	public String playGameLocate(@PathVariable Long childId, Model model) {
+	@GetMapping("/locate-game")
+	public String playGameLocate(@PathVariable Long childId,@PathVariable Long adminId, Model model) {
 		try {
 			int gameType = 5;
 			model.addAttribute("gameType", gameType);
@@ -158,7 +165,7 @@ public class ChildController {
 			// and add as model attribute
 			// model.addAttribute("gamelevel", gameLevel);
 
-			return "locate-game";
+			return "redirect:/admin/" + adminId + "/child/" + childId + "/locate-game";
 		} catch (Exception e) {
 			// Handle errors gracefully
 			e.printStackTrace();

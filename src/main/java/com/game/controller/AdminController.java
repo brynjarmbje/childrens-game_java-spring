@@ -1,6 +1,7 @@
 package com.game.controller;
 
 import com.game.entity.Child;
+import com.game.repository.ChildRepository;
 import com.game.service.AdminService;
 import com.game.service.SupervisorService;
 import jakarta.transaction.Transactional;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -23,6 +25,9 @@ public class AdminController {
 
     @Autowired
     private SupervisorService supervisorService;
+
+    @Autowired
+    private ChildRepository childRepository;
 
 
 
@@ -170,5 +175,34 @@ public class AdminController {
     @GetMapping
     public String missingAdminIdRedirect() {
         return "redirect:/login";
+    }
+    public int getGameLevel(Child child, int gameType) {
+        List<Integer> levels = child.getLevel();
+        if (levels == null) {
+            levels = new ArrayList<>();
+            child.setLevel(levels);
+        }
+
+        while (levels.size() < gameType) {
+            levels.add(1); // Default to level 1 for new games
+        }
+
+        childRepository.save(child); // Save updated child
+        return levels.get(gameType - 1);
+    }
+
+    public List<Integer> getGameProgress(Child child, int gameType) {
+        List<List<Integer>> progressList = child.getProgress();
+        if (progressList == null) {
+            progressList = new ArrayList<>();
+            child.setProgress(progressList);
+        }
+
+        while (progressList.size() < gameType) {
+            progressList.add(new ArrayList<>()); // Default to an empty progress list for new games
+        }
+
+        childRepository.save(child); // Save updated child
+        return progressList.get(gameType - 1);
     }
 }

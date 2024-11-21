@@ -5,15 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tölu leitin!</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <!-- Use Thymeleaf's JavaScript inlining -->
     <script th:inline="javascript">
         // Extract Thymeleaf variables into JavaScript
         const correctId = [[${correctId}]];
         const optionIds = [[${optionIds}]];
+        const adminId = /*[[${#strings.defaultString(adminId, 'null')}]]*/ 'null';
+        const childId = /*[[${#strings.defaultString(childId, 'null')}]]*/ 'null';
 
         // Function to play audio
         function playAudio() {
-            const audio = new Audio('/playAudio?id=' + correctId);
+            const audio = new Audio('/playAudio?id=' + correctId
+                + (adminId !== 'null' ? '&adminId=' + adminId : '')
+                + (childId !== 'null' ? '&childId=' + childId : ''));
             audio.play();
         }
 
@@ -30,8 +33,13 @@
 </head>
 <body>
 <h1>Tölu leitin!</h1>
-<button class="back-button" onclick="location.href='/'">⬅️ Til baka</button>
-<p>Ýttu töluna sem þú heyrir í!</p>
+
+<!-- Back Button -->
+<button class="back-button" th:onclick="'location.href=\'/\' + (adminId !== \'null\' && childId !== \'null\' ? \'admin/\' + adminId + \'/child/\' + childId : \'\');'">
+    ⬅️ Til baka
+</button>
+
+<p>Ýttu stafinn sem þú heyrir í!</p>
 <button type="button" onclick="playAudio()">Hlusta</button>
 
 <!-- Displaying options -->
@@ -44,34 +52,33 @@
 
 <!-- Adding a script to create buttons dynamically -->
 <script th:inline="javascript">
-        // Function to render buttons with image options
-        function renderOptions() {
-            const optionsContainer = document.getElementById('optionsContainer');
-            const correctId = [[${correctId}]];
-            const optionIds = [[${optionIds}]];
+    // Function to render buttons with image options
+    function renderOptions() {
+        const optionsContainer = document.getElementById('optionsContainer');
 
-            optionIds.forEach(id => {
-                // Create a button element
-                const button = document.createElement('button');
-                button.type = 'button';
+        optionIds.forEach(id => {
+            // Create a button element
+            const button = document.createElement('button');
+            button.type = 'button';
 
-                // Set onclick function for button
-                button.onclick = () => checkAnswer(id);
+            // Set onclick function for button
+            button.onclick = () => checkAnswer(id);
 
-                // Create an img element
-                const img = document.createElement('img');
-                img.src = '/getImage?id=' + id;
-                img.alt = 'Option Image';
+            // Create an img element
+            const img = document.createElement('img');
+            img.src = '/getImage?id=' + id
+                + (adminId !== 'null' ? '&adminId=' + adminId : '')
+                + (childId !== 'null' ? '&childId=' + childId : '');
+            img.alt = 'Option Image';
 
-                // Append img to button, and button to container
-                button.appendChild(img);
-                optionsContainer.appendChild(button);
-            });
-        }
+            // Append img to button, and button to container
+            button.appendChild(img);
+            optionsContainer.appendChild(button);
+        });
+    }
 
-        // Call the function to render options
-        renderOptions();
-    </script>
+    // Call the function to render options
+    renderOptions();
+</script>
 </body>
-
 </html>
