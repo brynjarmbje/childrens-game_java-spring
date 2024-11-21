@@ -158,7 +158,7 @@ public class AdminController {
 			return "redirect:/admin/" + adminId + "/child/" + childId;
         } else {
             model.addAttribute("error", "failed getting childId");
-			return "redirect:/{adminId}";
+			return "redirect:/admin/" + adminId;
         }
     }
 

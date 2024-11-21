@@ -24,15 +24,14 @@
 <div class="container">
     <h1>Veldu leik!</h1>
     <div class="game-selection">
-				<a th:action="@{/admin/{adminId}/child/{childId}/playgame/1}" method="post"  class="game-button">🎨 Stafir!</a>
+        <div class="game-selection">
+            <a th:href="@{/admin/{adminId}/child/{childId}/playgame/1(adminId=${adminId}, childId=${childId})}" class="game-button">🎨 Stafir!</a>
+            <a th:href="@{/admin/{adminId}/child/{childId}/playgame/2(adminId=${adminId}, childId=${childId})}" class="game-button">🎨 Tölur!</a>
+            <a th:href="@{/admin/{adminId}/child/{childId}/playgame/3(adminId=${adminId}, childId=${childId})}" class="game-button">🎨 Samstæðuspil!</a>
+            <a th:href="@{/admin/{adminId}/child/{childId}/playgame/4(adminId=${adminId}, childId=${childId})}" class="game-button">🔗 Hver er stafurinn?</a>
+            <a th:href="@{/admin/{adminId}/child/{childId}/playgame/5(adminId=${adminId}, childId=${childId})}" class="game-button">🌈 Hvar er dýrið!?</a>
+        </div>
 
-				<a th:action="@{/admin/{adminId}/child/{childId}/playgame/2}" method="post" class="game-button">🔢 Tölur!</a>
-
-				<a th:action="@{/admin/{adminId}/child/{childId}/playgame/3}" method="post"  class="game-button">🧠 Samstæðuspil!</a>
-
-				<a th:action="@{/admin/{adminId}/child/{childId}/playgame/4}" method="post" class="game-button">🔗 Hver er stafurinn?</a>
-
-				<a th:action="@{/admin/{adminId}/child/{childId}/playgame/5}" method="post" class="game-button">🌈 Hvar er dýrið!?</a>
 				<!--<a th:action="@{/admin/{adminId}/child/{childId}/playgame/1}" method="post" th:name="gameType" th:value="1" class="game-button">🎨 Stafir!</a>-->
 				<!---->
 				<!--<a th:action="@{/admin/{adminId}/child/{childId}/playgame/2}" method="post" th:value="2" class="game-button">🔢 Tölur!</a>-->

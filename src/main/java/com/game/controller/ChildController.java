@@ -14,7 +14,7 @@ import com.game.service.AdminService;
 import com.game.service.GameService;
 
 @Controller
-@RequestMapping("/admin/{adminId}/child")
+@RequestMapping("/admin/{adminId}/child/")
 @SessionAttributes("username")
 public class ChildController {
 	@Autowired
@@ -29,14 +29,16 @@ public class ChildController {
 	 * @return The select game page template.
 	 */
 	@GetMapping("/{childId}")
-	public String selectGamePage(@PathVariable Long childId, Model model) {
+	public String selectGamePage(@PathVariable Long childId,@PathVariable Long adminId  ,Model model) {
 		try {
 			Child child = adminService.getChildById(childId);
 
 			String childName = child.getName();
 
+			// Add adminId and childName to the model
+			model.addAttribute("adminId", adminId);
 			model.addAttribute("childName", childName);
-
+			model.addAttribute("childId", childId);
 			return "child";
 		} catch (Exception e) {
 			// Handle errors gracefully

@@ -55,10 +55,16 @@
 
     <!-- Play Button -->
     <section>
-				<form th:action="@{/admin/{adminId}/select-game}" method="get">
-			<input type="hidden" name="childId" th:value="${child.id}">
-            <button type="submit" class="selection-button">Velja leik</button>
-        </form>
+        <h2>Veldu barn til að spila leik:</h2>
+        <ul>
+            <li th:each="child : ${managedChildren}">
+                <span th:text="${child.name}"></span>
+                <form th:action="@{/admin/{adminId}/select-game(adminId=${adminId})}" method="post">
+                    <input type="hidden" name="childId" th:value="${child.id}">
+                    <button type="submit" class="selection-button">Velja leik</button>
+                </form>
+            </li>
+        </ul>
     </section>
 
     <div class="logout-container">
