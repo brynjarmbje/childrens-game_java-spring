@@ -1,6 +1,9 @@
 package com.game.entity;
 
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,11 +13,11 @@ public class Child {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-	@Column()
+	@Column(unique = true, nullable = false)
     private String name;
 
-	@ManyToOne
-	@JoinColumn(name = "school")
+    @ManyToOne
+	@JoinColumn(name = "school") // NOTE: veit ekki alveg afh ég gerði þetta svona, mögulegabreyta
 	private School school;
 
     @ElementCollection
@@ -22,6 +25,8 @@ public class Child {
 
     @ElementCollection
     private List<List<Integer>> progress;
+
+
 
     // References to the last sessions
 /*    @OneToOne
@@ -44,6 +49,15 @@ public class Child {
         this.name = name;
         this.level = level;
         this.progress = progress;
+    }
+
+    public Child(String name) {
+        this.name = name;
+    }
+
+    public Child(String name, School school) {
+        this.name = name;
+        this.school = school;
     }
 
     // Getters and setters
@@ -78,4 +92,14 @@ public class Child {
     public void setProgress(List<List<Integer>> progress) {
         this.progress = progress;
     }
+
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
+
+
 }

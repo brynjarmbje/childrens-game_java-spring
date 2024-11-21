@@ -1,97 +1,78 @@
 package com.game.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-
-import java.util.List;
+import jakarta.persistence.*;
 
 @Entity
 public class Question {
 
-    @Id
-    private String id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    private int type;
-    private int level;
+	@Column(nullable = false)
+	private String name;
 
-    @OneToMany
-    private List<Image> group;
+	@Column(nullable = false)
+	private int type;
 
-    @OneToOne
-    private Audio audioQuestion;
+	@Column(nullable = false)
+	private int level;
 
-    @OneToOne
-    private Image correctAnswer;
 
-    @OneToMany
-    private List<Image> wrongAnswers;
+	@Column(columnDefinition = "BYTEA") // This hints to store the data as a byte array
+	private byte[] audioQuestion;
 
-    // Constructor
-    public Question(String id, int type, int level) {
-        this.id = id;
-        this.type = type;
-        this.level = level;
-    }
 
-    // Default Constructor
-    public Question() {}
+	@OneToOne
+	@JoinColumn(name = "correct_image_id", referencedColumnName = "id", nullable = true)
+	private Image correctAnswer;
 
-    // Getters and Setters
-    public String getId() {
-        return id;
-    }
+	// Getters and Setters
+	public long getId() {
+		return id;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public int getType() {
-        return type;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setType(int type) {
-        this.type = type;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public int getLevel() {
-        return level;
-    }
+	public int getType() {
+		return type;
+	}
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
+	public void setType(int type) {
+		this.type = type;
+	}
 
-    public List<Image> getGroup() {
-        return group;
-    }
+	public int getLevel() {
+		return level;
+	}
 
-    public void setGroup(List<Image> group) {
-        this.group = group;
-    }
+	public void setLevel(int level) {
+		this.level = level;
+	}
 
-    public Audio getAudioQuestion() {
-        return audioQuestion;
-    }
+	public byte[] getAudioQuestion() {
+		return audioQuestion;
+	}
 
-    public void setAudioQuestion(Audio audioQuestion) {
-        this.audioQuestion = audioQuestion;
-    }
+	public void setAudioQuestion(byte[] audioQuestion) {
+		this.audioQuestion = audioQuestion;
+	}
 
-    public Image getCorrectAnswer() {
-        return correctAnswer;
-    }
+	public Image getCorrectAnswer() {
+		return correctAnswer;
+	}
 
-    public void setCorrectAnswer(Image correctAnswer) {
-        this.correctAnswer = correctAnswer;
-    }
-
-    public List<Image> getWrongAnswers() {
-        return wrongAnswers;
-    }
-
-    public void setWrongAnswers(List<Image> wrongAnswers) {
-        this.wrongAnswers = wrongAnswers;
-    }
+	public void setCorrectAnswer(Image correctAnswer) {
+		this.correctAnswer = correctAnswer;
+	}
 }

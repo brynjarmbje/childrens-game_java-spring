@@ -1,194 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supervisor Dashboard</title>
+    <title>Skólastjóri</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
+<body class="scrollable-page">
 <div class="container">
-    <h1>Supervisor Dashboard</h1>
+    <h1>Skólastjóri</h1>
+    <p>Skóli: <span th:text="${schoolName}">School Name</span></p>
 
-    <!-- Create and Display Children Section -->
-    <section class="flex-container">
-        <div class="form-container">
-            <h2>Create Child</h2>
-            <form id="create-child-form">
-                <label for="child-name">Child Name:</label>
-                <input type="text" id="child-name" name="childName" required>
-                <button class="selection-button" type="button" onclick="createChild()">Create Child</button>
-            </form>
-        </div>
-        <div class="list-container">
-            <h3>Children</h3>
-            <div class="scrollable-list">
-                <ul id="children-display">
-                    <!-- Newly created children will be added here -->
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <hr>
-
-    <!-- Delete Child Section -->
-    <section class="selection-container">
-        <h2>Delete Child</h2>
-        <form id="delete-child-form">
-            <label for="child-selection">Select Child to Delete:</label>
-            <div class="selection-box">
-                <select id="child-selection" name="childId" required>
-                    <option value="">Select a child...</option>
-                </select>
-            </div>
-            <button class="selection-button" type="button" onclick="deleteChild()">Delete Child</button>
+    <!-- Create Child Section -->
+    <section>
+        <h2>Skrá barn</h2>
+        <form th:action="@{/supervisor/child/create}" method="post">
+            <input type="hidden" name="adminId" th:value="${adminId}"/>
+            <input type="text" name="name" placeholder="Barn" required>
+            <button type="submit" class="selection-button">Búa til barn</button>
         </form>
     </section>
 
-    <hr>
-
-    <!-- Create and Display Admins Section -->
-    <section class="flex-container">
-        <div class="form-container">
-            <h2>Create Admin</h2>
-            <form id="create-admin-form">
-                <label for="admin-name">Admin Name:</label>
-                <input type="text" id="admin-name" name="adminName" required>
-                <label for="admin-password">Password:</label>
-                <input type="password" id="admin-password" name="adminPassword" required>
-                <button class="selection-button" type="button" onclick="createAdmin()">Create Admin</button>
-            </form>
-        </div>
-        <div class="list-container">
-            <h3>Admins</h3>
-            <div class="scrollable-list">
-                <ul id="admins-display">
-                    <!-- Newly created admins will be added here -->
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <hr>
-
-    <!-- Delete Admin Section -->
-    <section class="selection-container">
-        <h2>Delete Admin</h2>
-        <form id="delete-admin-form">
-            <label for="admin-selection">Select Admin to Delete:</label>
-            <div class="selection-box">
-                <select id="admin-selection" name="adminId" required>
-                    <option value="">Select an admin...</option>
-                </select>
-            </div>
-            <button class="selection-button" type="button" onclick="deleteAdmin()">Delete Admin</button>
+    <!-- Children List with Delete Functionality -->
+    <section>
+        <h3>Börn</h3>
+        <form th:action="@{/supervisor/child/delete}" method="post">
+            <input type="hidden" name="adminId" th:value="${adminId}"/>
+            <select id="child-selection" name="id" multiple required>
+                <option th:each="child : ${children}" th:value="${child.id}" th:text="${child.name}"></option>
+            </select>
+            <button type="submit" class="delete-button">Eyða barni</button>
         </form>
     </section>
 
-    <hr>
+    <!-- Create Admin Section -->
+    <section>
+        <h2>Skrá kennara</h2>
+        <form th:action="@{/supervisor/admin/create}" method="post">
+            <input type="hidden" name="adminId" th:value="${adminId}"/>
+            <input type="text" name="username" placeholder="Notendanafn" required>
+            <input type="password" name="password" placeholder="Lykilorð" required>
+            <button type="submit" class="selection-button">Búa til kennara</button>
+        </form>
+    </section>
+
+    <!-- Admins List with Delete Functionality -->
+    <section>
+        <h3>Kennarar</h3>
+        <form th:action="@{/supervisor/admin/delete}" method="post">
+            <input type="hidden" name="adminId" th:value="${adminId}"/>
+            <select id="admin-selection" name="id" multiple required>
+                <option th:each="admin : ${admins}" th:value="${admin.id}" th:text="${admin.username}"></option>
+            </select>
+            <button type="submit" class="delete-button">Eyða kennara</button>
+        </form>
+    </section>
 
     <!-- Logout Button -->
-    <div class="logout-section">
-        <form action="/logout" method="post">
-            <button class="selection-button" type="submit">Log Out</button>
+    <div class="logout-container">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout-button">Skrá út</button>
         </form>
     </div>
 </div>
-
-
-
-<script>
-    function createChild() {
-        const childName = document.getElementById("child-name").value;
-        if (childName.trim() === "") {
-            alert("Please enter a child name.");
-            return;
-        }
-
-        const childrenDisplay = document.getElementById("children-display");
-        const childItem = document.createElement("li");
-        childItem.textContent = childName;
-        childrenDisplay.appendChild(childItem);
-
-        const childSelection = document.getElementById("child-selection");
-        const childOption = document.createElement("option");
-        childOption.value = childName;
-        childOption.textContent = childName;
-        childSelection.appendChild(childOption);
-
-        document.getElementById("child-name").value = "";
-    }
-
-    function deleteChild() {
-        const childSelection = document.getElementById("child-selection");
-        const selectedValue = childSelection.value;
-
-        if (selectedValue === "") {
-            alert("Please select a child to delete.");
-            return;
-        }
-
-        const childrenDisplay = document.getElementById("children-display");
-        Array.from(childrenDisplay.children).forEach(childItem => {
-            if (childItem.textContent === selectedValue) {
-                childItem.remove();
-            }
-        });
-
-        Array.from(childSelection.options).forEach(option => {
-            if (option.value === selectedValue) {
-                option.remove();
-            }
-        });
-    }
-
-    function createAdmin() {
-        const adminName = document.getElementById("admin-name").value;
-        const adminPassword = document.getElementById("admin-password").value;
-
-        if (adminName.trim() === "" || adminPassword.trim() === "") {
-            alert("Please enter both admin name and password.");
-            return;
-        }
-
-        const adminsDisplay = document.getElementById("admins-display");
-        const adminItem = document.createElement("li");
-        adminItem.textContent = adminName;
-        adminsDisplay.appendChild(adminItem);
-
-        const adminSelection = document.getElementById("admin-selection");
-        const adminOption = document.createElement("option");
-        adminOption.value = adminName;
-        adminOption.textContent = adminName;
-        adminSelection.appendChild(adminOption);
-
-        document.getElementById("admin-name").value = "";
-        document.getElementById("admin-password").value = "";
-    }
-
-    function deleteAdmin() {
-        const adminSelection = document.getElementById("admin-selection");
-        const selectedValue = adminSelection.value;
-
-        if (selectedValue === "") {
-            alert("Please select an admin to delete.");
-            return;
-        }
-
-        const adminsDisplay = document.getElementById("admins-display");
-        Array.from(adminsDisplay.children).forEach(adminItem => {
-            if (adminItem.textContent === selectedValue) {
-                adminItem.remove();
-            }
-        });
-
-        Array.from(adminSelection.options).forEach(option => {
-            if (option.value === selectedValue) {
-                option.remove();
-            }
-        });
-    }
-</script>
 </body>
 </html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krakka leikur</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="scrollable-page"> <!-- Added scrollable-page class here -->
+<!-- Navigation Menu -->
+<nav class="navbar">
+    <ul>
+        <li><span class="username" th:text="${username}"></span></li>
+        <li><span class="school-name" th:text="'Skóli: ' + ${schoolName}">School Name</span></li>
+		<li><span class="Child-name" th:text="'Spilari: ' + ${childName}"></span></li>
+    </ul>
+
+
+
+</nav>
+
+<!-- Game Selection -->
+<div class="container">
+    <h1>Veldu leik!</h1>
+    <div class="game-selection">
+        <div class="game-selection">
+            <a th:href="@{/admin/{adminId}/child/{childId}/letters(adminId=${adminId}, childId=${childId})}" class="game-button">🎨 Stafir!</a>
+            <a th:href="@{/admin/{adminId}/child/{childId}/numbers(adminId=${adminId}, childId=${childId})}" class="game-button">🔢 Tölur!</a>
+            <a th:href="@{/admin/{adminId}/child/{childId}/memory-game(adminId=${adminId}, childId=${childId})}" class="game-button">🧠 Samstæðuspil!</a>
+            <a th:href="@{/admin/{adminId}/child/{childId}/matching-game(adminId=${adminId}, childId=${childId})}" class="game-button">🔗 Hver er stafurinn?</a>
+            <a th:href="@{/admin/{adminId}/child/{childId}/locate-game(adminId=${adminId}, childId=${childId})}" class="game-button">🌈 Hvar er dýrið!?</a>
+        </div>
+
+				<!--<a th:action="@{/admin/{adminId}/child/{childId}/playgame/1}" method="post" th:name="gameType" th:value="1" class="game-button">🎨 Stafir!</a>-->
+				<!---->
+				<!--<a th:action="@{/admin/{adminId}/child/{childId}/playgame/2}" method="post" th:value="2" class="game-button">🔢 Tölur!</a>-->
+				<!---->
+				<!--<a th:action="@{/admin/{adminId}/child/{childId}/playgame}" method="post" th:value="3" class="game-button">🧠 Samstæðuspil!</a>-->
+				<!---->
+				<!--<a th:action="@{/admin/{adminId}/child/{childId}/playgame}" method="post" th:value="1" class="game-button">🔗 Hver er stafurinn?</a>-->
+				<!---->
+				<!--<a th:action="@{/admin/{adminId}/child/{childId}/playgame}" method="post" th:value="4" class="game-button">🌈 Hvar er dýrið!?</a>-->
+        <!--<a href="/letters" class="game-button">🎨 Stafir!</a>-->
+        <!--<a href="/numbers" class="game-button">🔢 Tölur!</a>-->
+        <!--<a href="/memory-game" class="game-button">🧠 Samstæðuspil!</a>-->
+        <!--<a href="/matching-game" class="game-button">🔗 Hver er stafurinn?</a>-->
+        <!--<a href="/locate-game" class="game-button">🌈 Hvar er dýrið!?</a>-->
+    </div>
+</div>
+
+<div class="backbutton-container">
+<!--TODO: back button-->
+    <form th:action="@{/admin/{adminId}}" method="post">
+        <button type="submit" class="backButton">Til baka</button>
+    </form>
+</div>
+
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>

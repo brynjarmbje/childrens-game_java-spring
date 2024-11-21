@@ -2,52 +2,123 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Memory Game</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/memory-game.css}">
 </head>
 <body>
-
 <button class="back-button" onclick="location.href='/'">⬅️ Til baka</button>
 <h1>Samstæðuspil!</h1>
 
-<div>
-    <p>Finnum samstæður! Ýttu á spil til að heyra nafn þess og sjá upphafsstaf.</p>
-    <p>Ýttu síðan á aðra mynd af hlut sem byrjar á sama upphafsstaf til að finna par!</p>
-    <p>Finndu öll pörin til að vinna!</p>
-</div>
+<p>Finnum samstæður! Ýttu á spil til að sjá myndina og síðan á aðra til að reyna að finna par!</p>
 
-<div class="memory-game" id="memoryGameBoard">
+<div id="memoryGameBoard" class="memory-game">
     <div th:each="card : ${cards}">
-        <form action="/memory-game/flip" method="post">
-            <input type="hidden" name="id" th:value="${card.id}" />
-            <button type="submit"
-                    th:classappend="${card.matched ? 'matched' : (card.flipped ? 'flip' : '')}">
-                <span class="card-content">
-                    <span th:if="${card.flipped}" th:text="${card.letter}"></span>
-                    <i th:unless="${card.flipped}" th:class="'fas ' + ${card.imageUrl}"></i>
-                </span>
-            </button>
-
-        </form>
+        <button th:id="'card-' + ${card.id}"
+                th:data-audio-id="${card.questionId}"
+        th:classappend="${card.matched ? 'matched' : (card.flipped ? 'flipped' : '')}">
+        <span class="card-content">
+                <span th:if="${card.flipped}" th:text="${card.letter}"></span>
+                <img th:unless="${card.flipped}" th:src="${card.imageUrl}" alt="Card Image" />
+            </span>
+        <input type="hidden" name="id" th:value="${card.id}" />
+        </button>
     </div>
 </div>
+
 
 <!-- Modal for game completion -->
-<div th:if="${gameComplete}" id="congratulationsModal" class="modal" style="display: flex;">
+<div id="congratulationsModal" class="modal" style="display: none;">
     <div class="modal-content">
-        <h2>Congratulations!</h2>
-        <p>You found all pairs!</p>
+        <h2>Til hamingju!</h2>
+        <p>Þú vannst!</p>
         <form action="/memory-game/reset" method="post">
-            <button type="submit">Play Again</button>
+            <button type="submit">Spila aftur</button>
         </form>
     </div>
 </div>
 
-<script th:src="@{/js/memory-game.js}"></script>
+
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const cardsContainer = document.getElementById("memoryGameBoard");
+
+        cardsContainer.addEventListener("click", async (event) => {
+            const button = event.target.closest("button");
+            if (!button) return;
+
+            const cardId = button.querySelector("input[name='id']").value;
+            const audioId = button.dataset.audioId; // Get the Question ID
+
+            // Play audio if audioId is available
+            if (audioId) {
+                playAudio(audioId);
+            }
+
+            try {
+                const response = await fetch(`/memory-game/flip`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams({ id: cardId })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    updateGameBoard(data.cards);
+
+                    if (data.gameComplete) {
+                        showGameCompleteModal();
+                    }
+
+                    // If no match, refetch the state after delay
+                    if (data.cards.some(card => card.flipped && !card.matched)) {
+                        setTimeout(async () => {
+                            const refreshResponse = await fetch(`/memory-game/flip`, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                                body: new URLSearchParams({ id: cardId }) // Use dummy data
+                            });
+
+                            if (refreshResponse.ok) {
+                                const refreshedData = await refreshResponse.json();
+                                updateGameBoard(refreshedData.cards);
+                            }
+                        }, 1100); // Match the backend's timer delay
+                    }
+                } else {
+                    console.error("Failed to flip card:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Error flipping card:", error);
+            }
+        });
+
+        function updateGameBoard(cards) {
+            const cardElements = Array.from(cardsContainer.querySelectorAll("button"));
+
+            cards.forEach((card, index) => {
+                const cardElement = cardElements[index];
+                cardElement.className = card.matched ? "matched" : card.flipped ? "flipped" : "";
+                const cardContent = cardElement.querySelector(".card-content");
+
+                if (card.flipped) {
+                    cardContent.innerHTML = `<span>${card.letter.toUpperCase()}</span>`; // Ensure uppercase
+                } else {
+                    cardContent.innerHTML = `<img src="${card.imageUrl}" alt="Card Image" />`; // Show image
+                }
+            });
+        }
+
+        function showGameCompleteModal() {
+            const modal = document.getElementById("congratulationsModal");
+            modal.style.display = "flex";
+        }
+
+        // Function to play audio
+        function playAudio(audioId) {
+            const audio = new Audio(`/playAudio?id=${audioId}`);
+            audio.play();
+        }
+    });
+
+</script>
 </html>
-
-
-
-
-

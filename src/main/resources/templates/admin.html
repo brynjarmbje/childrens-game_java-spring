@@ -1,84 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
+<body class="scrollable-page">
 <div class="container">
-    <h1>Admin Dashboard</h1>
+    <h1>Kennara síða</h1>
+    <div>
+        <p>Velkomin/nn, <span th:text="${username}">User</span></p>
+        <p>Skóli: <span th:text="${schoolName}">School Name</span></p>
+
+    </div>
+    <!-- Feedback Messages -->
+    <div th:if="${success != null}" id="feedback" class="show">
+        <p th:text="${success}"></p>
+    </div>
+    <div th:if="${error != null}" id="feedback" class="error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <!-- Current Group Section (Moved Above Select Children) -->
+    <section>
+        <h2>Hópur:</h2>
+        <form th:action="@{/admin/{adminId}/remove-child(adminId=${adminId})}" method="post">
+
+            <select id="current-group" name="childId" multiple required class="scrollable-list">
+                <!-- Dynamically populate options from managedChildren -->
+                <option th:each="child : ${managedChildren}" th:value="${child.id}" th:text="${child.name}"></option>
+            </select>
+            <button type="submit" class="selection-button">Fjarlægja hóp</button>
+        </form>
+        <form th:action="@{/admin/{adminId}/clear-group(adminId=${adminId})}" method="post">
+
+        </form>
+    </section>
 
     <!-- Child Selection Section -->
-    <section class="selection-container">
-        <h2>Select Children</h2>
-        <div class="selection-box">
-            <label for="child-selection">Choose Children:</label>
-            <select id="child-selection" multiple required>
-                <option value="child1">Child 1</option>
-                <option value="child2">Child 2</option>
-                <option value="child3">Child 3</option>
-                <!-- Additional child options here -->
+    <section>
+        <h2>Veldu barn:</h2>
+        <form th:action="@{/admin/{adminId}/add-child(adminId=${adminId})}" method="post">
+
+            <select id="child-selection" name="childId" required class="scrollable-list">
+                <!-- Available children (not yet managed by the admin) -->
+                <option th:each="child : ${availableChildren}" th:value="${child.id}" th:text="${child.name}"></option>
             </select>
-        </div>
-        <button class="selection-button" type="button" onclick="addToGroup()">Add to Group</button>
+            <button type="submit" class="selection-button">Bæta í hóp</button>
+        </form>
     </section>
 
     <hr>
 
-    <!-- Group Section -->
-    <section class="selection-container">
-        <h2>Current Group</h2>
-        <div id="group-container" class="selection-box">
-            <!-- Dynamically filled with children added to the group -->
-            <p id="no-children-text">No children selected yet.</p>
-        </div>
-        <button class="selection-button" type="button" onclick="clearGroup()">Clear Group</button>
-        <!-- Play Button -->
-        <button class="selection-button" onclick="window.location.href='/index'">Play</button>
+    <!-- Play Button -->
+    <section>
+        <h2>Veldu barn til að spila leik:</h2>
+        <ul>
+            <li th:each="child : ${managedChildren}">
+                <span th:text="${child.name}"></span>
+                <form th:action="@{/admin/{adminId}/select-game(adminId=${adminId})}" method="post">
+                    <input type="hidden" name="childId" th:value="${child.id}">
+                    <button type="submit" class="selection-button">Velja leik</button>
+                </form>
+            </li>
+        </ul>
     </section>
 
-    <hr>
-
-    <!-- Logout Button -->
-    <div class="logout-section">
-        <form action="/logout" method="post">
-            <button class="selection-button" type="submit">Log Out</button>
+    <div class="logout-container">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout-button">Skrá út</button>
         </form>
     </div>
 </div>
-
-
-<script>
-    // Adds selected children to the Current Group section
-    function addToGroup() {
-        const selectedChildren = document.getElementById("child-selection");
-        const groupContainer = document.getElementById("group-container");
-        const noChildrenText = document.getElementById("no-children-text");
-
-        // Remove "No children selected yet" message if it's there
-        if (noChildrenText) {
-            noChildrenText.remove();
-        }
-
-        // Loop through selected options and add them to the group
-        Array.from(selectedChildren.selectedOptions).forEach(option => {
-            const childDiv = document.createElement("div");
-            childDiv.className = "group-child";
-            childDiv.textContent = option.textContent;
-            groupContainer.appendChild(childDiv);
-
-            // Optionally, deselect the child after adding
-            option.selected = false;
-        });
-    }
-
-    // Clears the Current Group section
-    function clearGroup() {
-        const groupContainer = document.getElementById("group-container");
-        groupContainer.innerHTML = "<p id='no-children-text'>No children selected yet.</p>";
-    }
-</script>
 </body>
 </html>

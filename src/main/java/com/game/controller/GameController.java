@@ -1,143 +1,177 @@
 package com.game.controller;
 
-import com.game.model.Game;
+import com.game.entity.Game;
+import com.game.entity.Question;
 import com.game.service.GameService;
-import com.game.service.MemoryGameService;
 import com.game.service.MatchingGameService;
+import com.game.service.MemoryGameService;
+import com.game.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Controller
-@SessionAttributes({"game", "username"})
+@RequestMapping({"/", "/admin/{adminId}/child/{childId}"})
+@SessionAttributes({"username", "game"})
 public class GameController {
 
-    @Autowired
-    private GameService gameService;
+	@Autowired
+	private QuestionService questionService;
 
-    @ModelAttribute("game")
-    public Game getGame() {
-        return new Game();
-    }
+	@Autowired
+	private GameService gameService;
 
-    @GetMapping("/")
-    public String index(@SessionAttribute(value = "username", required = false) String username) {
-        if (username == null || username.isEmpty()) {
-            return "redirect:/login";
-        }
-        return "index"; // No "redirect:/index", instead render "index" view
-    }
+	private static final int LETTERS_MIN_ID = 41;
+	private static final int LETTERS_MAX_ID = 72;
+	private static final int NUMBERS_MIN_ID = 1;
+	private static final int NUMBERS_MAX_ID = 40;
 
+	@GetMapping(value = {"/letters"})
+	public String StartLettersGame(
+			@PathVariable(required = false) Long adminId,
+			@PathVariable(required = false) Long childId,
+			Model model) {
+		try {
+			// Generate the game data
+			int gameType = 1;
+			Question question = gameService.generateRandomQuestion(LETTERS_MIN_ID, LETTERS_MAX_ID);
+			List<Long> wrongOptionIds = gameService.generateWrongOptions(question.getId(), LETTERS_MIN_ID, LETTERS_MAX_ID);
 
-    @PostMapping("/check")
-    public String checkAnswer(@RequestParam("answer") String answer, @ModelAttribute("game") Game game, Model model) {
-        boolean isCorrect = gameService.checkAnswer(answer, game);
-        model.addAttribute("isCorrect", isCorrect);
-        model.addAttribute("game", game);
-        return "index";
-    }
+			List<Long> optionIds = new ArrayList<>(wrongOptionIds);
+			optionIds.add(question.getId());
+			Collections.shuffle(optionIds);
 
-    @GetMapping("/reset")
-    public String resetGame(@ModelAttribute("game") Game game) {
-        game.setOptions(gameService.generateRandomOptions());
-        game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
-        return "index";
-    }
+			// Add data to the model
+			model.addAttribute("gameType", gameType);
+			model.addAttribute("correctId", question.getId());
+			model.addAttribute("optionIds", optionIds);
 
-    @GetMapping("/letters")
-    public String lettersGame(Model model, @ModelAttribute("game") Game game,
-                              @SessionAttribute("username") String username) {
-        game.setOptions(gameService.generateRandomOptions());
-        game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
-        model.addAttribute("game", game);
-        model.addAttribute("username", username);
-        return "letters";
-    }
+			// Add adminId and childId if available
+			if (adminId != null) model.addAttribute("adminId", adminId);
+			if (childId != null) model.addAttribute("childId", childId);
 
-    @GetMapping("/numbers")
-    public String numbersGame(Model model, @ModelAttribute("game") Game game,
-                              @SessionAttribute("username") String username) {
-        game.setOptions(gameService.generateRandomNumbers());
-        game.setCorrectAnswer(game.getOptions()[new Random().nextInt(3)]);
-        model.addAttribute("game", game);
-        model.addAttribute("username", username);
-        return "numbers";
-    }
-
-    @GetMapping("/login")
-    public String loginPage(Model model) {
-        model.addAttribute("username", "Guest");
-        return "login";
-    }
-
-    @PostMapping("/login")
-    public String handleLogin(@RequestParam String username, Model model) {
-        if (username == null || username.trim().isEmpty()) {
-            model.addAttribute("error", "Username cannot be empty");
-            return "login";
-        }
-        model.addAttribute("username", username);
-        return "redirect:/"; // Redirects to the root URL, which triggers index() method
-    }
+			return "letters"; // Load letters.html
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("error", "Failed to load the letters game: " + e.getMessage());
+			return "error"; // Use a valid error page
+		}
+	}
 
 
-    @Autowired
-    private MatchingGameService matchingGameService;
 
-    @Autowired
-    private MemoryGameService memoryGameService;
+	@GetMapping("/numbers")
+	public String startNumbersGame(@PathVariable(required = false) Long adminId,
+								   @PathVariable(required = false) Long childId,
+								   Model model) {
+		try {
+			// Generate the game data
+			int gameType = 2;
+			Question question = gameService.generateRandomQuestion(NUMBERS_MIN_ID, NUMBERS_MAX_ID);
+			List<Long> wrongOptionIds = gameService.generateWrongOptions(question.getId(), NUMBERS_MIN_ID, NUMBERS_MAX_ID);
 
-    @GetMapping("/memory-game")
-    public String memoryGame(Model model) {
-        model.addAttribute("cards", memoryGameService.getCards());
-        return "memory-game"; // Ensure this matches the name of your Thymeleaf template
-    }
+			List<Long> optionIds = new ArrayList<>(wrongOptionIds);
+			optionIds.add(question.getId());
+			Collections.shuffle(optionIds);
 
-    @PostMapping("/memory-game/flip")
-    public String flipCard(@RequestParam int id, Model model) {
-        memoryGameService.flipCard(id);
-        model.addAttribute("cards", memoryGameService.getCards());
-        if (memoryGameService.isGameComplete()) {
-            model.addAttribute("gameComplete", true);
-        }
-        return "memory-game"; // Return the updated state to the same template
-    }
+			// Add data to the model
+			model.addAttribute("gameType", gameType);
+			model.addAttribute("correctId", question.getId());
+			model.addAttribute("optionIds", optionIds);
 
-    @PostMapping("/memory-game/reset")
-    public String resetGame() {
-        memoryGameService.resetGame();
-        return "redirect:/memory-game";
-    }
+			// Add adminId and childId if available
+			if (adminId != null) model.addAttribute("adminId", adminId);
+			if (childId != null) model.addAttribute("childId", childId);
+
+			return "numbers"; // Load letters.html
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("error", "Failed to load the numbers game: " + e.getMessage());
+			return "error"; // Use a valid error page
+		}
+	}
+
+	private static final int LOCATE_MIN_ID = 100;
+	private static final int LOCATE_MAX_ID = 135;
+
+	@GetMapping("/locate-game")
+	public String startLocateGame(@PathVariable(required = false) Long adminId,
+								  @PathVariable(required = false) Long childId,
+								  Model model) {
+		try {
+			// Generate the game data
+			int gameType = 5;
+			Question question = gameService.generateRandomQuestion(LOCATE_MIN_ID, LOCATE_MAX_ID);
+			List<Long> wrongOptionIds = gameService.generateWrongOptions(question.getId(), LOCATE_MIN_ID, LOCATE_MAX_ID);
+
+			List<Long> optionIds = new ArrayList<>(wrongOptionIds);
+			optionIds.add(question.getId());
+			Collections.shuffle(optionIds);
+
+			// Add data to the model
+			model.addAttribute("gameType", gameType);
+			model.addAttribute("correctId", question.getId());
+			model.addAttribute("optionIds", optionIds);
+
+			// Add adminId and childId if available
+			if (adminId != null) model.addAttribute("adminId", adminId);
+			if (childId != null) model.addAttribute("childId", childId);
+
+			return "numbers"; // Load letters.html
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("error", "Failed to load the numbers game: " + e.getMessage());
+			return "error"; // Use a valid error page
+		}
+	}
+
+	@ModelAttribute("game")
+	public Game getGame() {
+		return new Game();
+	}
+
+	@Autowired
+	private MatchingGameService matchingGameService;
+
+	@Autowired
+	private MemoryGameService memoryGameService;
+
+	@GetMapping("/memory-game")
+	public String memoryGame(Model model) {
+		memoryGameService.initializeGame();
+		model.addAttribute("cards", memoryGameService.getCards());
+		return "memory-game"; // Loads memory-game.html
+	}
+
+	@PostMapping("/memory-game/flip")
+	@ResponseBody
+	public Map<String, Object> flipCard(@RequestParam int id) {
+		memoryGameService.flipCard(id);
+
+		// Always return the updated state of the game
+		Map<String, Object> response = new HashMap<>();
+		response.put("cards", memoryGameService.getCards());
+		response.put("gameComplete", memoryGameService.isGameComplete());
+		return response;
+	}
 
 
-    @GetMapping("/matching-game")
-    public String matchingGame(Model model) {
-        if (matchingGameService.getIcons() == null || matchingGameService.getIcons().isEmpty()) {
-            matchingGameService.initializeGame();
-        }
-        model.addAttribute("icons", matchingGameService.getIcons());
-        model.addAttribute("letters", matchingGameService.getLetters());
-        return "matching-game";
-    }
+	@PostMapping("/memory-game/reset")
+	public String resetGame() {
+		memoryGameService.resetGame();
+		return "redirect:/memory-game";
+	}
 
+	@GetMapping("/matching-game")
+	public String matchingGame(Model model) {
+		matchingGameService.initializeGame();
+		model.addAttribute("imageCards", matchingGameService.getImageCards());
+		model.addAttribute("letterCards", matchingGameService.getLetterCards());
+		return "matching-game"; // Load matching-game.html
+	}
 
-    @PostMapping("/matching-game/match")
-    @ResponseBody // Ensure JSON response for AJAX
-    public Map<String, Boolean> matchIcon(@RequestParam int iconId, @RequestParam char letter) {
-        boolean isMatch = matchingGameService.checkMatch(iconId, letter);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("isMatch", isMatch);
-        return response;
-    }
-
-    @PostMapping("/matching-game/reset")
-    public String resetMatchingGame() {
-        matchingGameService.initializeGame();
-        return "redirect:/matching-game";
-    }
 }
+

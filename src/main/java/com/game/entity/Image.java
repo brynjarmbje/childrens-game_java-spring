@@ -1,33 +1,38 @@
 package com.game.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Image {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private int type;
 
-    // Constructor
-    public Image(String id, String name, int type) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-    }
+    @Column(nullable = false)
+    private int level;
 
-    // Default Constructor
-    public Image() {}
+    @Column(nullable = true)
+    private String firstLetter;
+
+    @Column(nullable = true)
+    private boolean isLetter;
+
+    @Column(columnDefinition = "BYTEA") // This hints to store the data as a byte array
+    private byte[] imageData;
 
     // Getters and Setters
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -45,5 +50,37 @@ public class Image {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public String getFirstLetter() {
+        return firstLetter;
+    }
+
+    public void setFirstLetter(String firstLetter) {
+        this.firstLetter = firstLetter;
+    }
+
+    public boolean isLetter() {
+        return isLetter;
+    }
+
+    public void setLetter(boolean letter) {
+        isLetter = letter;
+    }
+
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
     }
 }

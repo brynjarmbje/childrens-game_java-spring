@@ -1,57 +1,121 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Samstæður!</title>
+  <title>Matching Game</title>
   <link rel="stylesheet" th:href="@{/css/matching-game.css}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-
 <button class="back-button" onclick="location.href='/'">⬅️ Til baka</button>
-<h1>Matching Game</h1>
+<h1>Pörun!</h1>
 
-<div>
-  <p>Finnum pörin!</p>
-  <p>Ýttu á hlut til að heyra nafnið á honum!</p>
-  <p>Leitum svo af upphafsstaf hlutarins!</p>
-  <p>Finnum öll pörin til að vinna!</p>
-</div>
+<p>Veldu mynd og staf sem passa saman!</p>
 
-<div class="matching-game-container">
-  <!-- Icons Grid -->
+<div id="gameBoard" class="matching-game-container">
   <div class="matching-grid">
-    <div th:each="icon : ${icons}">
-      <button class="match-icon" th:data-id="${icon.id}" th:data-letter="${icon.letter}">
-        <img th:src="@{'/imagefiles/' + ${icon.imageUrl}}" alt="icon">
+    <div th:each="card : ${imageCards}">
+      <button class="match-icon"  th:id="'image-card-' + ${card.id}"
+              th:data-id="${card.id}"
+              th:data-type="image"
+              th:data-audio-id="${card.questionId}"
+              th:data-letter="${card.letter}"
+              th:classappend="${card.matched ? 'correct-match' : ''}">
+        <img th:src="${card.imageUrl}" alt="Image Card" />
       </button>
     </div>
   </div>
 
-  <!-- Letters Grid -->
   <div class="matching-grid">
-    <div th:each="letter : ${letters}">
-      <button class="match-letter"
-              th:data-letter="${letter}"
-              th:text="${letter}">
+    <div th:each="card : ${letterCards}">
+      <button class="match-icon"  th:id="'letter-card-' + ${card.id}"
+              th:data-id="${card.id}"
+              th:data-type="letter"
+              th:data-audio-id="${card.questionId}"
+              th:data-letter="${card.letter}"
+              th:classappend="${card.matched ? 'correct-match' : ''}">
+        <img th:src="${card.imageUrl}" alt="Letter Card" />
       </button>
     </div>
   </div>
 </div>
 
-<!-- Congratulatory Modal -->
-<div id="congratulationsModal" class="modal">
+<!-- Modal for victory screen -->
+<div id="victoryModal" class="modal" style="display: none;">
   <div class="modal-content">
-    <h2>Congratulations!</h2>
-    <p>You matched all the pairs!</p>
-    <button onclick="restartGame()">Play Again</button>
+    <h2>Til hamingju!</h2>
+    <p>Þú fannst öll pörin!</p>
+    <button onclick="location.reload()">Spila aftur</button>
   </div>
 </div>
 
-<script th:src="@{/js/matching-game.js}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    let firstSelection = null;
+
+    const gameBoard = document.getElementById("gameBoard");
+    const victoryModal = document.getElementById("victoryModal");
+
+    gameBoard.addEventListener("click", (event) => {
+      const button = event.target.closest("button");
+      if (!button || button.classList.contains("correct-match")) return;
+
+      const type = button.dataset.type;
+      const letter = button.dataset.letter;
+      const audioId = button.dataset.audioId;
+
+      // Play audio for the selected card
+      playAudio(audioId);
+
+      if (!firstSelection) {
+        // First selection
+        firstSelection = { type, letter, button };
+        button.classList.add("selected");
+      } else {
+        // Second selection
+        button.classList.add("selected");
+        if (firstSelection.letter === letter && firstSelection.type !== type) {
+          // Match
+          firstSelection.button.classList.add("correct-match");
+          button.classList.add("correct-match");
+          firstSelection = null;
+
+          // Check if all pairs are matched
+          if (checkVictory()) {
+            setTimeout(() => {
+              victoryModal.style.display = "flex";
+            }, 500);
+          }
+        } else {
+          // No match
+          button.classList.add("wrong-match");
+          firstSelection.button.classList.add("wrong-match");
+
+          setTimeout(() => {
+            button.classList.remove("wrong-match");
+            firstSelection.button.classList.remove("wrong-match");
+            button.classList.remove("selected");
+            firstSelection.button.classList.remove("selected");
+            firstSelection = null;
+          }, 1000);
+        }
+      }
+    });
+
+    // Function to play audio
+    function playAudio(audioId) {
+      const audio = new Audio(`/playAudio?id=${audioId}`);
+      audio.play();
+    }
+
+    // Function to check if all pairs are matched
+    function checkVictory() {
+      return Array.from(gameBoard.querySelectorAll("button")).every((button) =>
+              button.classList.contains("correct-match")
+      );
+    }
+  });
+</script>
 </body>
 </html>
-
-
 
 
 
