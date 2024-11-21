@@ -121,6 +121,11 @@ input, select {
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
 }
 
+ul {
+    list-style: none;
+    padding: 0;
+}
+
 /* Logout container styles */
 .logout-container {
     position: fixed;

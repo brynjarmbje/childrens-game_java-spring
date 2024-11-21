@@ -22,6 +22,19 @@
         <p th:text="${error}"></p>
     </div>
 
+    <!-- Play Button -->
+    <section>
+        <h2>Veldu barn til að spila leik:</h2>
+        <ul>
+            <li th:each="child : ${managedChildren}">
+                <form th:action="@{/admin/{adminId}/select-game(adminId=${adminId})}" method="post">
+                    <button type="submit" name="childId" th:value="${child.id}" class="selection-button" th:text="${child.name}"></button>
+                </form>
+            </li>
+        </ul>
+    </section>
+    <hr>
+
     <!-- Current Group Section (Moved Above Select Children) -->
     <section>
         <h2>Hópur:</h2>
@@ -38,6 +51,9 @@
         </form>
     </section>
 
+    <br>
+    <hr>
+
     <!-- Child Selection Section -->
     <section>
         <h2>Veldu barn:</h2>
@@ -51,21 +67,8 @@
         </form>
     </section>
 
-    <hr>
 
-    <!-- Play Button -->
-    <section>
-        <h2>Veldu barn til að spila leik:</h2>
-        <ul>
-            <li th:each="child : ${managedChildren}">
-                <span th:text="${child.name}"></span>
-                <form th:action="@{/admin/{adminId}/select-game(adminId=${adminId})}" method="post">
-                    <input type="hidden" name="childId" th:value="${child.id}">
-                    <button type="submit" class="selection-button">Velja leik</button>
-                </form>
-            </li>
-        </ul>
-    </section>
+
 
     <div class="logout-container">
         <form th:action="@{/logout}" method="post">
