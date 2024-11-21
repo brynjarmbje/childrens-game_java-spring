@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,10 +13,10 @@
 	<section>
 		<h2>Innskráning kennara</h2>
 		<form th:action="@{/login}" th:object="${admin}" method="post">
-			<label for="username">Username:</label>
+			<label for="username">Notendanafn:</label>
 			<input type="text" id="username" name="username" th:field="*{username}" required>
 
-			<label for="password">Password:</label>
+			<label for="password">Lykilorð:</label>
 			<input type="password" id="password" name="password" th:field="*{password}" required>
 
 			<button type="submit">Skrá inn sem kennari</button>
@@ -29,7 +29,7 @@
 	<section>
 		<h2>Gesta innskráning</h2>
 		<form action="/guest-login" method="post">
-			<label for="guest-username">Guest name:</label>
+			<label for="guest-username">Nafn á gesti:</label>
 			<input type="text" id="guest-username" name="guestUsername" value="Guest">
 			<button type="submit">Skrá inn sem gestur</button>
 		</form>

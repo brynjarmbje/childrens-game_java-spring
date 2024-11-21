@@ -47,6 +47,7 @@ public class LoginController {
 	public String loginPage(Model model) {
 		model.addAttribute("admin", new Admin());
 		model.addAttribute("username", "Guest");
+
 		return "login";
 	}
 
@@ -110,6 +111,9 @@ public class LoginController {
 		return loginService.getAllAdmins();
 	}
 
+
+
+
 	public String validateSupervisorAccess(HttpSession session) {
 		String username = (String) session.getAttribute("username");
 		Boolean isSupervisor = (Boolean) session.getAttribute("isSupervisor");
@@ -128,4 +132,5 @@ public class LoginController {
 		// Allow access for supervisors
 		return null;
 	}
+
 }

@@ -9,19 +9,14 @@
 </head>
 <body class="scrollable-page"> <!-- Added scrollable-page class here -->
 <!-- Navigation Menu -->
-<nav class="navbar">
-    <ul>
-        <li><span class="username" th:text="${username}"></span></li>
-        <li><span class="school-name" th:text="'Skóli: ' + ${schoolName}">School Name</span></li>
-    </ul>
 
 
-
-</nav>
 
 <!-- Game Selection -->
 <div class="container">
     <h1>Veldu leik!</h1>
+    <p><span class="username" th:text="${username}"></span></p>
+    <p><span th:text="${schoolName}">School Name</span></p>
     <div class="game-selection">
         <a href="/letters" class="game-button">🎨 Stafir!</a>
         <a href="/numbers" class="game-button">🔢 Tölur!</a>

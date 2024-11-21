@@ -24,25 +24,25 @@
 
     <!-- Current Group Section (Moved Above Select Children) -->
     <section>
-        <h2>Hópur</h2>
+        <h2>Hópur:</h2>
         <form th:action="@{/admin/{adminId}/remove-child(adminId=${adminId})}" method="post">
-            <label for="current-group">Managed Children:</label>
+
             <select id="current-group" name="childId" multiple required class="scrollable-list">
                 <!-- Dynamically populate options from managedChildren -->
                 <option th:each="child : ${managedChildren}" th:value="${child.id}" th:text="${child.name}"></option>
             </select>
-            <button type="submit" class="selection-button">Remove from Group</button>
+            <button type="submit" class="selection-button">Fjarlægja hóp</button>
         </form>
         <form th:action="@{/admin/{adminId}/clear-group(adminId=${adminId})}" method="post">
-            <button type="submit" class="selection-button">Clear All</button>
+
         </form>
     </section>
 
     <!-- Child Selection Section -->
     <section>
-        <h2>Veldu barn</h2>
+        <h2>Veldu barn:</h2>
         <form th:action="@{/admin/{adminId}/add-child(adminId=${adminId})}" method="post">
-            <label for="child-selection">Choose a Child:</label>
+
             <select id="child-selection" name="childId" required class="scrollable-list">
                 <!-- Available children (not yet managed by the admin) -->
                 <option th:each="child : ${availableChildren}" th:value="${child.id}" th:text="${child.name}"></option>

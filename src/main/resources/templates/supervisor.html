@@ -38,8 +38,8 @@
         <h2>Skrá kennara</h2>
         <form th:action="@{/supervisor/admin/create}" method="post">
             <input type="hidden" name="adminId" th:value="${adminId}"/>
-            <input type="text" name="username" placeholder="Admin Username" required>
-            <input type="password" name="password" placeholder="Admin Password" required>
+            <input type="text" name="username" placeholder="Notendanafn" required>
+            <input type="password" name="password" placeholder="Lykilorð" required>
             <button type="submit" class="selection-button">Búa til kennara</button>
         </form>
     </section>
@@ -58,7 +58,6 @@
 
     <!-- Logout Button -->
     <div class="logout-container">
-        <h3>Skrá út</h3>
         <form th:action="@{/logout}" method="post">
             <button type="submit" class="logout-button">Skrá út</button>
         </form>

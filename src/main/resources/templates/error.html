@@ -1,12 +1,18 @@
-<!-- error.html -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="is">
 <head>
-    <title>Error</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Villa</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<h1>Oops! Something went wrong.</h1>
-<p>An error occurred while processing your request. Please try again later.</p>
-<button onclick="window.history.back()">Go Back</button>
+<div class="container">
+    <h1>Oops!</h1>
+    <p th:text="${errorMessage}">Óþekkt villa</p>
+    <a href="/login">
+        <button>Til baka á heimasíðu</button>
+    </a>
+</div>
 </body>
 </html>

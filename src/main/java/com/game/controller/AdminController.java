@@ -2,6 +2,7 @@ package com.game.controller;
 
 import com.game.entity.Child;
 import com.game.service.AdminService;
+import com.game.service.SupervisorService;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,11 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private SupervisorService supervisorService;
+
+
 
     /**
      * Handles GET requests to the /admin/{adminId} endpoint.
@@ -135,6 +141,8 @@ public class AdminController {
         }
         return "redirect:/admin/" + adminId;
     }
+
+
 
     /**
      * Redirects to the login page if the admin ID is missing.
