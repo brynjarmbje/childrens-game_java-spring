@@ -63,6 +63,7 @@ public class LoginController {
 			Session childSession = sessionService.findOrCreateSessionForChild(selectedChild);
 			model.addAttribute("username", selectedChild.getName());
 			model.addAttribute("childSession", childSession);
+			model.addAttribute("schoolName", selectedChild.getSchool().getName());
 		} else {
 			model.addAttribute("username", "Guest");
 		}
