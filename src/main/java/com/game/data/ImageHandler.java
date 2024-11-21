@@ -1,7 +1,6 @@
 package com.game.data;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
@@ -21,21 +20,6 @@ public class ImageHandler {
 
     // Constructor to initialize the ImageHandler
     public ImageHandler() {
-    }
-
-    // Display the image in a JFrame window
-    public void display() {
-        if (image != null) {
-            JFrame frame = new JFrame("Image Display");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(image.getWidth(), image.getHeight());
-            JLabel label = new JLabel(new ImageIcon(image));
-            frame.add(label);
-            frame.pack();
-            frame.setVisible(true);
-        } else {
-            System.out.println("No image loaded to display.");
-        }
     }
 
     // Convert the image to a blob

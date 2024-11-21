@@ -1,5 +1,7 @@
 package com.game.config;
 
+import com.game.errors.ForbiddenAccessException;
+import com.game.errors.UnauthorizedAccessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -24,10 +26,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         // Validate username
         String username = (String) session.getAttribute("username");
         if (username == null || username.isEmpty()) {
-            logger.warn("Unauthorized access attempt: No username in session. Redirecting to login.");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.sendRedirect("/login");
-            return false;
+            logger.warn("Unauthorized access attempt: No username in session.");
+            throw new UnauthorizedAccessException("Notandi ekki innskráður");
         }
 
         // Log the user information
@@ -46,10 +46,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         // Allow access to /admin/** for regular admins or supervisors
         if (path.startsWith("/admin")) {
             if (adminId == null) {
-                logger.warn("Forbidden access attempt to /admin/**: Missing adminId.");
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                response.sendRedirect("/login");
-                return false;
+                logger.warn("Óleyfilegt að fara inn á /admin/**: Finn ekki admin adminId.");
+                throw new ForbiddenAccessException("Það þarf admin leyfi til að komast hingað.");
             }
             logger.info("Access granted to /admin/** for username={}", username);
             return true;
@@ -58,11 +56,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         // Allow access to /supervisor/** only for supervisors
         if (path.startsWith("/supervisor") || path.startsWith("/api/supervisor")) {
             if (isSupervisor == null || !isSupervisor) {
-                logger.warn("Forbidden access attempt to /supervisor/** or /api/supervisor/** by username={}", username);
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                return false;
+                logger.warn("Það er verið að reyna að komast inn á /supervisor/** eða /api/supervisor/** af username={}", username);
+                throw new ForbiddenAccessException("Það þarf að vera skólastjóri til að fara hingað inn.");
             }
-            logger.info("Access granted to /supervisor/** for supervisor={}", username);
+            logger.info("leyfi gefið inn á /supervisor/** fyrir supervisor={}", username);
             return true;
         }
 

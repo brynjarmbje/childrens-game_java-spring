@@ -50,14 +50,4 @@ public class AudioHandler {
         }
         return audioBytes;
     }
-
-    // Write a byte array (blob) back to an audio file
-    public void writeBlobToAudioFile(byte[] audioBlob, String outputFilePath) {
-        try (OutputStream outputStream = new FileOutputStream(outputFilePath)) {
-            outputStream.write(audioBlob);
-            System.out.println("Audio file written to: " + new File(outputFilePath).getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
