@@ -55,8 +55,9 @@
 
     <!-- Play Button -->
     <section>
-        <form th:action="@{/index}" method="get">
-            <button type="submit" class="selection-button">Spila</button>
+				<form th:action="@{/admin/{adminId}/select-game}" method="get">
+			<input type="hidden" name="childId" th:value="${child.id}">
+            <button type="submit" class="selection-button">Velja leik</button>
         </form>
     </section>
 

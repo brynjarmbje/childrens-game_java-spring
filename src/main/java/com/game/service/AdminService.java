@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdminService {
@@ -105,6 +106,16 @@ public class AdminService {
         admin.removeChildFromAdmin(child);
         adminRepository.save(admin); // Persist changes
     }
+
+	public Child getChildById(Long childId){
+        Child child = childRepository.findById(childId).orElseThrow(() ->
+                new IllegalArgumentException("child fannst ekki með id: " + childId));
+		return child;
+	}
+
+	public boolean childExistById(Long childId){
+		return childRepository.existsById(childId);
+	}
 
     public String getUsername(Long adminId) {
         Admin admin = adminRepository.findById(adminId).orElseThrow(() ->

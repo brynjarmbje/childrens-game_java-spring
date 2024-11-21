@@ -145,6 +145,24 @@ public class AdminController {
 
 
     /**
+     * Handles POST requests to got to the selected childs page.
+     *
+     * @param childId The ID of the child.
+     * @param model   The model to populate with feedback messages.
+     * @return A redirect to the child page.
+     */
+    @PostMapping("/{adminId}/select-game")
+    public String selectChildToPlay(@PathVariable Long adminId, @RequestParam Long childId , Model model) {
+		if (adminService.childExistById(childId)) {
+			model.addAttribute("selectedChild", childId);
+			return "redirect:/admin/" + adminId + "/child/" + childId;
+        } else {
+            model.addAttribute("error", "failed getting childId");
+			return "redirect:/{adminId}";
+        }
+    }
+
+    /**
      * Redirects to the login page if the admin ID is missing.
      *
      * @return Redirect to the login page.
